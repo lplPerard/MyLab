@@ -1,0 +1,194 @@
+"""Copyright Oticon Medical NICE
+
+Developped by : Luc PERARD
+
+File description : Class container for the application's view
+
+"""
+
+from tkinter import Tk   
+from tkinter import Label
+from tkinter import Menu 
+from tkinter import Toplevel
+from tkinter import Text
+from tkinter import messagebox
+from tkinter import BOTH
+from tkinter import YES
+from tkinter import END
+
+from DeviceFrame import DeviceFrame
+from ParametersTL import ParametersTL
+from ConnectionsTL import ConnectionsTL
+from Model import Model
+
+class View(Tk):
+    """Class containing the GUI for the Mylab according to the MCV model.
+
+    """
+
+    def __init__(self):
+    #Constructor for the View class
+        """
+            Constructor for the class View. The class inherits from Tk from GUI management.
+            The following attributes are  created :
+
+        """
+        Tk.__init__(self)
+        
+        self.model = Model()
+
+        self.topLevel_term =Toplevel(self)        
+        self.topLevel_param =Toplevel(self)
+        self.topLevel_connect =Toplevel(self)
+
+        self.__initWidgets()
+
+    def __initWidgets(self):
+    #This method is used to encapsulate the creation of sequences and menues
+        
+        self.resizable(True, True)
+        self.title("MyLab")
+        self.geometry(self.model.parameters_dict['geometry'])
+        self.attributes('-alpha', self.model.parameters_dict['backgroundAlpha'])
+        self.configure(bg=self.model.parameters_dict['backgroundColor'])
+
+        self.topLevel_term.title("Terminal")
+        self.topLevel_term.protocol('WM_DELETE_WINDOW', self.topLevel_term.withdraw)
+        self.topLevel_term.transient()
+        self.topLevel_term.withdraw()
+        self.term_text = Text(self.topLevel_term, height=30, width=70, bg="black", fg="green")
+        self.term_text.grid(column=0, row=0)
+        self.term_text.insert(END, "You are running MyLab\n")
+        
+        self.topLevel_param.title("Parameters")
+        self.topLevel_param.protocol('WM_DELETE_WINDOW', self.topLevel_param.withdraw)
+        self.topLevel_param.transient()
+        self.topLevel_param.withdraw()
+        self.parametersTL = ParametersTL(self.topLevel_param)
+        self.parametersTL.frame.grid(column=0, row=0)
+        
+        self.topLevel_connect.title("Connections")
+        self.topLevel_connect.protocol('WM_DELETE_WINDOW', self.topLevel_connect.withdraw)
+        self.topLevel_connect.transient()
+        self.topLevel_connect.withdraw()
+        self.connectionsTL = ConnectionsTL(self.topLevel_param)
+        self.connectionsTL.frame.grid(column=0, row=0)
+
+
+        self.frame = DeviceFrame(self, self.term_text)
+        self.frame.initFrame(text="Device Name", column=0, row=0, rowspan=1, bg=self.model.parameters_dict['backgroundColor'])
+
+        self.__initMenu()
+
+        self.copyright = Label(self, text="Copyright Oticon Medical NICE", bg=self.model.parameters_dict['backgroundColor'])
+        self.copyright.grid(column=0, row=0)
+        
+    def __initMenu(self):
+    #This method generates a Menu bar which give access to the diffent software's tools
+        self.menubar = Menu(self)
+
+        self.menu1 = Menu(self.menubar, tearoff=0)
+        self.menubar.add_cascade(label="File", menu=self.menu1)
+        self.menu1.add_command(label="Save", command=self.menu1_Save_callBack)
+        self.menu1.add_command(label="Save as", command=self.menu1_SaveAs_callBack)
+        self.menu1.add_command(label="Open", command=self.menu1_Open_callBack)
+
+        self.menu2 = Menu(self.menubar, tearoff=0)
+        self.menubar.add_cascade(label="Edit", menu=self.menu2)        
+        self.menu2.add_command(label="Parameters", command=self.menu2_Parameters_callBack)
+        self.menu2.add_command(label="Connections", command=self.menu2_Connections_callBack)       
+
+        self.menu3 = Menu(self.menubar, tearoff=0)
+        self.menubar.add_cascade(label="Display", menu=self.menu3)
+        self.menu3.add_command(label="Terminal", command=self.menu3_Terminal_callBack)
+        self.menu3.add_command(label="Change logs", command=self.menu3_logs_callBack)
+        
+        self.menu4 = Menu(self.menubar, tearoff=0)
+        self.menubar.add_cascade(label="Instruments", menu=self.menu4)
+        self.menu4.add_command(label="Oscilloscope", command=self.menu4_Oscilloscope_callBack)
+        self.menu4.add_command(label="Source Meter", command=self.menu4_SourceMeter_callBack)
+        self.menu4.add_command(label="RLC Meter", command=self.menu4_RLCMeter_callBack)
+        self.menu4.add_command(label="Power Supply", command=self.menu4_PowerSupply_callBack)
+        self.menu4.add_command(label="Climatic Chamber", command=self.menu4_ClimaticChamber_callBack)
+
+        self.config(menu=self.menubar)
+
+    def menu1_Save_callBack(self):
+    #Callback function for  menu1 1 option
+        print("test")
+
+    def menu1_SaveAs_callBack(self):
+    #Callback function for menu1 2 option
+        print("test")
+
+    def menu1_Open_callBack(self):
+    #Callback function for menu1 2 option
+        print("test")
+
+    def menu2_Parameters_callBack(self):
+    #Callback function for menu2 1 option
+        if self.topLevel_param.state() == "withdrawn":
+            self.topLevel_param.deiconify()
+
+        elif self.topLevel_param.state() == "normal":
+            self.topLevel_param.withdraw()
+
+    def menu2_Connections_callBack(self):
+    #Callback function for menu2 2 option
+        if self.topLevel_connect.state() == "withdrawn":
+            self.topLevel_connect.deiconify()
+
+        elif self.topLevel_connect.state() == "normal":
+            self.topLevel_connect.withdraw()
+
+    def menu3_Terminal_callBack(self):
+    #Callback function for menu2 1 option
+        if self.topLevel_term.state() == "withdrawn":
+            self.topLevel_term.deiconify()
+
+        elif self.topLevel_term.state() == "normal":
+            self.topLevel_term.withdraw()
+
+    def menu3_logs_callBack(self):
+    #Callback function for menu2 2 option
+        print("bla")
+
+    def menu4_Oscilloscope_callBack(self):
+    #Callback function for menu2 2 option
+        mbox = messagebox.askyesno("Switch Instrument", "Do you want to switch instrument ?")
+        if mbox == True:
+            print("bla")
+        else:
+            print("bla")
+
+    def menu4_SourceMeter_callBack(self):
+    #Callback function for menu2 2 option
+        mbox = messagebox.askyesno("Switch Instrument", "Do you want to switch instrument ?")
+        if mbox == True:
+            print("bla")
+        else:
+            print("bla")
+
+    def menu4_RLCMeter_callBack(self):
+    #Callback function for menu2 2 option
+        mbox = messagebox.askyesno("Switch Instrument", "Do you want to switch instrument ?")
+        if mbox == True:
+            print("bla")
+        else:
+            print("bla")
+
+    def menu4_PowerSupply_callBack(self):
+    #Callback function for menu2 2 option
+        mbox = messagebox.askyesno("Switch Instrument", "Do you want to switch instrument ?")
+        if mbox == True:
+            print("bla")
+        else:
+            print("bla")
+
+    def menu4_ClimaticChamber_callBack(self):
+    #Callback function for menu2 2 option
+        mbox = messagebox.askyesno("Switch Instrument", "Do you want to switch instrument ?")
+        if mbox == True:
+            print("bla")
+        else:
+            print("bla")
