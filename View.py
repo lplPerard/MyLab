@@ -29,7 +29,7 @@ class View(Tk):
 
     """
 
-    def __init__(self):
+    def __init__(self, controller, model):
     #Constructor for the View class
         """
             Constructor for the class View. The class inherits from Tk from GUI management.
@@ -38,7 +38,8 @@ class View(Tk):
         """
         Tk.__init__(self)
         
-        self.model = Model()
+        self.model = model
+        self.controller = controller
 
         self.topLevel_wakeUp = Toplevel(self) 
         self.topLevel_term = Toplevel(self)        
@@ -81,7 +82,7 @@ class View(Tk):
         self.topLevel_param.withdraw()
         self.topLevel_param.configure(bg=self.model.parameters_dict['backgroundColor'])
         self.topLevel_param.attributes('-alpha', self.model.parameters_dict['backgroundAlpha'])
-        self.parametersTL = ParametersTL(self.topLevel_param)
+        self.parametersTL = ParametersTL(self.topLevel_param, model=self.model)
         self.parametersTL.frame.pack()
         
         self.topLevel_connect.title("Connections")
@@ -92,7 +93,7 @@ class View(Tk):
         self.topLevel_connect.configure(bg=self.model.parameters_dict['backgroundColor'])
         self.topLevel_connect.geometry(self.model.parameters_dict['geometryConnectionsTL'])
         self.topLevel_connect.attributes('-alpha', self.model.parameters_dict['backgroundAlpha'])
-        self.connectionsTL = ConnectionsTL(self.topLevel_connect)
+        self.connectionsTL = ConnectionsTL(self.topLevel_connect, view=self)
         self.connectionsTL.frame.pack()
 
         self.frame = DeviceFrame(self, self.term_text, model=self.model)
@@ -117,6 +118,11 @@ class View(Tk):
         if deviceName == "RLC Meter":
                 self.frame.clearFrame()
                 self.frame = PowerSupplyView(self, self.term_text, self.model)
+
+    def sendError(self, error):
+    #This method generates message boxes from error returns
+        messagebox.showerror(title="Error : " + error, message=self.model.error_dict[error])
+
         
     def __initMenu(self):
     #This method generates a Menu bar which give access to the diffent software's tools

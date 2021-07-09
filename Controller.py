@@ -7,8 +7,11 @@ File description : Class container for Controller.
 """
 
 
+from Instrument import Instrument
 from View import View
 from Model import Model
+
+import pyvisa
 
 class Controller():
     """Class containing the Controller for MyLab.
@@ -18,6 +21,27 @@ class Controller():
     def __init__(self):
     #Constructor for the Controller class
 
-        self.view = View()
+        
+        self.model = Model(self)
+        self.view = View(self, self.model)
         self.view.mainloop()
-        self.model = Model()
+
+        self.instrument = Instrument()
+        self.instrList=["null"]
+
+    def VISA_connect(self):
+    #This method is used to connect to VISA
+        try:
+            self.resourceManager = pyvisa.ResourceManager()
+            self.findInstruments()
+
+        except:
+            self.view.sendError("000")
+
+    def findInstruments(self):
+    #This method detects instruments connected via VISA
+        try:
+            self.instrList = self.resourceManager.list_resources()
+        except:
+            self.instrList = []
+            self.view.sendError("001")

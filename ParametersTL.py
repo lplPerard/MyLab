@@ -14,10 +14,10 @@ class ParametersTL():
 
     """
 
-    def __init__(self, root):
+    def __init__(self, root, model):
     #Constructor for the Paramaters class
 
         self.frame = LabelFrame(root, text="Parameters")
-        self.model = Model()
+        self.model = model
         self.frame.configure(bg=self.model.parameters_dict['backgroundColor'])
         self.show = True
