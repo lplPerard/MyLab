@@ -6,6 +6,7 @@ File description : Class container for the POwerSupply instrument's View.
 
 """
 
+from PowerSupplyController import PowerSupplyController
 from DeviceFrame import DeviceFrame
 
 from tkinter import Frame, Label
@@ -21,13 +22,14 @@ class PowerSupplyView (DeviceFrame):
 
     """
 
-    def __init__(self, root, terminal, model, instrument):
+    def __init__(self, root, terminal, model):
     #Constructor for the PowerSupply's View
 
-        DeviceFrame.__init__(self, root, terminal, model, instrument)
-        self.instrument.type = "Power Supply"
+        DeviceFrame.__init__(self, root, terminal, model)
+        self.localController = PowerSupplyController()
+        self.localController.instrument.type = "Power Supply"
 
-        self.initFrame(text=self.instrument.type)
+        self.initFrame(text=self.localController.instrument.type)
         
         self.initLabelFrame()
         self.initFrameLine()

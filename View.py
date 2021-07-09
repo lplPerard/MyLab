@@ -96,7 +96,7 @@ class View(Tk):
         self.connectionsTL = ConnectionsTL(self.topLevel_connect, view=self)
         self.connectionsTL.frame.pack()
 
-        self.frame = DeviceFrame(self, terminal=self.term_text, model=self.model, instrument=self.controller.instrument)
+        self.frame = DeviceFrame(self, terminal=self.term_text, model=self.model)
         self.frame.initFrame(text="Device Name", bg=self.model.parameters_dict['backgroundColor'])
 
         self.__initMenu()
@@ -108,16 +108,16 @@ class View(Tk):
     #This methods is used to change the device display
         if deviceName == "Power Supply":
                 self.frame.clearFrame()
-                self.frame = PowerSupplyView(self, terminal=self.term_text, model=self.model, instrument=self.controller.instrument)
+                self.frame = PowerSupplyView(self, terminal=self.term_text, model=self.model)
         if deviceName == "Oscilloscope":
                 self.frame.clearFrame()
-                self.frame = PowerSupplyView(self, terminal=self.term_text, model=self.model, instrument=self.controller.instrument)
+                self.frame = PowerSupplyView(self, terminal=self.term_text, model=self.model)
         if deviceName == "Source Meter":
                 self.frame.clearFrame()
-                self.frame = PowerSupplyView(self, terminal=self.term_text, model=self.model, instrument=self.controller.instrument)
+                self.frame = PowerSupplyView(self, terminal=self.term_text, model=self.model)
         if deviceName == "RLC Meter":
                 self.frame.clearFrame()
-                self.frame = PowerSupplyView(self, terminal=self.term_text, model=self.model, instrument=self.controller.instrument)
+                self.frame = PowerSupplyView(self, terminal=self.term_text, model=self.model)
 
     def sendError(self, error):
     #This method generates message boxes from error returns
