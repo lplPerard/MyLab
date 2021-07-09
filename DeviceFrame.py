@@ -27,10 +27,10 @@ class DeviceFrame():
         self.frame = LabelFrame(root)
 
 
-    def initFrame(self, text="",column=0, columnspan=1, row=0, rowspan=1, padx=15, pady=15, bg=""):
+    def initFrame(self, text="", padx=15, pady=15, bg=""):
     #This method generates the Frame's parameters for the sequence
         self.frame.configure(text=text, padx=padx, pady=pady, bg=bg)
-        self.frame.grid(column=column, columnspan=columnspan, row=row, rowspan=rowspan)
+        self.frame.pack()
         
     def clearFrame(self):
     #This method delete the Sequence's frame from the grid

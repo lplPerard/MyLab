@@ -15,10 +15,12 @@ from tkinter import messagebox
 from tkinter import BOTH
 from tkinter import YES
 from tkinter import END
+from tkinter.constants import BOTTOM
 
 from DeviceFrame import DeviceFrame
 from ParametersTL import ParametersTL
 from ConnectionsTL import ConnectionsTL
+from WakeUpTL import WakeUpTL
 from Model import Model
 
 class View(Tk):
@@ -37,9 +39,10 @@ class View(Tk):
         
         self.model = Model()
 
-        self.topLevel_term =Toplevel(self)        
-        self.topLevel_param =Toplevel(self)
-        self.topLevel_connect =Toplevel(self)
+        self.topLevel_wakeUp = Toplevel(self) 
+        self.topLevel_term = Toplevel(self)        
+        self.topLevel_param = Toplevel(self)
+        self.topLevel_connect = Toplevel(self)
 
         self.__initWidgets()
 
@@ -50,12 +53,22 @@ class View(Tk):
         self.title("MyLab")
         self.geometry(self.model.parameters_dict['geometry'])
         self.attributes('-alpha', self.model.parameters_dict['backgroundAlpha'])
-        self.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.configure(bg=self.model.parameters_dict['backgroundColor'])        
+        
+        self.topLevel_wakeUp.title("Select Instrument")
+        self.topLevel_wakeUp.protocol('WM_DELETE_WINDOW', self.topLevel_wakeUp.withdraw)
+        self.topLevel_wakeUp.transient()
+        self.topLevel_wakeUp.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.topLevel_wakeUp.attributes('-alpha', self.model.parameters_dict['backgroundAlpha'])
+        self.wakeUpTL = WakeUpTL(self.topLevel_wakeUp)
+        self.wakeUpTL.frame.grid(column=0, row=0)
 
         self.topLevel_term.title("Terminal")
         self.topLevel_term.protocol('WM_DELETE_WINDOW', self.topLevel_term.withdraw)
         self.topLevel_term.transient()
         self.topLevel_term.withdraw()
+        self.topLevel_term.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.topLevel_term.attributes('-alpha', self.model.parameters_dict['backgroundAlpha'])
         self.term_text = Text(self.topLevel_term, height=30, width=70, bg="black", fg="green")
         self.term_text.grid(column=0, row=0)
         self.term_text.insert(END, "You are running MyLab\n")
@@ -64,6 +77,8 @@ class View(Tk):
         self.topLevel_param.protocol('WM_DELETE_WINDOW', self.topLevel_param.withdraw)
         self.topLevel_param.transient()
         self.topLevel_param.withdraw()
+        self.topLevel_param.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.topLevel_param.attributes('-alpha', self.model.parameters_dict['backgroundAlpha'])
         self.parametersTL = ParametersTL(self.topLevel_param)
         self.parametersTL.frame.grid(column=0, row=0)
         
@@ -71,17 +86,19 @@ class View(Tk):
         self.topLevel_connect.protocol('WM_DELETE_WINDOW', self.topLevel_connect.withdraw)
         self.topLevel_connect.transient()
         self.topLevel_connect.withdraw()
-        self.connectionsTL = ConnectionsTL(self.topLevel_param)
+        self.topLevel_connect.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.topLevel_connect.attributes('-alpha', self.model.parameters_dict['backgroundAlpha'])
+        self.connectionsTL = ConnectionsTL(self.topLevel_connect)
         self.connectionsTL.frame.grid(column=0, row=0)
 
 
         self.frame = DeviceFrame(self, self.term_text)
-        self.frame.initFrame(text="Device Name", column=0, row=0, rowspan=1, bg=self.model.parameters_dict['backgroundColor'])
+        self.frame.initFrame(text="Device Name", bg=self.model.parameters_dict['backgroundColor'])
 
         self.__initMenu()
 
         self.copyright = Label(self, text="Copyright Oticon Medical NICE", bg=self.model.parameters_dict['backgroundColor'])
-        self.copyright.grid(column=0, row=0)
+        self.copyright.pack(side = BOTTOM, padx=5, pady=5)
         
     def __initMenu(self):
     #This method generates a Menu bar which give access to the diffent software's tools
