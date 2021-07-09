@@ -28,13 +28,14 @@ class ConnectionsTL():
         self.frame.pack(fill="both", expand="yes")
         self.frame.configure(bg=self.model.parameters_dict['backgroundColor'])
 
-        self.combo_type = Combobox(self.frame, state="readonly", width=20, values=["USB",
+        self.combo_type = Combobox(self.frame, state="readonly", width=20, values=["All",
+                                                                                   "USB",
                                                                                    "Ethernet"])
         self.combo_type.current(0)
         self.combo_type.pack(pady=10)
 
         self.list_devices = Listbox(self.frame, selectmode='single')
-        self.list_devices.pack(pady=5)
+        self.list_devices.pack(pady=5, fill='x')
 
         self.button_actualize = Button(self.frame, text="Actualize", command=self.button_actualize_onclick)
         self.button_actualize.pack(side="left", pady=5, padx=30)
@@ -54,5 +55,7 @@ class ConnectionsTL():
     def button_select_onclick(self):
     #This method is called when user clicks on select
 
-        self.view.controller.setInstrumentAdress(self.list_devices.get(ANCHOR))
-        self.view.topLevel_connect.withdraw()
+        self.view.controller.instrument.adress = self.list_devices.get(ANCHOR)
+        
+        if self.view.controller.instrument.adress != "":
+            self.view.topLevel_connect.withdraw()

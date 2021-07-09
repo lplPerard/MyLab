@@ -22,11 +22,11 @@ class DeviceFrame():
 
     """
 
-    def __init__(self,  root, terminal, model=None):
+    def __init__(self,  root, terminal=None, model=None, instrument = None):
     #Constructor for the Sequence_view superclass
         
         self.term_text = terminal
-        self.instrument = Instrument()
+        self.instrument = instrument
         self.model = model
         self.frame = LabelFrame(root)
 

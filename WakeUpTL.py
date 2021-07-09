@@ -48,5 +48,6 @@ class WakeUpTL():
         self.button.pack(pady=5)
 
     def button_onclick(self):
+        self.view.frame.clearFrame()
         self.view.changeDeviceFrame(self.combo_instrument.get())
         self.view.topLevel_wakeUp.withdraw()

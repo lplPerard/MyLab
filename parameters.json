@@ -1,9 +1,9 @@
 {
-    "backgroundColor": "#49A",
+    "backgroundColor": "#EE7023",
     "backgroundAlpha": "0.95",
     "geometry": "720x480",
 
     "geometryWakeUpTL": "300x120",
 
-    "geometryConnectionsTL": "240x360"
+    "geometryConnectionsTL": "240x300"
 }

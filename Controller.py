@@ -19,15 +19,14 @@ class Controller():
     """
 
     def __init__(self):
-    #Constructor for the Controller class
-
-        
-        self.model = Model(self)
-        self.view = View(self, self.model)
-        self.view.mainloop()
+    #Constructor for the Controller class     
 
         self.instrument = Instrument()
         self.instrList=["null"]
+        
+        self.model = Model(self)
+        self.view = View(controller=self, model=self.model)
+        self.view.mainloop()
 
     def VISA_connect(self):
     #This method is used to connect to VISA
