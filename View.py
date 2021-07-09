@@ -6,6 +6,7 @@ File description : Class container for the application's view
 
 """
 
+from PowerSupplyController import PowerSupplyController
 from PowerSupplyView import PowerSupplyView
 from tkinter import Tk   
 from tkinter import Label
@@ -109,6 +110,8 @@ class View(Tk):
         if deviceName == "Power Supply":
                 self.frame.clearFrame()
                 self.frame = PowerSupplyView(self, terminal=self.term_text, model=self.model)
+                self.localController = PowerSupplyController()
+                self.localController.instrument.type = "Power Supply"
         if deviceName == "Oscilloscope":
                 self.frame.clearFrame()
                 self.frame = PowerSupplyView(self, terminal=self.term_text, model=self.model)

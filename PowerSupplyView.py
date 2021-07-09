@@ -22,12 +22,11 @@ class PowerSupplyView (DeviceFrame):
 
     """
 
-    def __init__(self, root, terminal, model):
+    def __init__(self, root, terminal, model, controller):
     #Constructor for the PowerSupply's View
 
         DeviceFrame.__init__(self, root, terminal, model)
-        self.localController = PowerSupplyController()
-        self.localController.instrument.type = "Power Supply"
+        self.controller = controller
 
         self.initFrame(text=self.localController.instrument.type)
         

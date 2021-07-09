@@ -8,7 +8,6 @@ File description : Class container for Power Supply Controller.
 
 
 from Instrument import Instrument
-
 import pyvisa
 
 class PowerSupplyController():
