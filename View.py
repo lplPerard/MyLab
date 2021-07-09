@@ -6,6 +6,7 @@ File description : Class container for the application's view
 
 """
 
+from PowerSupplyView import PowerSupplyView
 from tkinter import Tk   
 from tkinter import Label
 from tkinter import Menu 
@@ -53,15 +54,7 @@ class View(Tk):
         self.title("MyLab")
         self.geometry(self.model.parameters_dict['geometry'])
         self.attributes('-alpha', self.model.parameters_dict['backgroundAlpha'])
-        self.configure(bg=self.model.parameters_dict['backgroundColor'])        
-        
-        self.topLevel_wakeUp.title("Select Instrument")
-        self.topLevel_wakeUp.protocol('WM_DELETE_WINDOW', self.topLevel_wakeUp.withdraw)
-        self.topLevel_wakeUp.transient()
-        self.topLevel_wakeUp.configure(bg=self.model.parameters_dict['backgroundColor'])
-        self.topLevel_wakeUp.attributes('-alpha', self.model.parameters_dict['backgroundAlpha'])
-        self.wakeUpTL = WakeUpTL(self.topLevel_wakeUp)
-        self.wakeUpTL.frame.grid(column=0, row=0)
+        self.configure(bg=self.model.parameters_dict['backgroundColor'])
 
         self.topLevel_term.title("Terminal")
         self.topLevel_term.protocol('WM_DELETE_WINDOW', self.topLevel_term.withdraw)
@@ -71,7 +64,16 @@ class View(Tk):
         self.topLevel_term.attributes('-alpha', self.model.parameters_dict['backgroundAlpha'])
         self.term_text = Text(self.topLevel_term, height=30, width=70, bg="black", fg="green")
         self.term_text.grid(column=0, row=0)
-        self.term_text.insert(END, "You are running MyLab\n")
+        self.term_text.insert(END, "You are running MyLab\n")        
+        
+        self.topLevel_wakeUp.title("Select Instrument")
+        self.topLevel_wakeUp.protocol('WM_DELETE_WINDOW', self.topLevel_wakeUp.withdraw)
+        self.topLevel_wakeUp.transient()
+        self.topLevel_wakeUp.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.topLevel_wakeUp.geometry(self.model.parameters_dict['geometryWakeUpTL'])
+        self.topLevel_wakeUp.attributes('-alpha', self.model.parameters_dict['backgroundAlpha'], '-topmost', 'true')
+        self.wakeUpTL = WakeUpTL(self.topLevel_wakeUp, model=self.model, View=self)
+        self.wakeUpTL.frame.pack()
         
         self.topLevel_param.title("Parameters")
         self.topLevel_param.protocol('WM_DELETE_WINDOW', self.topLevel_param.withdraw)
@@ -91,14 +93,18 @@ class View(Tk):
         self.connectionsTL = ConnectionsTL(self.topLevel_connect)
         self.connectionsTL.frame.grid(column=0, row=0)
 
-
-        self.frame = DeviceFrame(self, self.term_text)
+        self.frame = DeviceFrame(self, self.term_text, model=self.model)
         self.frame.initFrame(text="Device Name", bg=self.model.parameters_dict['backgroundColor'])
 
         self.__initMenu()
 
         self.copyright = Label(self, text="Copyright Oticon Medical NICE", bg=self.model.parameters_dict['backgroundColor'])
         self.copyright.pack(side = BOTTOM, padx=5, pady=5)
+
+    def changeDeviceFrame(self, deviceName):
+    #This methods is used to change the device display
+        if deviceName == "Power Supply":
+                self.frame = PowerSupplyView(self, self.term_text, self.model)
         
     def __initMenu(self):
     #This method generates a Menu bar which give access to the diffent software's tools
@@ -198,7 +204,7 @@ class View(Tk):
     #Callback function for menu2 2 option
         mbox = messagebox.askyesno("Switch Instrument", "Do you want to switch instrument ?")
         if mbox == True:
-            print("bla")
+            self.changeDeviceFrame("Power Supply")
         else:
             print("bla")
 

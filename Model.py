@@ -23,3 +23,9 @@ class Model():
         with open("parameters.json") as f:
             self.parameters_dict = json.load(f)
             f.close()
+
+    def actualizeModel(self):
+    #This method actualize the parameters_dict 
+        with open("parameters.json") as f:
+            self.parameters_dict = json.load(f)
+            f.close()

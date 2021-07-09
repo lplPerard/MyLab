@@ -1,5 +1,7 @@
 {
     "backgroundColor": "#49A",
     "backgroundAlpha": "0.95",
-    "geometry": "720x480"
+    "geometry": "720x480",
+
+    "geometryWakeUpTL": "300x120"
 }

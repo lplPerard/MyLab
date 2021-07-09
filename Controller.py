@@ -11,7 +11,7 @@ from View import View
 from Model import Model
 
 class Controller():
-    """Class containing the Controller for the CBRAM software.
+    """Class containing the Controller for MyLab.
 
     """
 
@@ -21,8 +21,3 @@ class Controller():
         self.view = View()
         self.view.mainloop()
         self.model = Model()
-        self.__initModel()
-
-    def __initModel(self):
-    #This method initialize the Model
-        print("bla")
