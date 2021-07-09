@@ -24,7 +24,6 @@ class WakeUpTL():
         self.view = View
         self.model = model
         self.frame.configure(bg=self.model.parameters_dict['backgroundColor'])
-        self.show = True
 
         self.initWidgets()
 

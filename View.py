@@ -61,7 +61,7 @@ class View(Tk):
         self.topLevel_term.transient()
         self.topLevel_term.withdraw()
         self.topLevel_term.configure(bg=self.model.parameters_dict['backgroundColor'])
-        self.topLevel_term.attributes('-alpha', self.model.parameters_dict['backgroundAlpha'])
+        self.topLevel_term.attributes('-alpha', self.model.parameters_dict['backgroundAlpha'], '-topmost', 'true')
         self.term_text = Text(self.topLevel_term, height=30, width=70, bg="black", fg="green")
         self.term_text.grid(column=0, row=0)
         self.term_text.insert(END, "You are running MyLab\n")        
@@ -82,16 +82,18 @@ class View(Tk):
         self.topLevel_param.configure(bg=self.model.parameters_dict['backgroundColor'])
         self.topLevel_param.attributes('-alpha', self.model.parameters_dict['backgroundAlpha'])
         self.parametersTL = ParametersTL(self.topLevel_param)
-        self.parametersTL.frame.grid(column=0, row=0)
+        self.parametersTL.frame.pack()
         
         self.topLevel_connect.title("Connections")
+        self.topLevel_connect.resizable(False, True)
         self.topLevel_connect.protocol('WM_DELETE_WINDOW', self.topLevel_connect.withdraw)
         self.topLevel_connect.transient()
         self.topLevel_connect.withdraw()
         self.topLevel_connect.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.topLevel_connect.geometry(self.model.parameters_dict['geometryConnectionsTL'])
         self.topLevel_connect.attributes('-alpha', self.model.parameters_dict['backgroundAlpha'])
         self.connectionsTL = ConnectionsTL(self.topLevel_connect)
-        self.connectionsTL.frame.grid(column=0, row=0)
+        self.connectionsTL.frame.pack()
 
         self.frame = DeviceFrame(self, self.term_text, model=self.model)
         self.frame.initFrame(text="Device Name", bg=self.model.parameters_dict['backgroundColor'])
@@ -104,6 +106,16 @@ class View(Tk):
     def changeDeviceFrame(self, deviceName):
     #This methods is used to change the device display
         if deviceName == "Power Supply":
+                self.frame.clearFrame()
+                self.frame = PowerSupplyView(self, self.term_text, self.model)
+        if deviceName == "Oscilloscope":
+                self.frame.clearFrame()
+                self.frame = PowerSupplyView(self, self.term_text, self.model)
+        if deviceName == "Source Meter":
+                self.frame.clearFrame()
+                self.frame = PowerSupplyView(self, self.term_text, self.model)
+        if deviceName == "RLC Meter":
+                self.frame.clearFrame()
                 self.frame = PowerSupplyView(self, self.term_text, self.model)
         
     def __initMenu(self):

@@ -30,7 +30,7 @@ class PowerSupplyView (DeviceFrame):
         self.instrument.type = "Power Supply"
 
         self.initFrame(text=self.instrument.type)
-        print(self.instrument.type)
-        self.text = Label(text="coucou")
+        
+        self.text = Label(self.frame, text="Power supply to come !")
         self.text.pack()
 

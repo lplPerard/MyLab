@@ -34,9 +34,8 @@ class DeviceFrame():
     def initFrame(self, text="", padx=15, pady=15, bg=""):
     #This method generates the Frame's parameters for the sequence
         self.frame.configure(text=text, padx=padx, pady=pady, bg=self.model.parameters_dict['backgroundColor'])
-        self.frame.pack(side=TOP)
+        self.frame.pack(fill="both", expand="yes")
 
     def clearFrame(self):
     #This method delete the Sequence's frame from the grid
-        self.frame.grid_forget()
-
+        self.frame.destroy()
