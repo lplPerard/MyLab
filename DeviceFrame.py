@@ -30,11 +30,14 @@ class DeviceFrame():
         self.frame = LabelFrame(root)
 
 
-    def initFrame(self, text="", padx=15, pady=15, bg=""):
+    def initFrame(self, text="", padx=10, pady=10):
     #This method generates the Frame's parameters for the sequence
         self.frame.configure(text=text, padx=padx, pady=pady, bg=self.model.parameters_dict['backgroundColor'])
-        self.frame.pack(fill="both", expand="yes")
+        self.frame.pack(fill="y", expand="yes", side="left")
+
+        self.labelFrame_instrument = LabelFrame(self.frame, text="Instrument", bg=self.model.parameters_dict['backgroundColor'])
 
     def clearFrame(self):
     #This method delete the Sequence's frame from the grid
+        self.labelFrame_instrument.destroy()
         self.frame.destroy()

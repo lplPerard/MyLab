@@ -42,6 +42,8 @@ class View(Tk):
         self.model = model
         self.controller = controller
 
+        self.listInstruments=[]
+
         self.topLevel_wakeUp = Toplevel(self) 
         self.topLevel_term = Toplevel(self)        
         self.topLevel_param = Toplevel(self)
@@ -97,36 +99,71 @@ class View(Tk):
         self.connectionsTL = ConnectionsTL(self.topLevel_connect, view=self)
         self.connectionsTL.frame.pack()
 
-        self.frame = DeviceFrame(self, terminal=self.term_text, model=self.model)
-        self.frame.initFrame(text="Device Name", bg=self.model.parameters_dict['backgroundColor'])
+        self.listInstruments.append(DeviceFrame(self, terminal=self.term_text, model=self.model))
+        self.listInstruments[0].initFrame(text="Device Name")
 
         self.__initMenu()
 
         self.copyright = Label(self, text="Copyright Oticon Medical NICE", bg=self.model.parameters_dict['backgroundColor'])
         self.copyright.pack(side = BOTTOM, padx=5, pady=5)
 
-    def changeDeviceFrame(self, deviceName):
+    def addDeviceFrame(self, deviceType):
     #This methods is used to change the device display
-        if deviceName == "Power Supply":
-                self.frame.clearFrame()
-                self.frame = PowerSupplyView(self, terminal=self.term_text, model=self.model)
+        if deviceType == "Power Supply":
                 self.localController = PowerSupplyController()
-                self.localController.instrument.type = "Power Supply"
-        if deviceName == "Oscilloscope":
-                self.frame.clearFrame()
-                self.frame = PowerSupplyView(self, terminal=self.term_text, model=self.model)
-        if deviceName == "Source Meter":
-                self.frame.clearFrame()
-                self.frame = PowerSupplyView(self, terminal=self.term_text, model=self.model)
-        if deviceName == "RLC Meter":
-                self.frame.clearFrame()
-                self.frame = PowerSupplyView(self, terminal=self.term_text, model=self.model)
+                if len(self.listInstruments) < 4:
+                    pos = len(self.listInstruments)
+                    name=deviceType + " (" + str(pos) + ")"
+                    tamp = PowerSupplyView(self, terminal=self.term_text, model=self.model, controller=self.localController, name=name)
+                    self.listInstruments.insert(0, tamp)
+                    self.menu5.add_command(label=name, command=lambda: self.menu5_callback(deviceType, pos, tamp))
+                    self.term_text.insert(END, "New Instrument added : " + deviceType + " (" + str(pos) + ")\n")
+                else:
+                    self.sendWarning("W000")
+
+        if deviceType == "Oscilloscope":
+                self.localController = PowerSupplyController()
+                if len(self.listInstruments) < 4:
+                    pos = len(self.listInstruments)
+                    tamp = PowerSupplyView(self, terminal=self.term_text, model=self.model, controller=self.localController)
+                    self.listInstruments.insert(0, tamp)
+                    self.menu5.add_command(label=deviceType + " (" + str(pos) + ")", command=lambda: self.menu5_callback(deviceType, pos, tamp))
+                    self.term_text.insert(END, "New Instrument added : " + deviceType + " (" + str(pos) + ")\n")
+                else:
+                    self.sendWarning("W000")
+
+        if deviceType == "Source Meter":
+                self.localController = PowerSupplyController()
+                if len(self.listInstruments) < 4:
+                    pos = len(self.listInstruments)
+                    tamp = PowerSupplyView(self, terminal=self.term_text, model=self.model, controller=self.localController)
+                    self.listInstruments.insert(0, tamp)
+                    self.menu5.add_command(label=deviceType + " (" + str(pos) + ")", command=lambda: self.menu5_callback(deviceType, pos, tamp))
+                    self.term_text.insert(END, "New Instrument added : " + deviceType + " (" + str(pos) + ")\n")
+                else:
+                    self.sendWarning("W000")
+
+        if deviceType == "RLC Meter":
+                self.localController = PowerSupplyController()
+                if len(self.listInstruments) < 4:
+                    pos = len(self.listInstruments)
+                    tamp = PowerSupplyView(self, terminal=self.term_text, model=self.model, controller=self.localController)
+                    self.listInstruments.insert(0, tamp)
+                    self.menu5.add_command(label=deviceType + " (" + str(pos) + ")", command=lambda: self.menu5_callback(deviceType, pos, tamp))
+                    self.term_text.insert(END, "New Instrument added : " + deviceType + " (" + str(pos) + ")\n")
+                else:
+                    self.sendWarning("W000")
 
     def sendError(self, error):
     #This method generates message boxes from error returns
         messagebox.showerror(title="Error : " + error, message=self.model.error_dict[error])
+        self.term_text.insert(END, "\nError : " + error + "\n  " + self.model.error_dict[error] + "\n")  
 
-        
+    def sendWarning(self, warning):
+    #This method generates message boxes from error returns
+        messagebox.showerror(title="Warning : " + warning, message=self.model.error_dict[warning])
+        self.term_text.insert(END, "\nWarning : " + warning + "\n  " + self.model.error_dict[warning] + "\n")  
+
     def __initMenu(self):
     #This method generates a Menu bar which give access to the diffent software's tools
         self.menubar = Menu(self)
@@ -137,37 +174,42 @@ class View(Tk):
         self.menu1.add_command(label="Save as", command=self.menu1_SaveAs_callBack)
         self.menu1.add_command(label="Open", command=self.menu1_Open_callBack)
 
-        self.menu2 = Menu(self.menubar, tearoff=0)
-        self.menubar.add_cascade(label="Edit", menu=self.menu2)        
-        self.menu2.add_command(label="Parameters", command=self.menu2_Parameters_callBack)
-        self.menu2.add_command(label="Connections", command=self.menu2_Connections_callBack)       
-
-        self.menu3 = Menu(self.menubar, tearoff=0)
-        self.menubar.add_cascade(label="Display", menu=self.menu3)
-        self.menu3.add_command(label="Terminal", command=self.menu3_Terminal_callBack)
-        self.menu3.add_command(label="Change logs", command=self.menu3_logs_callBack)
-        
         self.menu4 = Menu(self.menubar, tearoff=0)
-        self.menubar.add_cascade(label="Instruments", menu=self.menu4)
         self.menu4.add_command(label="Oscilloscope", command=self.menu4_Oscilloscope_callBack)
         self.menu4.add_command(label="Source Meter", command=self.menu4_SourceMeter_callBack)
         self.menu4.add_command(label="RLC Meter", command=self.menu4_RLCMeter_callBack)
         self.menu4.add_command(label="Power Supply", command=self.menu4_PowerSupply_callBack)
         self.menu4.add_command(label="Climatic Chamber", command=self.menu4_ClimaticChamber_callBack)
 
+        self.menu5 = Menu(self.menubar, tearoff="0")
+
+        self.menu2 = Menu(self.menubar, tearoff=0)
+        self.menubar.add_cascade(label="Edit", menu=self.menu2)
+        self.menu2.add_cascade(label="Add Instrument", menu=self.menu4)
+        self.menu2.add_cascade(label="Delete Instrument", menu=self.menu5) 
+        self.menu2.add_separator()
+        self.menu2.add_command(label="Parameters", command=self.menu2_Parameters_callBack)
+        self.menu2.add_command(label="Connections", command=self.menu2_Connections_callBack)       
+
+        self.menu3 = Menu(self.menubar, tearoff=0)
+        self.menubar.add_cascade(label="Display", menu=self.menu3)
+        self.menu3.add_command(label="Terminal", command=self.menu3_Terminal_callBack)
+        self.menu3.add_separator()
+        self.menu3.add_command(label="Change logs", command=self.menu3_logs_callBack)
+        
         self.config(menu=self.menubar)
 
     def menu1_Save_callBack(self):
     #Callback function for  menu1 1 option
-        print("test")
+        self.sendError("404")
 
     def menu1_SaveAs_callBack(self):
     #Callback function for menu1 2 option
-        print("test")
+        self.sendError("404")
 
     def menu1_Open_callBack(self):
     #Callback function for menu1 2 option
-        print("test")
+        self.sendError("404")
 
     def menu2_Parameters_callBack(self):
     #Callback function for menu2 1 option
@@ -195,44 +237,42 @@ class View(Tk):
 
     def menu3_logs_callBack(self):
     #Callback function for menu2 2 option
-        print("bla")
+        self.sendError("404")
 
     def menu4_Oscilloscope_callBack(self):
     #Callback function for menu2 2 option
-        mbox = messagebox.askyesno("Switch Instrument", "Do you want to switch instrument ?")
+        mbox = messagebox.askyesno("Add Instrument", "Do you want to add an Oscilloscope ?")
         if mbox == True:
-            print("bla")
-        else:
-            print("bla")
+            self.sendError("404")
 
     def menu4_SourceMeter_callBack(self):
     #Callback function for menu2 2 option
-        mbox = messagebox.askyesno("Switch Instrument", "Do you want to switch instrument ?")
+        mbox = messagebox.askyesno("Add Instrument", "Do you want to add a Source Meter?")
         if mbox == True:
-            print("bla")
-        else:
-            print("bla")
+            self.sendError("404")
 
     def menu4_RLCMeter_callBack(self):
     #Callback function for menu2 2 option
-        mbox = messagebox.askyesno("Switch Instrument", "Do you want to switch instrument ?")
+        mbox = messagebox.askyesno("Add Instrument", "Do you want to add a RLC Meter ?")
         if mbox == True:
-            print("bla")
-        else:
-            print("bla")
+            self.sendError("404")
 
     def menu4_PowerSupply_callBack(self):
     #Callback function for menu2 2 option
-        mbox = messagebox.askyesno("Switch Instrument", "Do you want to switch instrument ?")
+        mbox = messagebox.askyesno("Add Instrument", "Do you want to add a Power Supply ?")
         if mbox == True:
-            self.changeDeviceFrame("Power Supply")
-        else:
-            print("bla")
+            self.addDeviceFrame("Power Supply")
 
     def menu4_ClimaticChamber_callBack(self):
     #Callback function for menu2 2 option
-        mbox = messagebox.askyesno("Switch Instrument", "Do you want to switch instrument ?")
+        mbox = messagebox.askyesno("Add Instrument", "Do you want to add a Climatic Chamber ?")
         if mbox == True:
-            print("bla")
-        else:
-            print("bla")
+            self.sendError("404")
+
+    def menu5_callback(self, deviceType, pos, tamp):
+    #Callback function for menu5 delete option
+        index = self.listInstruments.index(tamp)
+        self.listInstruments[index].clearFrame()
+        del self.listInstruments[index]
+        self.menu5.delete(deviceType + " (" + str(pos) + ")")
+        self.term_text.insert(END, "An Instrument was deleted : " + deviceType + " (" + str(pos+1) + ")\n")

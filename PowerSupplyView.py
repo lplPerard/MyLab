@@ -22,13 +22,15 @@ class PowerSupplyView (DeviceFrame):
 
     """
 
-    def __init__(self, root, terminal, model, controller):
+    def __init__(self, root, terminal, model, controller, name):
     #Constructor for the PowerSupply's View
 
         DeviceFrame.__init__(self, root, terminal, model)
         self.controller = controller
 
-        self.initFrame(text=self.localController.instrument.type)
+        self.controller.instrument.name = name
+        self.initFrame(text=self.controller.instrument.type)
+        self.labelFrame_instrument.pack(padx=5, pady=5)
         
         self.initLabelFrame()
         self.initFrameLine()
@@ -49,21 +51,42 @@ class PowerSupplyView (DeviceFrame):
         self.labelFrame_measure.pack(padx=5, pady=5)
 
     def initFrameLine(self):
+        self.frame_instrument_name = Frame(self.labelFrame_instrument)
+        self.frame_instrument_name.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_instrument_name.pack(fill="both", pady=3)
+
+        self.frame_instrument_connectMode = Frame(self.labelFrame_instrument)
+        self.frame_instrument_connectMode.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_instrument_connectMode.pack(fill="both", pady=3)
+
+        self.frame_instrument_adress = Frame(self.labelFrame_instrument)
+        self.frame_instrument_adress.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_instrument_adress.pack(fill="both", pady=3)
 
         self.frame_source_voltage = Frame(self.labelFrame_source)
-        self.frame_source_voltage.pack(fill="both")
+        self.frame_source_voltage.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_source_voltage.pack(fill="both", pady=5)
 
         self.frame_source_current = Frame(self.labelFrame_source)
-        self.frame_source_current.pack(fill="both")
+        self.frame_source_current.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_source_current.pack(fill="both", pady=5)
 
         self.frame_measure_voltage = Frame(self.labelFrame_measure)
-        self.frame_measure_voltage.pack(fill="both")
+        self.frame_measure_voltage.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_measure_voltage.pack(fill="both", pady=5)
 
         self.frame_measure_current = Frame(self.labelFrame_measure)
-        self.frame_measure_current.pack(fill="both")
+        self.frame_measure_current.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_measure_current.pack(fill="both",pady=5)
     
     def initVar(self):
     #This methods instanciates all the Var
+        self.stringvar_instrumentName = StringVar()
+        self.stringvar_instrumentName.set(self.controller.instrument.name)
+        
+        self.stringvar_instrumentAdress = StringVar()
+        self.stringvar_instrumentAdress.set(self.controller.instrument.adress)
+
         self.doubleVar_voltageSource = DoubleVar()
         self.doubleVar_voltageSource.set(0)
 
@@ -78,24 +101,41 @@ class PowerSupplyView (DeviceFrame):
         
     def initLabel(self):
     #This methods instanciates all the Label
-        self.label_voltageSource = Label(self.frame_source_voltage, text="Voltage")
+        self.label_instrumentName = Label(self.frame_instrument_name, text="Name :")
+        self.label_instrumentName.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_instrumentName.pack(side="left")
+
+        self.label_instrumentConnectMode = Label(self.frame_instrument_connectMode, text="Connect mode :")
+        self.label_instrumentConnectMode.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_instrumentConnectMode.pack(side="left")
+
+        self.label_instrumentAdress = Label(self.frame_instrument_adress, text="Adress :")
+        self.label_instrumentAdress.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_instrumentAdress.pack(side="left")
+
+        self.label_voltageSource = Label(self.frame_source_voltage, text="Voltage :")
         self.label_voltageSource.configure(bg=self.model.parameters_dict['backgroundColor'])
         self.label_voltageSource.pack(side="left")
 
-        self.label_currentSource = Label(self.frame_source_current, text="Current")
+        self.label_currentSource = Label(self.frame_source_current, text="Current :")
         self.label_currentSource.configure(bg=self.model.parameters_dict['backgroundColor'])
         self.label_currentSource.pack(side="left")
 
-        self.label_voltageMeasure = Label(self.frame_measure_voltage, text="Voltage")
+        self.label_voltageMeasure = Label(self.frame_measure_voltage, text="Voltage :")
         self.label_voltageMeasure.configure(bg=self.model.parameters_dict['backgroundColor'])
         self.label_voltageMeasure.pack(side="left")
 
-        self.label_currentMeasure = Label(self.frame_measure_current, text="Current")
+        self.label_currentMeasure = Label(self.frame_measure_current, text="Current :")
         self.label_currentMeasure.configure(bg=self.model.parameters_dict['backgroundColor'])
         self.label_currentMeasure.pack(side="left")
 
     def initCombo(self):
     #This methods instanciates all the combobox
+        self.combo_instrumentConnectMode = Combobox(self.frame_instrument_connectMode, state="readonly", width=5, values=["USB", "Ethernet"])
+        #self.combo_instrumentConnectMode.bind("<<ComboboxSelected>>", self.combo_instrumentConnectMode_callback)
+        self.combo_instrumentConnectMode.configure(background='white')
+        self.combo_instrumentConnectMode.current(0)
+        self.combo_instrumentConnectMode.pack(side="right")
 
         self.combo_voltageSource = Combobox(self.frame_source_voltage, state="readonly", width=5, values=["V", "mV"])
         #self.combo_voltageSource.bind("<<ComboboxSelected>>", self.combo_voltageSource_callback)
@@ -122,18 +162,24 @@ class PowerSupplyView (DeviceFrame):
         self.combo_currentMeasure.pack(side="right")
 
     def initEntries(self):
-    #This method instanciates the entries
+    #This method instanciates the entries    
+        self.entry_instrumentName = Entry(self.frame_instrument_name, textvariable=self.stringvar_instrumentName)
+        self.entry_instrumentName.pack(side='right', padx=5)
+
+        self.entry_instrumentAdress = Entry(self.frame_instrument_adress, textvariable=self.stringvar_instrumentAdress)
+        self.entry_instrumentAdress.pack(side='right', padx=5)
+
         self.entry_voltageSource = Entry(self.frame_source_voltage, textvariable=self.doubleVar_voltageSource)
-        self.entry_voltageSource.pack(side='right')
+        self.entry_voltageSource.pack(side='right', padx=5)
 
         self.entry_currentSource = Entry(self.frame_source_current, textvariable=self.doubleVar_currentSource)
-        self.entry_currentSource.pack(side='right')
+        self.entry_currentSource.pack(side='right', padx=5)
 
         self.entry_voltageMeasure = Entry(self.frame_measure_voltage, textvariable=self.doubleVar_voltageMeasure)
-        self.entry_voltageMeasure.pack(side='right')
+        self.entry_voltageMeasure.pack(side='right', padx=5)
 
         self.entry_currentMeasure = Entry(self.frame_measure_current, textvariable=self.doubleVar_currentMeasure)
-        self.entry_currentMeasure.pack(side='right')
+        self.entry_currentMeasure.pack(side='right', padx=5)
 
     def initRadio(self):
     #This method instanciates the Radio buttons

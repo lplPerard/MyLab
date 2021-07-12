@@ -21,8 +21,9 @@ class Model():
 
         """
         self.controller = controller
+        self.parametersFile = "parameters.json"
 
-        with open("parameters.json") as f:
+        with open(self.parametersFile) as f:
             self.parameters_dict = json.load(f)
             f.close()
 
@@ -32,7 +33,7 @@ class Model():
 
     def actualizeModel(self):
     #This method actualize the parameters_dict 
-        with open("parameters.json") as f:
+        with open(self.parametersFile) as f:
             self.parameters_dict = json.load(f)
             f.close()
 

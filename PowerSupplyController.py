@@ -15,7 +15,9 @@ class PowerSupplyController():
 
     """
 
-    def __init__(self):
+    def __init__(self, type=None):
     #Constructor for the Controller class     
-
         self.instrument = Instrument()
+        self.instrument.type="Power Supply"
+
+        
