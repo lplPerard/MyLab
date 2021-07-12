@@ -9,7 +9,7 @@ File description : Class container for the POwerSupply instrument's View.
 from PowerSupplyController import PowerSupplyController
 from DeviceFrame import DeviceFrame
 
-from tkinter import Frame, Label
+from tkinter import Button, Frame, Label
 from tkinter import LabelFrame
 from tkinter import StringVar
 from tkinter import DoubleVar
@@ -39,7 +39,7 @@ class PowerSupplyView (DeviceFrame):
         self.initCombo()
         self.initVar()
         self.initEntries()
-        self.initRadio()
+        self.initButton()
 
     def updateView(self):
     #This method refresh the content of the view
@@ -192,21 +192,26 @@ class PowerSupplyView (DeviceFrame):
         self.entry_currentMeasure = Entry(self.frame_measure_current, textvariable=self.doubleVar_currentMeasure)
         self.entry_currentMeasure.pack(side='right', padx=5)
 
-    def initRadio(self):
+    def initButton(self):
     #This method instanciates the Radio buttons
 
-        self.channel_activate = Radiobutton(self.labelFrame_source, text='On/Off', indicatoron=0)
+        self.channel_activate = Button(self.labelFrame_source, text='On/Off', command=self.channel_activate_callback)
         self.channel_activate.pack()
 
     def entry_voltageSource_callback(self, arg):
-    #This methods calls the controller to change the voltage
+    #This method calls the controller to change the voltage
         voltage = self.doubleVar_voltageSource.get()
         thread=Thread(target=self.controller.setVoltageSource(voltage))
         thread.start()
 
-    def entry_currentSource_callback(self):
-    #This methods calls the controller to change the voltage
-        current = self.doubleVar_currentSource.get()
+    def entry_currentSource_callback(self, arg):
+    #This method calls the controller to change the voltage
+        current = self.doubleVar_currentSource.get()        
         thread=Thread(target=self.controller.setCurrentSource(current))
+        thread.start()
+
+    def channel_activate_callback(self):
+    #This method call the controller to change output state
+        thread=Thread(target=self.controller.setOutputState())
         thread.start()
         

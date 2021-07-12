@@ -111,7 +111,7 @@ class View(Tk):
     def addDeviceFrame(self, deviceType):
     #This methods is used to change the device display
         if deviceType == "Power Supply":
-                self.localController = PowerSupplyController(term=self.term_text)
+                self.localController = PowerSupplyController(view=self, term=self.term_text)
                 if len(self.listInstruments) < 4:
                     pos = len(self.listInstruments)
                     name=deviceType + " (" + str(pos) + ")"

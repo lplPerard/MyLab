@@ -32,18 +32,54 @@ class PowerSupplyController():
     #This method establish connection with device using instrument adress        
         try:
             self.instrument.ressource = self.resourceManager.open_resource(self.instrument.adress)
+        except:
+            self.view.sendError("001")
+        try:
             self.instrument.ressource.write('*RST')
             self.instrument.ressource.write('*CLS')
             self.instrument.ressource.close()
         except:
-            self.term.insert("end", "error")
+            self.view.sendError("002")
 
     def setVoltageSource(self, voltage, calibre=0):
     #This method modify the voltage source
 
         try:
             self.instrument.ressource = self.resourceManager.open_resource(self.instrument.adress)
-            self.instrument.ressource.write('SOUR:VOLT:LEV:IMM:AMP' + str(voltage))
+        except:
+            self.view.sendError("001")
+        try:
+            self.instrument.ressource.write('INST:NSEL 1')
+            self.instrument.ressource.write('SOUR:VOLT ' + str(voltage))
+            self.instrument.ressource.close()
+        except:
+            self.view.sendError("002")
+
+    def setCurrentSource(self, current, calibre=0):
+    #This method modify the voltage source
+
+        try:
+            self.instrument.ressource = self.resourceManager.open_resource(self.instrument.adress)
+        except:
+            self.view.sendError("001")
+        try:
+            self.instrument.ressource.write('INST:NSEL 1')
+            self.instrument.ressource.write('OUTP:STAT ' + str(current))
+            self.instrument.ressource.close()
+        except:
+            self.view.sendError("002")
+            
+    def setOutputState(self):
+    #This method modify the output state
+
+        try:
+            self.instrument.ressource = self.resourceManager.open_resource(self.instrument.adress)
+        except:
+            self.view.sendError("001")
+        try:
+            self.instrument.ressource.write('INST:NSEL 1')
+            self.instrument.ressource.write('SOUR:CURR ON|1')
+            self.instrument.ressource.close()
         except:
             self.term.insert("end", "error")
 
