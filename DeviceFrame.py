@@ -25,6 +25,7 @@ class DeviceFrame():
     def __init__(self,  root, terminal=None, model=None):
     #Constructor for the Sequence_view superclass
         
+        self.view = root
         self.term_text = terminal
         self.model = model
         self.frame = LabelFrame(root)
@@ -41,3 +42,7 @@ class DeviceFrame():
     #This method delete the Sequence's frame from the grid
         self.labelFrame_instrument.destroy()
         self.frame.destroy()
+
+    def updateView(self):
+    #This method update the content of a device Frame
+        self.view.sendError("404")

@@ -17,6 +17,8 @@ from tkinter import Entry
 from tkinter import Radiobutton
 from tkinter.ttk import Combobox
 
+from threading import Thread
+
 class PowerSupplyView (DeviceFrame):
     """Class containing the PowerSupply's View
 
@@ -30,7 +32,6 @@ class PowerSupplyView (DeviceFrame):
 
         self.controller.instrument.name = name
         self.initFrame(text=self.controller.instrument.type)
-        self.labelFrame_instrument.pack(padx=5, pady=5)
         
         self.initLabelFrame()
         self.initFrameLine()
@@ -40,15 +41,23 @@ class PowerSupplyView (DeviceFrame):
         self.initEntries()
         self.initRadio()
 
+    def updateView(self):
+    #This method refresh the content of the view
+        self.stringvar_instrumentAdress.set(self.controller.instrument.adress)
+        thread=Thread(target=self.controller.connectToDevice)
+        thread.start()
+        
     def initLabelFrame(self):
     #This method instanciates all the LabelFrame
+        self.labelFrame_instrument.pack(padx=5, pady=5, fill="y")
+
         self.labelFrame_source = LabelFrame(self.frame, text="Source")
         self.labelFrame_source.configure(bg=self.model.parameters_dict['backgroundColor'])
-        self.labelFrame_source.pack(padx=5, pady=5)
+        self.labelFrame_source.pack(padx=5, pady=5, fill="y")
 
         self.labelFrame_measure = LabelFrame(self.frame, text="Measure")
         self.labelFrame_measure.configure(bg=self.model.parameters_dict['backgroundColor'])
-        self.labelFrame_measure.pack(padx=5, pady=5)
+        self.labelFrame_measure.pack(padx=5, pady=5, fill="y")
 
     def initFrameLine(self):
         self.frame_instrument_name = Frame(self.labelFrame_instrument)
@@ -170,9 +179,11 @@ class PowerSupplyView (DeviceFrame):
         self.entry_instrumentAdress.pack(side='right', padx=5)
 
         self.entry_voltageSource = Entry(self.frame_source_voltage, textvariable=self.doubleVar_voltageSource)
+        self.entry_voltageSource.bind("<Return>", self.entry_voltageSource_callback)
         self.entry_voltageSource.pack(side='right', padx=5)
 
         self.entry_currentSource = Entry(self.frame_source_current, textvariable=self.doubleVar_currentSource)
+        self.entry_currentSource.bind("<Return>", self.entry_currentSource_callback)
         self.entry_currentSource.pack(side='right', padx=5)
 
         self.entry_voltageMeasure = Entry(self.frame_measure_voltage, textvariable=self.doubleVar_voltageMeasure)
@@ -186,3 +197,16 @@ class PowerSupplyView (DeviceFrame):
 
         self.channel_activate = Radiobutton(self.labelFrame_source, text='On/Off', indicatoron=0)
         self.channel_activate.pack()
+
+    def entry_voltageSource_callback(self, arg):
+    #This methods calls the controller to change the voltage
+        voltage = self.doubleVar_voltageSource.get()
+        thread=Thread(target=self.controller.setVoltageSource(voltage))
+        thread.start()
+
+    def entry_currentSource_callback(self):
+    #This methods calls the controller to change the voltage
+        current = self.doubleVar_currentSource.get()
+        thread=Thread(target=self.controller.setCurrentSource(current))
+        thread.start()
+        

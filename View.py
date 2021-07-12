@@ -61,14 +61,15 @@ class View(Tk):
         self.configure(bg=self.model.parameters_dict['backgroundColor'])
 
         self.topLevel_term.title("Terminal")
+        self.topLevel_term.resizable(True, True)
         self.topLevel_term.protocol('WM_DELETE_WINDOW', self.topLevel_term.withdraw)
         self.topLevel_term.transient()
         self.topLevel_term.withdraw()
         self.topLevel_term.configure(bg=self.model.parameters_dict['backgroundColor'])
         self.topLevel_term.attributes('-alpha', self.model.parameters_dict['backgroundAlpha'], '-topmost', 'true')
         self.term_text = Text(self.topLevel_term, height=30, width=70, bg="black", fg="green")
-        self.term_text.grid(column=0, row=0)
-        self.term_text.insert(END, "You are running MyLab\n")        
+        self.term_text.pack(fill="both", expand="yes")
+        self.term_text.insert(END, "You are running MyLab" + self.model.meta_dict["version"] + "\n")    
         
         self.topLevel_wakeUp.title("Select Instrument")
         self.topLevel_wakeUp.protocol('WM_DELETE_WINDOW', self.topLevel_wakeUp.withdraw)
@@ -104,17 +105,18 @@ class View(Tk):
 
         self.__initMenu()
 
-        self.copyright = Label(self, text="Copyright Oticon Medical NICE", bg=self.model.parameters_dict['backgroundColor'])
+        self.copyright = Label(self, text="Copyright " + self.model.meta_dict["copyright"], bg=self.model.parameters_dict['backgroundColor'])
         self.copyright.pack(side = BOTTOM, padx=5, pady=5)
 
     def addDeviceFrame(self, deviceType):
     #This methods is used to change the device display
         if deviceType == "Power Supply":
-                self.localController = PowerSupplyController()
+                self.localController = PowerSupplyController(term=self.term_text)
                 if len(self.listInstruments) < 4:
                     pos = len(self.listInstruments)
                     name=deviceType + " (" + str(pos) + ")"
                     tamp = PowerSupplyView(self, terminal=self.term_text, model=self.model, controller=self.localController, name=name)
+                    tamp.updateView()
                     self.listInstruments.insert(0, tamp)
                     self.menu5.add_command(label=name, command=lambda: self.menu5_callback(deviceType, pos, tamp))
                     self.term_text.insert(END, "New Instrument added : " + deviceType + " (" + str(pos) + ")\n")
@@ -163,6 +165,12 @@ class View(Tk):
     #This method generates message boxes from error returns
         messagebox.showerror(title="Warning : " + warning, message=self.model.error_dict[warning])
         self.term_text.insert(END, "\nWarning : " + warning + "\n  " + self.model.error_dict[warning] + "\n")  
+
+    def refresh(self):
+    #This method refresh the view and its content
+        self.update_idletasks()
+        for item in self.listInstruments:
+            item.updateView()
 
     def __initMenu(self):
     #This method generates a Menu bar which give access to the diffent software's tools
@@ -223,6 +231,7 @@ class View(Tk):
     #Callback function for menu2 2 option
         if self.topLevel_connect.state() == "withdrawn":
             self.topLevel_connect.deiconify()
+            self.connectionsTL.actualizeInstruments()
 
         elif self.topLevel_connect.state() == "normal":
             self.topLevel_connect.withdraw()

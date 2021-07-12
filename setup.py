@@ -9,7 +9,7 @@ base = None
 if sys.platform == 'win32':
     base = 'Win32GUI'
 
-includefiles = ['parameters.json']
+includefiles = ['parameters.json', 'Metadata.json', 'Error.json', 'NIVISA_19.5']
 
 executables = [
     Executable('MyLab.py', base=base)
