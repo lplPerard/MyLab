@@ -282,7 +282,7 @@ class View(Tk):
     def menu5_callback(self, deviceType, pos, tamp):
     #Callback function for menu5 delete option
         index = self.listInstruments.index(tamp)
+        self.menu5.delete(self.listInstruments[index].controller.instrument.name)
+        self.term_text.insert(END, "An Instrument was deleted : " + self.listInstruments[index].controller.instrument.name +"\n")
         self.listInstruments[index].clearFrame()
         del self.listInstruments[index]
-        self.menu5.delete(deviceType + " (" + str(pos) + ")")
-        self.term_text.insert(END, "An Instrument was deleted : " + deviceType + " (" + str(pos+1) + ")\n")

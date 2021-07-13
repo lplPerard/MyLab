@@ -175,6 +175,7 @@ class PowerSupplyView (DeviceFrame):
     def initEntries(self):
     #This method instanciates the entries    
         self.entry_instrumentName = Entry(self.frame_instrument_name, textvariable=self.stringvar_instrumentName)
+        self.entry_instrumentName.bind("<Return>", self.entry_instrumentName_callback)
         self.entry_instrumentName.pack(side='right', padx=5)
 
         self.entry_instrumentAdress = Entry(self.frame_instrument_adress, textvariable=self.stringvar_instrumentAdress)
@@ -199,6 +200,14 @@ class PowerSupplyView (DeviceFrame):
         self.channel_activate = Button(self.labelFrame_source, text='On/Off', command=self.channel_activate_callback)
         self.channel_activate.pack()
         self.channel_activateState="off"
+
+    def entry_instrumentName_callback(self, arg):
+    #This method calls the view to change instrument name
+        oldname = self.controller.instrument.name
+        name = self.stringvar_instrumentName.get()
+        self.controller.instrument.name = name
+        indexMenu = self.view.menu5.index(oldname)
+        self.view.menu5.entryconfigure(indexMenu, label=name)
 
     def entry_voltageSource_callback(self, arg):
     #This method calls the controller to change the voltage
