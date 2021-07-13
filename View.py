@@ -117,6 +117,7 @@ class View(Tk):
                     name=deviceType + " (" + str(pos) + ")"
                     tamp = PowerSupplyView(self, terminal=self.term_text, model=self.model, controller=self.localController, name=name)
                     tamp.updateView()
+                    self.localController.updateView(tamp)
                     self.listInstruments.insert(0, tamp)
                     self.menu5.add_command(label=name, command=lambda: self.menu5_callback(deviceType, pos, tamp))
                     self.term_text.insert(END, "New Instrument added : " + deviceType + " (" + str(pos) + ")\n")

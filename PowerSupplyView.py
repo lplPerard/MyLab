@@ -29,10 +29,11 @@ class PowerSupplyView (DeviceFrame):
 
         DeviceFrame.__init__(self, root, terminal, model)
         self.controller = controller
-
         self.controller.instrument.name = name
+        self.view=root
+
         self.initFrame(text=self.controller.instrument.type)
-        
+                
         self.initLabelFrame()
         self.initFrameLine()
         self.initLabel()
@@ -44,8 +45,9 @@ class PowerSupplyView (DeviceFrame):
     def updateView(self):
     #This method refresh the content of the view
         self.stringvar_instrumentAdress.set(self.controller.instrument.adress)
-        thread=Thread(target=self.controller.connectToDevice)
-        thread.start()
+
+        if self.controller.instrument.adress != "":
+            self.controller.connectToDevice()
         
     def initLabelFrame(self):
     #This method instanciates all the LabelFrame
@@ -193,25 +195,34 @@ class PowerSupplyView (DeviceFrame):
         self.entry_currentMeasure.pack(side='right', padx=5)
 
     def initButton(self):
-    #This method instanciates the Radio buttons
-
+    #This method instanciates the buttons
         self.channel_activate = Button(self.labelFrame_source, text='On/Off', command=self.channel_activate_callback)
         self.channel_activate.pack()
+        self.channel_activateState="off"
 
     def entry_voltageSource_callback(self, arg):
     #This method calls the controller to change the voltage
-        voltage = self.doubleVar_voltageSource.get()
+        voltage = self.doubleVar_voltageSource.get()        
         thread=Thread(target=self.controller.setVoltageSource(voltage))
         thread.start()
 
     def entry_currentSource_callback(self, arg):
     #This method calls the controller to change the voltage
-        current = self.doubleVar_currentSource.get()        
+        current = self.doubleVar_currentSource.get()              
         thread=Thread(target=self.controller.setCurrentSource(current))
         thread.start()
 
     def channel_activate_callback(self):
-    #This method call the controller to change output state
+    #This method call the controller to change output state        
         thread=Thread(target=self.controller.setOutputState())
         thread.start()
+
+        if self.channel_activateState == "off":
+            self.channel_activateState="on"
+            self.controller.instrument.state="on"      
+            thread=Thread(target=self.controller.updateMonitoring())
+            thread.start()
+        else:
+            self.channel_activateState="off"
+            self.controller.instrument.state="off"
         

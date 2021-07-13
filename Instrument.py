@@ -18,5 +18,6 @@ class Instrument():
         self.type = ""
         self.connectMode = ""
         self.adress = ""
+        self.state = "off"
 
         self.ressource = None
