@@ -17,7 +17,9 @@ class Instrument():
         self.name = ""
         self.type = ""
         self.connectMode = ""
-        self.adress = ""
+        self.address = ""
         self.state = "off"
+
+        self.channelNumber = ["1"]
 
         self.ressource = None

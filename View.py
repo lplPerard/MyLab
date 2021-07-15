@@ -42,14 +42,34 @@ class View(Tk):
         self.model = model
         self.controller = controller
 
+        self.initAttributes()
+        self.__initWidgets()
+
+    def initAttributes(self):
+    #This method instanciates all the attributes    
         self.listInstruments=[]
 
         self.topLevel_wakeUp = Toplevel(self) 
         self.topLevel_term = Toplevel(self)        
         self.topLevel_param = Toplevel(self)
         self.topLevel_connect = Toplevel(self)
+        
+        self.term_text = Text(self.topLevel_term, height=30, width=70, bg="black", fg="green")
 
-        self.__initWidgets()
+        self.wakeUpTL = WakeUpTL(frame=self.topLevel_wakeUp, model=self.model, view=self)
+        self.parametersTL = ParametersTL(self.topLevel_param, model=self.model)
+        self.connectionsTL = ConnectionsTL(self.topLevel_connect, view=self)
+
+        self.copyright = Label(self, text="Copyright " + self.model.meta_dict["copyright"], bg=self.model.parameters_dict['backgroundColor'])
+
+        self.localController = None
+
+        self.menubar = Menu(self)
+        self.menu1 = Menu(self.menubar, tearoff=0)
+        self.menu2 = Menu(self.menubar, tearoff=0)
+        self.menu3 = Menu(self.menubar, tearoff=0)
+        self.menu4 = Menu(self.menubar, tearoff=0)
+        self.menu5 = Menu(self.menubar, tearoff=0)
 
     def __initWidgets(self):
     #This method is used to encapsulate the creation of sequences and menues
@@ -67,7 +87,6 @@ class View(Tk):
         self.topLevel_term.withdraw()
         self.topLevel_term.configure(bg=self.model.parameters_dict['backgroundColor'])
         self.topLevel_term.attributes('-alpha', self.model.parameters_dict['backgroundAlpha'], '-topmost', 'true')
-        self.term_text = Text(self.topLevel_term, height=30, width=70, bg="black", fg="green")
         self.term_text.pack(fill="both", expand="yes")
         self.term_text.insert(END, "You are running MyLab" + self.model.meta_dict["version"] + "\n")    
         
@@ -77,7 +96,6 @@ class View(Tk):
         self.topLevel_wakeUp.configure(bg=self.model.parameters_dict['backgroundColor'])
         self.topLevel_wakeUp.geometry(self.model.parameters_dict['geometryWakeUpTL'])
         self.topLevel_wakeUp.attributes('-alpha', self.model.parameters_dict['backgroundAlpha'], '-topmost', 'true')
-        self.wakeUpTL = WakeUpTL(self.topLevel_wakeUp, model=self.model, View=self)
         self.wakeUpTL.frame.pack()
         
         self.topLevel_param.title("Parameters")
@@ -86,7 +104,6 @@ class View(Tk):
         self.topLevel_param.withdraw()
         self.topLevel_param.configure(bg=self.model.parameters_dict['backgroundColor'])
         self.topLevel_param.attributes('-alpha', self.model.parameters_dict['backgroundAlpha'])
-        self.parametersTL = ParametersTL(self.topLevel_param, model=self.model)
         self.parametersTL.frame.pack()
         
         self.topLevel_connect.title("Connections")
@@ -97,7 +114,6 @@ class View(Tk):
         self.topLevel_connect.configure(bg=self.model.parameters_dict['backgroundColor'])
         self.topLevel_connect.geometry(self.model.parameters_dict['geometryConnectionsTL'])
         self.topLevel_connect.attributes('-alpha', self.model.parameters_dict['backgroundAlpha'])
-        self.connectionsTL = ConnectionsTL(self.topLevel_connect, view=self)
         self.connectionsTL.frame.pack()
 
         self.listInstruments.append(DeviceFrame(self, terminal=self.term_text, model=self.model))
@@ -105,7 +121,6 @@ class View(Tk):
 
         self.__initMenu()
 
-        self.copyright = Label(self, text="Copyright " + self.model.meta_dict["copyright"], bg=self.model.parameters_dict['backgroundColor'])
         self.copyright.pack(side = BOTTOM, padx=5, pady=5)
 
     def addDeviceFrame(self, deviceType):
@@ -125,34 +140,43 @@ class View(Tk):
                     self.sendWarning("W000")
 
         if deviceType == "Oscilloscope":
-                self.localController = PowerSupplyController()
+                self.localController = PowerSupplyController(view=self, term=self.term_text)
                 if len(self.listInstruments) < 4:
                     pos = len(self.listInstruments)
-                    tamp = PowerSupplyView(self, terminal=self.term_text, model=self.model, controller=self.localController)
+                    name=deviceType + " (" + str(pos) + ")"
+                    tamp = PowerSupplyView(self, terminal=self.term_text, model=self.model, controller=self.localController, name=name)
+                    tamp.updateView()
+                    self.localController.updateView(tamp)
                     self.listInstruments.insert(0, tamp)
-                    self.menu5.add_command(label=deviceType + " (" + str(pos) + ")", command=lambda: self.menu5_callback(deviceType, pos, tamp))
+                    self.menu5.add_command(label=name, command=lambda: self.menu5_callback(deviceType, pos, tamp))
                     self.term_text.insert(END, "New Instrument added : " + deviceType + " (" + str(pos) + ")\n")
                 else:
                     self.sendWarning("W000")
 
         if deviceType == "Source Meter":
-                self.localController = PowerSupplyController()
+                self.localController = PowerSupplyController(view=self, term=self.term_text)
                 if len(self.listInstruments) < 4:
                     pos = len(self.listInstruments)
-                    tamp = PowerSupplyView(self, terminal=self.term_text, model=self.model, controller=self.localController)
+                    name=deviceType + " (" + str(pos) + ")"
+                    tamp = PowerSupplyView(self, terminal=self.term_text, model=self.model, controller=self.localController, name=name)
+                    tamp.updateView()
+                    self.localController.updateView(tamp)
                     self.listInstruments.insert(0, tamp)
-                    self.menu5.add_command(label=deviceType + " (" + str(pos) + ")", command=lambda: self.menu5_callback(deviceType, pos, tamp))
+                    self.menu5.add_command(label=name, command=lambda: self.menu5_callback(deviceType, pos, tamp))
                     self.term_text.insert(END, "New Instrument added : " + deviceType + " (" + str(pos) + ")\n")
                 else:
                     self.sendWarning("W000")
 
         if deviceType == "RLC Meter":
-                self.localController = PowerSupplyController()
+                self.localController = PowerSupplyController(view=self, term=self.term_text)
                 if len(self.listInstruments) < 4:
                     pos = len(self.listInstruments)
-                    tamp = PowerSupplyView(self, terminal=self.term_text, model=self.model, controller=self.localController)
+                    name=deviceType + " (" + str(pos) + ")"
+                    tamp = PowerSupplyView(self, terminal=self.term_text, model=self.model, controller=self.localController, name=name)
+                    tamp.updateView()
+                    self.localController.updateView(tamp)
                     self.listInstruments.insert(0, tamp)
-                    self.menu5.add_command(label=deviceType + " (" + str(pos) + ")", command=lambda: self.menu5_callback(deviceType, pos, tamp))
+                    self.menu5.add_command(label=name, command=lambda: self.menu5_callback(deviceType, pos, tamp))
                     self.term_text.insert(END, "New Instrument added : " + deviceType + " (" + str(pos) + ")\n")
                 else:
                     self.sendWarning("W000")
@@ -175,36 +199,28 @@ class View(Tk):
 
     def __initMenu(self):
     #This method generates a Menu bar which give access to the diffent software's tools
-        self.menubar = Menu(self)
-
-        self.menu1 = Menu(self.menubar, tearoff=0)
         self.menubar.add_cascade(label="File", menu=self.menu1)
         self.menu1.add_command(label="Save", command=self.menu1_Save_callBack)
         self.menu1.add_command(label="Save as", command=self.menu1_SaveAs_callBack)
         self.menu1.add_command(label="Open", command=self.menu1_Open_callBack)
 
-        self.menu4 = Menu(self.menubar, tearoff=0)
-        self.menu4.add_command(label="Oscilloscope", command=self.menu4_Oscilloscope_callBack)
-        self.menu4.add_command(label="Source Meter", command=self.menu4_SourceMeter_callBack)
-        self.menu4.add_command(label="RLC Meter", command=self.menu4_RLCMeter_callBack)
-        self.menu4.add_command(label="Power Supply", command=self.menu4_PowerSupply_callBack)
-        self.menu4.add_command(label="Climatic Chamber", command=self.menu4_ClimaticChamber_callBack)
-
-        self.menu5 = Menu(self.menubar, tearoff="0")
-
-        self.menu2 = Menu(self.menubar, tearoff=0)
         self.menubar.add_cascade(label="Edit", menu=self.menu2)
         self.menu2.add_cascade(label="Add Instrument", menu=self.menu4)
         self.menu2.add_cascade(label="Delete Instrument", menu=self.menu5) 
         self.menu2.add_separator()
         self.menu2.add_command(label="Parameters", command=self.menu2_Parameters_callBack)
-        self.menu2.add_command(label="Connections", command=self.menu2_Connections_callBack)       
+        self.menu2.add_command(label="Connections", command=self.menu2_Connections_callBack)
 
-        self.menu3 = Menu(self.menubar, tearoff=0)
         self.menubar.add_cascade(label="Display", menu=self.menu3)
         self.menu3.add_command(label="Terminal", command=self.menu3_Terminal_callBack)
         self.menu3.add_separator()
-        self.menu3.add_command(label="Change logs", command=self.menu3_logs_callBack)
+        self.menu3.add_command(label="Change logs", command=self.menu3_logs_callBack)  
+
+        self.menu4.add_command(label="Oscilloscope", command=self.menu4_Oscilloscope_callBack)
+        self.menu4.add_command(label="Source Meter", command=self.menu4_SourceMeter_callBack)
+        self.menu4.add_command(label="RLC Meter", command=self.menu4_RLCMeter_callBack)
+        self.menu4.add_command(label="Power Supply", command=self.menu4_PowerSupply_callBack)
+        self.menu4.add_command(label="Climatic Chamber", command=self.menu4_ClimaticChamber_callBack)     
         
         self.config(menu=self.menubar)
 
@@ -279,7 +295,7 @@ class View(Tk):
         if mbox == True:
             self.sendError("404")
 
-    def menu5_callback(self, deviceType, pos, tamp):
+    def menu5_callback(self, tamp):
     #Callback function for menu5 delete option
         index = self.listInstruments.index(tamp)
         self.menu5.delete(self.listInstruments[index].controller.instrument.name)

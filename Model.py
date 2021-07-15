@@ -35,6 +35,10 @@ class Model():
             self.meta_dict = json.load(f)
             f.close()
 
+        with open("Devices.json") as f:
+            self.devices_dict = json.load(f)
+            f.close()
+
     def actualizeModel(self):
     #This method actualize the parameters_dict 
         with open(self.parametersFile) as f:

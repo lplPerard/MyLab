@@ -17,12 +17,13 @@ class WakeUpTL():
 
     """
 
-    def __init__(self, root, View, model=None):
+    def __init__(self, frame, view, model=None):
     #Constructor for the Paramaters class
 
-        self.frame = Frame(root)
-        self.view = View
+        self.frame = Frame(frame)
+        self.view = view
         self.model = model
+
         self.frame.configure(bg=self.model.parameters_dict['backgroundColor'])
 
         self.initWidgets()

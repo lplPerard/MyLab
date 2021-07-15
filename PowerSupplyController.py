@@ -23,19 +23,21 @@ class PowerSupplyController():
 
         self.view = view  
         self.term = term
+
         self.instrument = Instrument()
         self.instrument.type="Power Supply"
 
         self.resourceManager = pyvisa.ResourceManager()
 
     def updateView(self, view):
+    #Setter method for view attribute
         self.view = view
 
     def connectToDevice(self):
-    #This method establish connection with device using instrument adress   
-        if self.instrument.adress != "":
+    #This method establish connection with device using instrument address   
+        if self.instrument.address != "":
             try:
-                self.instrument.ressource = self.resourceManager.open_resource(self.instrument.adress)
+                self.instrument.ressource = self.resourceManager.open_resource(self.instrument.address)
             except:
                 self.view.view.sendError('001')
             try:
@@ -50,9 +52,9 @@ class PowerSupplyController():
 
     def setVoltageSource(self, voltage, calibre=0):
     #This method modify the voltage source 
-        if self.instrument.adress != "":
+        if self.instrument.address != "":
             try:
-                self.instrument.ressource = self.resourceManager.open_resource(self.instrument.adress)
+                self.instrument.ressource = self.resourceManager.open_resource(self.instrument.address)
             except:
                 self.view.view.sendError('001')
 
@@ -68,9 +70,9 @@ class PowerSupplyController():
 
     def setCurrentSource(self, current, calibre=0):
     #This method modify the voltage source 
-        if self.instrument.adress != "":
+        if self.instrument.address != "":
             try:
-                self.instrument.ressource = self.resourceManager.open_resource(self.instrument.adress)
+                self.instrument.ressource = self.resourceManager.open_resource(self.instrument.address)
             except:
                 self.view.view.sendError('001')
 
@@ -86,9 +88,9 @@ class PowerSupplyController():
             
     def setOutputState(self):
     #This method modify the output state 
-        if self.instrument.adress != "":
+        if self.instrument.address != "":
             try:
-                self.instrument.ressource = self.resourceManager.open_resource(self.instrument.adress)
+                self.instrument.ressource = self.resourceManager.open_resource(self.instrument.address)
             except:
                 self.view.view.sendError('001')
 
@@ -112,9 +114,9 @@ class PowerSupplyController():
         
     def updateMonitoring(self):
     #This method update the content of the view with content from device   
-        if self.instrument.adress != "":
+        if self.instrument.address != "":
             try:
-                self.instrument.ressource = self.resourceManager.open_resource(self.instrument.adress)
+                self.instrument.ressource = self.resourceManager.open_resource(self.instrument.address)
             except:
                 self.view.view.sendError('001')
 
@@ -136,5 +138,3 @@ class PowerSupplyController():
 
         else:
             self.view.view.sendError('004')
-
-

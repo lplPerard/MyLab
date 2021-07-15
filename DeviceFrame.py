@@ -22,14 +22,14 @@ class DeviceFrame():
 
     """
 
-    def __init__(self,  root, terminal=None, model=None):
+    def __init__(self,  view=None, controller=None, terminal=None, model=None):
     #Constructor for the Sequence_view superclass
         
-        self.view = root
+        self.view = view
         self.term_text = terminal
         self.model = model
-        self.frame = LabelFrame(root)
-
+        self.controller = controller
+        self.frame = LabelFrame(view)
 
     def initFrame(self, text="", padx=10, pady=10):
     #This method generates the Frame's parameters for the sequence
