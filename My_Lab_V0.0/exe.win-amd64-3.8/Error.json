@@ -1,0 +1,13 @@
+{
+    "000": "VISA is not supported on this computer. \nYou can install it using NI VISA 19.5",
+    "001": "Impossible to detect any instruments using VISA",
+    "002": "Fail to send VISA command",
+    "004": "Please specify an adress for each instrument",
+
+
+    "404": "This functionnality is not implemented yet !\nContact the developper for further information",
+
+
+
+    "W000": "Maximum number of instrument : 4"
+}
