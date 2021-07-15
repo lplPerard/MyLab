@@ -17,7 +17,7 @@ from tkinter import messagebox
 from tkinter import BOTH
 from tkinter import YES
 from tkinter import END
-from tkinter.constants import BOTTOM
+from tkinter.constants import BOTTOM, RIGHT
 
 from DeviceFrame import DeviceFrame
 from ParametersTL import ParametersTL
@@ -244,7 +244,7 @@ class View(Tk):
         elif self.topLevel_param.state() == "normal":
             self.topLevel_param.withdraw()
 
-    def menu2_Connections_callBack(self):
+    def menu2_Connections_callBack(self, args=None):
     #Callback function for menu2 2 option
         if self.topLevel_connect.state() == "withdrawn":
             self.topLevel_connect.deiconify()

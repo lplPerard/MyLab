@@ -50,7 +50,7 @@ class PowerSupplyController():
         else:
             self.view.view.sendError('004')
 
-    def setVoltageSource(self, voltage, calibre=0):
+    def setVoltageSource(self, voltage, channel, calibre=0):
     #This method modify the voltage source 
         if self.instrument.address != "":
             try:
@@ -59,7 +59,7 @@ class PowerSupplyController():
                 self.view.view.sendError('001')
 
             try:
-                self.instrument.ressource.write('INST:NSEL 1')
+                self.instrument.ressource.write('INST:NSEL ' + str(channel))
                 self.instrument.ressource.write('SOUR:VOLT ' + str(voltage))
                 self.instrument.ressource.close()
             except:
@@ -68,7 +68,7 @@ class PowerSupplyController():
         else:
             self.view.view.sendError('004')
 
-    def setCurrentSource(self, current, calibre=0):
+    def setCurrentSource(self, current, channel, calibre=0):
     #This method modify the voltage source 
         if self.instrument.address != "":
             try:
@@ -77,7 +77,7 @@ class PowerSupplyController():
                 self.view.view.sendError('001')
 
             try:
-                self.instrument.ressource.write('INST:NSEL 1')
+                self.instrument.ressource.write('INST:NSEL ' + str(channel))
                 self.instrument.ressource.write('SOUR:CURR ' + str(current))
                 self.instrument.ressource.close()
             except:
@@ -86,7 +86,7 @@ class PowerSupplyController():
         else:
             self.view.view.sendError('004')
             
-    def setOutputState(self):
+    def setOutputState(self, channel):
     #This method modify the output state 
         if self.instrument.address != "":
             try:
@@ -99,11 +99,11 @@ class PowerSupplyController():
                 state = float(self.instrument.ressource.read())
 
                 if state == 0:
-                    self.instrument.ressource.write('INST:NSEL 1')
+                    self.instrument.ressource.write('INST:NSEL ' + str(channel))
                     self.instrument.ressource.write('OUTP:STAT ON ')
                     self.instrument.ressource.close()
                 else:
-                    self.instrument.ressource.write('INST:NSEL 1')
+                    self.instrument.ressource.write('INST:NSEL ' + str(channel))
                     self.instrument.ressource.write('OUTP:STAT OFF ')
                     self.instrument.ressource.close()
             except:
@@ -112,7 +112,7 @@ class PowerSupplyController():
         else:
             self.view.view.sendError('004')
         
-    def updateMonitoring(self):
+    def updateMonitoring(self, channel=1):
     #This method update the content of the view with content from device   
         if self.instrument.address != "":
             try:
@@ -121,6 +121,8 @@ class PowerSupplyController():
                 self.view.view.sendError('001')
 
             try:
+                self.instrument.ressource.write('INST:NSEL ' + str(channel))
+
                 self.instrument.ressource.write('MEAS:CURR?')         
                 current = float(self.instrument.ressource.read())
                 self.view.doubleVar_currentMeasure.set(current)
@@ -133,8 +135,12 @@ class PowerSupplyController():
                 
                 self.instrument.ressource.write('MEAS:POW?')         
                 power = float(self.instrument.ressource.read())
+                self.view.doubleVar_powerMeasure.set(power)
+                self.term.insert(END, "power : " + str(power) + " W\n\n")
+                
             except:
                 self.view.view.sendError('002')
 
         else:
             self.view.view.sendError('004')
+
