@@ -129,12 +129,12 @@ class View(Tk):
                 self.localController = PowerSupplyController(view=self, term=self.term_text)
                 if len(self.listInstruments) < 4:
                     pos = len(self.listInstruments)
-                    name=deviceType + " (" + str(pos) + ")"
+                    name= deviceType + " (" + str(pos) + ")"
                     tamp = PowerSupplyView(self, terminal=self.term_text, model=self.model, controller=self.localController, name=name)
                     tamp.updateView()
                     self.localController.updateView(tamp)
                     self.listInstruments.insert(0, tamp)
-                    self.menu5.add_command(label=name, command=lambda: self.menu5_callback(deviceType, pos, tamp))
+                    self.menu5.add_command(label=name, command=lambda: self.menu5_callback(tamp))
                     self.term_text.insert(END, "New Instrument added : " + deviceType + " (" + str(pos) + ")\n")
                 else:
                     self.sendWarning("W000")
