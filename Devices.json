@@ -1,4 +1,4 @@
 {
-    "ASRL3::INSTR": ["Test", "VISA", ["1", "2"]]
-
+    "ASRL3::INSTR":                             ["Test", "VISA", ["1", "2"]],
+    "USB0::0x0AAD::0x0135::034053768::INSTR":   ["HMC8042", "Power Supply", ["1", "2"]]
 }
