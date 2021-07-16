@@ -10,7 +10,7 @@ from tkinter.constants import END
 from PowerSupplyController import PowerSupplyController
 from DeviceFrame import DeviceFrame
 
-from tkinter import Button, Frame, Label
+from tkinter import Button, Frame, IntVar, Label
 from tkinter import LabelFrame
 from tkinter import StringVar
 from tkinter import DoubleVar
@@ -39,11 +39,11 @@ class PowerSupplyView (DeviceFrame):
                 
         self.initLabelFrame()
         self.initFrameLine()
+        self.initButton()
         self.initLabel()
         self.initCombo()
         self.initVar()
         self.initEntries()
-        self.initButton()
 
     def initAttributes(self):
     #This methods initiates all attributes in the class. It is usefull to prevent double usage        
@@ -53,12 +53,17 @@ class PowerSupplyView (DeviceFrame):
         self.frame_instrument_name = Frame(self.labelFrame_instrument)
         self.frame_instrument_address = Frame(self.labelFrame_instrument)
         self.frame_instrument_channel =  Frame(self.labelFrame_instrument)
+        self.frame_master = Frame(self.frame)
 
         self.frame_source_voltage = Frame(self.labelFrame_source)
         self.frame_source_current = Frame(self.labelFrame_source)
+        self.frame_source_button = Frame(self.labelFrame_source)
+        self.frame_source_radio = Frame(self.labelFrame_source)
         self.frame_measure_voltage = Frame(self.labelFrame_measure)
         self.frame_measure_current = Frame(self.labelFrame_measure)
         self.frame_measure_power = Frame(self.labelFrame_measure)
+        self.frame_master_button = Frame(self.frame_master)
+        self.frame_master_radio = Frame(self.frame_master)
 
         self.stringvar_instrumentName = StringVar()    
         self.stringvar_instrumentaddress = StringVar()
@@ -67,6 +72,8 @@ class PowerSupplyView (DeviceFrame):
         self.doubleVar_voltageMeasure = DoubleVar()
         self.doubleVar_currentMeasure = DoubleVar()
         self.doubleVar_powerMeasure = DoubleVar()
+        self.intVar_radioValueChannel = IntVar()
+        self.intVar_radioValueMaster = IntVar()
 
         self.label_instrumentName = Label(self.frame_instrument_name, text="Name :")
         self.label_instrumentaddress = Label(self.frame_instrument_address, text="Address :")
@@ -79,7 +86,7 @@ class PowerSupplyView (DeviceFrame):
         self.label_powerMeasure = Label(self.frame_measure_power, text="Power :")
         self.label_powerMeasure.after(1000, self.updateMonitoring)
 
-        self.combo_instrumentChannel = Combobox(self.frame_instrument_channel, state="readonly", width=5, values=["1"])
+        self.combo_instrumentChannel = Combobox(self.frame_instrument_channel, state="readonly", width=5, values=["1", "2"])
 
         self.combo_voltageSource = Combobox(self.frame_source_voltage, state="readonly", width=5, values=["V", "mV"])
         self.combo_currentSource = Combobox(self.frame_source_current, state="readonly", width=5, values=["A", "mA"])
@@ -91,40 +98,60 @@ class PowerSupplyView (DeviceFrame):
         self.entry_instrumentaddress = Entry(self.frame_instrument_address, textvariable=self.stringvar_instrumentaddress, state="readonly")
         self.entry_instrumentaddress.bind('<ButtonRelease-1>', self.view.menu2_Connections_callBack)
 
-        self.entry_voltageSource = Entry(self.frame_source_voltage, textvariable=self.doubleVar_voltageSource)
-        self.entry_currentSource = Entry(self.frame_source_current, textvariable=self.doubleVar_currentSource)
+        self.entry_voltageSource = Entry(self.frame_source_voltage, textvariable=self.doubleVar_voltageSource, width=6)
+        self.entry_currentSource = Entry(self.frame_source_current, textvariable=self.doubleVar_currentSource, width=6)
         self.entry_voltageMeasure = Entry(self.frame_measure_voltage, textvariable=self.doubleVar_voltageMeasure, state="readonly")
         self.entry_currentMeasure = Entry(self.frame_measure_current, textvariable=self.doubleVar_currentMeasure, state="readonly")
         self.entry_powerMeasure = Entry(self.frame_measure_power, textvariable=self.doubleVar_powerMeasure, state="readonly")
 
-        self.channel_activate = Button(self.labelFrame_source, text='On/Off', command=self.channel_activate_callback)
-        self.channel_activateState="off"
+        self.channel_activate = Button(self.frame_source_button, text='Channel ON/OFF', command=self.channel_activate_callback)
+        self.master_activate = Button(self.frame_master_button, text='Master ON/OFF', command=self.master_activate_callback)
 
-        self.img = Image.open("HMC8042.png")
+        self.radio_channelStateOFF = Radiobutton(self.frame_source_radio, text='OFF', variable=self.intVar_radioValueChannel, value=1)
+        self.radio_channelStateON = Radiobutton(self.frame_source_radio, text='ON', variable=self.intVar_radioValueChannel, value=2)
+        self.radio_masterStateOFF = Radiobutton(self.frame_master_radio, text='OFF', variable=self.intVar_radioValueMaster, value=1)
+        self.radio_masterStateON = Radiobutton(self.frame_master_radio, text='ON', variable=self.intVar_radioValueMaster, value=2)
+        
+        self.img = None
 
     def updateView(self):
     #This method refresh the content of the view
         self.stringvar_instrumentaddress.set(self.controller.instrument.address)
+        found=0
 
         try:
-            if self.model.devices_dict[self.controller.instrument.address][1] == "Power Supply":
-                self.controller.instrument.channelNumber = self.model.devices_dict[self.controller.instrument.address][2]
-                self.combo_instrumentChannel.configure(values=self.controller.instrument.channelNumber)
+            for item in self.model.devices_dict:
+                if item in self.controller.instrument.address:
+                    self.controller.instrument.channelNumber = self.model.devices_dict[item][2]
+                    self.combo_instrumentChannel.configure(values=self.controller.instrument.channelNumber)
 
-                oldname = self.controller.instrument.name
-                self.controller.instrument.name = self.model.devices_dict[self.controller.instrument.address][0]
-                indexMenu = self.view.menu5.index(oldname)
-                self.view.menu5.entryconfigure(indexMenu, label=self.controller.instrument.name)
-                self.stringvar_instrumentName.set(self.controller.instrument.name)
+                    oldname = self.controller.instrument.name
+                    self.controller.instrument.name = self.model.devices_dict[item][0]
+                    indexMenu = self.view.menu5.index(oldname)
+                    self.view.menu5.entryconfigure(indexMenu, label=self.controller.instrument.name)
+                    self.stringvar_instrumentName.set(self.controller.instrument.name)
 
-                if self.model.devices_dict[self.controller.instrument.address][0] == "HMC8042":   
-                    self.img = self.img.resize((200, 100), Image.ANTIALIAS)
-                    self.img = ImageTk.PhotoImage(self.img)
-                    panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColor'])
-                    panel.pack(fill = "both", expand = "yes")
+                    if self.model.devices_dict[item][0] == "HMC8042":   
+                        self.img = Image.open(self.model.devices_dict[item][3])
+                        self.img = self.img.resize((200, 100), Image.ANTIALIAS)
+                        self.img = ImageTk.PhotoImage(self.img)
+                        panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColor'])
+                        panel.pack(fill = "both", expand = "yes")
 
-            else:
-                self.view.sendError("005")
+                    if self.model.devices_dict[item][0] == "2220-30-1":   
+                        self.img = Image.open(self.model.devices_dict[item][3])
+                        self.img = self.img.resize((200, 200), Image.ANTIALIAS)
+                        self.img = ImageTk.PhotoImage(self.img)
+                        panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColor'])
+                        panel.pack(fill = "both", expand = "yes")
+
+                    found=1
+
+                    break
+
+            if (found==1) and (self.model.devices_dict[item][1] != "Power Supply"):
+                self.view.sendError('005')
+
         except:
             self.term_text.insert(END, "\nUnknown device connected\n")
             
@@ -157,6 +184,12 @@ class PowerSupplyView (DeviceFrame):
         self.frame_source_current.configure(bg=self.model.parameters_dict['backgroundColor'])
         self.frame_source_current.pack(fill="both", pady=5)
 
+        self.frame_source_button.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_source_button.pack(side="left", fill="both", pady=5)
+
+        self.frame_source_radio.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_source_radio.pack(side="right", fill="both", pady=5)
+
         self.frame_measure_voltage.configure(bg=self.model.parameters_dict['backgroundColor'])
         self.frame_measure_voltage.pack(fill="both", pady=5)
 
@@ -165,6 +198,16 @@ class PowerSupplyView (DeviceFrame):
 
         self.frame_measure_power.configure(bg=self.model.parameters_dict['backgroundColor'])
         self.frame_measure_power.pack(fill="both",pady=5)
+
+        self.frame_master.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_master.pack(padx=5, pady=5, fill="y")
+
+        self.frame_master_button.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_master_button.pack(side="left", padx=5, pady=5, fill="y")
+
+        self.frame_master_radio.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_master_radio.pack(side="right", padx=5, pady=5, fill="y")
+
     
     def initVar(self):
     #This methods instanciates all the Var
@@ -255,7 +298,20 @@ class PowerSupplyView (DeviceFrame):
 
     def initButton(self):
     #This method instanciates the buttons
-        self.channel_activate.pack()
+        self.channel_activate.pack(expand="yes")
+        self.master_activate.pack(expand="yes")
+
+        self.radio_channelStateON.pack(side="top", expand="yes", fill="both")
+        self.radio_channelStateON.configure(bg=self.model.parameters_dict['backgroundColor'], state="disabled", disabledforeground="black")
+        self.radio_channelStateOFF.pack(side="top", expand="yes", fill="both")
+        self.radio_channelStateOFF.configure(bg=self.model.parameters_dict['backgroundColor'], state="disabled", disabledforeground="black")
+        self.radio_masterStateON.pack(side="top", expand="yes", fill="both")
+        self.radio_masterStateON.configure(bg=self.model.parameters_dict['backgroundColor'], state="disabled", disabledforeground="black")
+        self.radio_masterStateOFF.pack(side="top", expand="yes", fill="both")
+        self.radio_masterStateOFF.configure(bg=self.model.parameters_dict['backgroundColor'], state="disabled", disabledforeground="black")
+
+        self.intVar_radioValueChannel.set(1)
+        self.intVar_radioValueMaster.set(1)
 
     def entry_instrumentName_callback(self, arg):
     #This method calls the view to change instrument name
@@ -265,7 +321,7 @@ class PowerSupplyView (DeviceFrame):
         indexMenu = self.view.menu5.index(oldname)
         self.view.menu5.entryconfigure(indexMenu, label=name)
 
-    def entry_voltageSource_callback(self, arg):
+    def entry_voltageSource_callback(self, arg=None):
     #This method calls the controller to change the voltage
         voltage = self.doubleVar_voltageSource.get()  
         channel = self.combo_instrumentChannel.current() + 1        
@@ -280,20 +336,38 @@ class PowerSupplyView (DeviceFrame):
     def channel_activate_callback(self):
     #This method call the controller to change output state 
         channel = self.combo_instrumentChannel.current() + 1 
-        self.controller.setOutputState(channel)
+        self.controller.setChannelState(channel)
 
-        if self.channel_activateState == "off":
-            self.channel_activateState="on"
-            self.controller.instrument.state="on"      
-            self.controller.updateMonitoring(channel)
+        if (self.intVar_radioValueChannel.get() == 1) and (self.controller.instrument.address != ""):
+            self.entry_currentSource_callback()
+            self.entry_voltageSource_callback()
+
+            self.intVar_radioValueChannel.set(2) 
+            self.radio_channelStateON.select() 
+            self.updateMonitoring()
         else:
-            self.channel_activateState="off"
-            self.controller.instrument.state="off"
+            self.intVar_radioValueChannel.set(1)
+            self.radio_channelStateOFF.select() 
+
+    def master_activate_callback(self):
+    #This method call the controller to change output state 
+        self.controller.setMasterState()
+
+        if (self.intVar_radioValueMaster.get() == 1) and (self.controller.instrument.address != ""):
+            self.entry_currentSource_callback()
+            self.entry_voltageSource_callback()
+
+            self.intVar_radioValueMaster.set(2) 
+            self.radio_masterStateON.select() 
+            self.updateMonitoring()
+        else:
+            self.intVar_radioValueMaster.set(1)
+            self.radio_masterStateOFF.select() 
 
     def updateMonitoring(self):
     #This method  updates the measurement content         
-        self.label_powerMeasure.after(1000, self.updateMonitoring)
         channel = self.combo_instrumentChannel.current() + 1  
 
-        if self.channel_activateState == "on":    
+        if (self.intVar_radioValueChannel.get() == 2) and (self.intVar_radioValueMaster.get() == 2):    
             self.controller.updateMonitoring(channel)
+            self.label_powerMeasure.after(1000, self.updateMonitoring)

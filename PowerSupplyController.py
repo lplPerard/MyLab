@@ -8,10 +8,8 @@ File description : Class container for Power Supply Controller.
 
 
 from tkinter.constants import END
-from pyvisa import resources
 from Instrument import Instrument
 import pyvisa
-import time 
 
 class PowerSupplyController():
     """Class containing the PowerSupplyController for MyLab.
@@ -86,7 +84,7 @@ class PowerSupplyController():
         else:
             self.view.view.sendError('004')
             
-    def setOutputState(self, channel):
+    def setChannelState(self, channel):
     #This method modify the output state 
         if self.instrument.address != "":
             try:
@@ -100,11 +98,36 @@ class PowerSupplyController():
 
                 if state == 0:
                     self.instrument.ressource.write('INST:NSEL ' + str(channel))
-                    self.instrument.ressource.write('OUTP:STAT ON ')
+                    self.instrument.ressource.write('OUTP:CHAN ON ')
                     self.instrument.ressource.close()
                 else:
                     self.instrument.ressource.write('INST:NSEL ' + str(channel))
-                    self.instrument.ressource.write('OUTP:STAT OFF ')
+                    self.instrument.ressource.write('OUTP:CHAN OFF ')
+                    self.instrument.ressource.close()
+            except:
+                self.view.view.sendError('002')
+
+        else:
+            self.view.view.sendError('004')
+
+            
+    def setMasterState(self):
+    #This method modify the output state 
+        if self.instrument.address != "":
+            try:
+                self.instrument.ressource = self.resourceManager.open_resource(self.instrument.address)
+            except:
+                self.view.view.sendError('001')
+
+            try: 
+                self.instrument.ressource.write('OUTP:MAST:STAT?')            
+                state = float(self.instrument.ressource.read())
+
+                if state == 0:
+                    self.instrument.ressource.write('OUTP:MAST ON ')
+                    self.instrument.ressource.close()
+                else:
+                    self.instrument.ressource.write('OUTP:MAST OFF ')
                     self.instrument.ressource.close()
             except:
                 self.view.view.sendError('002')

@@ -21,9 +21,8 @@ class Model():
 
         """
         self.controller = controller
-        self.parametersFile = "Parameters.json"
 
-        with open(self.parametersFile) as f:
+        with open("Parameters.json") as f:
             self.parameters_dict = json.load(f)
             f.close()
 
