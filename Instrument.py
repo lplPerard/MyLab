@@ -18,8 +18,8 @@ class Instrument():
         self.type = ""
         self.connectMode = ""
         self.address = ""
-        self.state = "off"
+        self.masterState = 0
+        self.state = "free"
 
-        self.channelNumber = ["1"]
 
         self.ressource = None

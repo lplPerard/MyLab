@@ -76,7 +76,8 @@ class ConnectionsTL():
         if self.view.listInstruments[self.combo_instrumentName.current()].controller.instrument.address != "":
             self.view.topLevel_connect.withdraw()
             self.view.term_text.insert(END, "address changed for : " + self.view.listInstruments[index].controller.instrument.name + "\n")   
-            self.view.term_text.insert(END, "   New address is : " + self.view.listInstruments[index].controller.instrument.address + "\n")    
+            self.view.term_text.insert(END, "   New address is : " + self.view.listInstruments[index].controller.instrument.address + "\n")   
+            self.view.listInstruments[self.combo_instrumentName.current()].controller.instrument.state="free"  
             self.view.refresh()
 
     def actualizeInstruments(self):

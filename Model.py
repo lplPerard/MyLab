@@ -22,10 +22,6 @@ class Model():
         """
         self.controller = controller
 
-        with open("Parameters.json") as f:
-            self.parameters_dict = json.load(f)
-            f.close()
-
         with open("Error.json") as f:
             self.error_dict = json.load(f)
             f.close()
@@ -36,6 +32,10 @@ class Model():
 
         with open("Devices.json") as f:
             self.devices_dict = json.load(f)
+            f.close()
+
+        with open("Parameters.json") as f:
+            self.parameters_dict = json.load(f)
             f.close()
 
     def actualizeModel(self):

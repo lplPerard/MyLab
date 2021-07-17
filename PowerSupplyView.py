@@ -119,41 +119,54 @@ class PowerSupplyView (DeviceFrame):
         self.stringvar_instrumentaddress.set(self.controller.instrument.address)
         found=0
 
-        try:
-            for item in self.model.devices_dict:
-                if item in self.controller.instrument.address:
-                    self.controller.instrument.channelNumber = self.model.devices_dict[item][2]
-                    self.combo_instrumentChannel.configure(values=self.controller.instrument.channelNumber)
+        for item in self.model.devices_dict:
+            if item in self.controller.instrument.address:
+                self.controller.instrument.channelNumber = self.model.devices_dict[item][2]
+                self.combo_instrumentChannel.configure(values=self.controller.instrument.channelNumber)
+                self.controller.instrument.channelState = self.model.devices_dict[item][3]
+                self.controller.instrument.channelUsed = self.model.devices_dict[item][4]
 
-                    oldname = self.controller.instrument.name
-                    self.controller.instrument.name = self.model.devices_dict[item][0]
-                    indexMenu = self.view.menu5.index(oldname)
-                    self.view.menu5.entryconfigure(indexMenu, label=self.controller.instrument.name)
-                    self.stringvar_instrumentName.set(self.controller.instrument.name)
+                oldname = self.controller.instrument.name
+                self.controller.instrument.name = self.model.devices_dict[item][0]
+                indexMenu = self.view.menu5.index(oldname)
+                self.view.menu5.entryconfigure(indexMenu, label=self.controller.instrument.name)
+                self.stringvar_instrumentName.set(self.controller.instrument.name)
 
-                    if self.model.devices_dict[item][0] == "HMC8042":   
-                        self.img = Image.open(self.model.devices_dict[item][3])
-                        self.img = self.img.resize((200, 100), Image.ANTIALIAS)
-                        self.img = ImageTk.PhotoImage(self.img)
-                        panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColor'])
-                        panel.pack(fill = "both", expand = "yes")
+                if self.model.devices_dict[item][0] == "HMC8042":   
+                    self.img = Image.open(self.model.devices_dict[item][5])
+                    self.img = self.img.resize((200, 100), Image.ANTIALIAS)
+                    self.img = ImageTk.PhotoImage(self.img)
+                    panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColor'])
+                    panel.pack(fill = "both", expand = "yes")
 
-                    if self.model.devices_dict[item][0] == "2220-30-1":   
-                        self.img = Image.open(self.model.devices_dict[item][3])
-                        self.img = self.img.resize((200, 200), Image.ANTIALIAS)
-                        self.img = ImageTk.PhotoImage(self.img)
-                        panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColor'])
-                        panel.pack(fill = "both", expand = "yes")
+                if self.model.devices_dict[item][0] == "2220-30-1":   
+                    self.img = Image.open(self.model.devices_dict[item][5])
+                    self.img = self.img.resize((200, 200), Image.ANTIALIAS)
+                    self.img = ImageTk.PhotoImage(self.img)
+                    panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColor'])
+                    panel.pack(fill = "both", expand = "yes")
 
-                    found=1
+                found=1
 
-                    break
+                break
 
-            if (found==1) and (self.model.devices_dict[item][1] != "Power Supply"):
-                self.view.sendError('005')
+        if (found==1) and (self.model.devices_dict[item][1] != "Power Supply"):
+            self.view.sendError('005')
 
-        except:
-            self.term_text.insert(END, "\nUnknown device connected\n")
+        if (found == 0) and (self.controller.instrument.address != ""):                
+            self.term_text.insert(END, "\nUnknown device connected")
+            used = 0
+            for item in self.view.getInstrList():
+                if (item.name != self.controller.instrument.name) and (item.address == self.controller.instrument.address):
+                    self.controller.instrument.channelState = item.channelState
+                    self.controller.instrument.channelUsed = item.channelUsed
+                    self.combo_instrumentChannel_callback()
+                    used = used + 1
+
+            if used == 0:           
+                self.controller.instrument.channelState = ["", ""]
+                self.controller.instrument.channelUsed = ["", ""]
+                self.combo_instrumentChannel_callback()
             
         if self.controller.instrument.address != "":
             self.controller.connectToDevice()
@@ -207,7 +220,6 @@ class PowerSupplyView (DeviceFrame):
 
         self.frame_master_radio.configure(bg=self.model.parameters_dict['backgroundColor'])
         self.frame_master_radio.pack(side="right", padx=5, pady=5, fill="y")
-
     
     def initVar(self):
     #This methods instanciates all the Var
@@ -247,10 +259,11 @@ class PowerSupplyView (DeviceFrame):
 
     def initCombo(self):
     #This methods instanciates all the combobox
-        #self.combo_instrumentChannel.bind("<<ComboboxSelected>>", self.combo_instrumentChannel_callback)
+        self.combo_instrumentChannel.bind("<<ComboboxSelected>>", self.combo_instrumentChannel_callback)
         self.combo_instrumentChannel.configure(background='white')
         self.combo_instrumentChannel.current(0)
         self.combo_instrumentChannel.pack(side="right")
+        self.combo_instrumentChannel_callback()
 
         #self.combo_voltageSource.bind("<<ComboboxSelected>>", self.combo_voltageSource_callback)
         self.combo_voltageSource.configure(background='white')
@@ -313,7 +326,42 @@ class PowerSupplyView (DeviceFrame):
         self.intVar_radioValueChannel.set(1)
         self.intVar_radioValueMaster.set(1)
 
-    def entry_instrumentName_callback(self, arg):
+    def combo_instrumentChannel_callback(self, arg=None):
+    #This method sets the channel to avoid conflict
+        i=0
+        for i in range(len(self.controller.instrument.channelUsed)):
+            if self.controller.instrument.channelUsed[i] == self.controller.instrument:
+                self.controller.instrument.channelUsed[i]=""
+
+        i=0
+        found=0
+        liste = self.controller.instrument.channelUsed
+        for item in liste:
+            if ((item == "") or (item == self.controller.instrument)) and (self.combo_instrumentChannel.current() == i):
+                self.combo_instrumentChannel.current(i)
+                self.controller.instrument.channelUsed[i]=self.controller.instrument
+                found=1
+                break         
+
+            i=i+1
+
+        if found == 0:
+            i=0
+            liste = self.controller.instrument.channelUsed
+            for item in liste:
+                if (item == ""):
+                    self.combo_instrumentChannel.current(i)
+                    self.controller.instrument.channelUsed[i]=self.controller.instrument
+                    found=2
+                    break            
+
+                i=i+1
+        if found == 2:
+            self.view.sendWarning('003')
+        if found == 0:
+            self.view.sendError('006')
+
+    def entry_instrumentName_callback(self, arg=None):
     #This method calls the view to change instrument name
         oldname = self.controller.instrument.name
         name = self.stringvar_instrumentName.get()
@@ -369,5 +417,5 @@ class PowerSupplyView (DeviceFrame):
         channel = self.combo_instrumentChannel.current() + 1  
 
         if (self.intVar_radioValueChannel.get() == 2) and (self.intVar_radioValueMaster.get() == 2):    
-            self.controller.updateMonitoring(channel)
-            self.label_powerMeasure.after(1000, self.updateMonitoring)
+            if self.controller.updateMonitoring(channel) != -1:
+                self.label_powerMeasure.after(1000, self.updateMonitoring)

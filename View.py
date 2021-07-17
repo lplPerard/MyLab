@@ -123,6 +123,15 @@ class View(Tk):
 
         self.copyright.pack(side = BOTTOM, padx=5, pady=5)
 
+    def getInstrList(self):
+    #This method returns a list of instruments from listInstrument
+        liste = []
+        for item in self.listInstruments:
+            liste.append(item.controller.instrument)
+
+        liste.reverse()
+        return(liste)
+   
     def addDeviceFrame(self, deviceType):
     #This methods is used to change the device display
         if deviceType == "Power Supply":
