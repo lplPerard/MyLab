@@ -197,7 +197,7 @@ class View(Tk):
 
     def sendWarning(self, warning):
     #This method generates message boxes from error returns
-        messagebox.showerror(title="Warning : " + warning, message=self.model.error_dict[warning])
+        messagebox.showwarning(title="Warning : " + warning, message=self.model.error_dict[warning])
         self.term_text.insert(END, "\nWarning : " + warning + "\n  " + self.model.error_dict[warning] + "\n")  
 
     def refresh(self):
@@ -309,5 +309,6 @@ class View(Tk):
         index = self.listInstruments.index(tamp)
         self.menu5.delete(self.listInstruments[index].controller.instrument.name)
         self.term_text.insert(END, "An Instrument was deleted : " + self.listInstruments[index].controller.instrument.name +"\n")
+        self.listInstruments[index].clearInstrument()
         self.listInstruments[index].clearFrame()
         del self.listInstruments[index]

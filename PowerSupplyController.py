@@ -62,9 +62,8 @@ class PowerSupplyController():
                 self.instrument.ressource = self.resourceManager.open_resource(self.instrument.address)
                 self.instrument.state == "connected"
             except:
-                if(self.instrument.state != "unreachable"):
-                    self.view.view.sendError('001')
-                    self.instrument.state = "unreachable"
+                self.view.view.sendError('001')
+                self.instrument.state = "unreachable"
                 return(-1)
 
             try:
@@ -72,9 +71,8 @@ class PowerSupplyController():
                 self.instrument.ressource.write('SOUR:VOLT ' + str(voltage))
                 self.instrument.ressource.close()
             except:
-                if(self.instrument.state != "unreachable"):
-                    self.view.view.sendError('002')
-                    self.instrument.state = "unreachable"
+                self.view.view.sendError('002')
+                self.instrument.state = "unreachable"
                 return(-1)
 
         else:
@@ -87,9 +85,8 @@ class PowerSupplyController():
                 self.instrument.ressource = self.resourceManager.open_resource(self.instrument.address)
                 self.instrument.state == "connected"
             except:
-                if(self.instrument.state != "unreachable"):
-                    self.view.view.sendError('002')
-                    self.instrument.state = "unreachable"
+                self.view.view.sendError('002')
+                self.instrument.state = "unreachable"
                 return(-1)
 
             try:
@@ -97,9 +94,8 @@ class PowerSupplyController():
                 self.instrument.ressource.write('SOUR:CURR ' + str(current))
                 self.instrument.ressource.close()
             except:
-                if(self.instrument.state != "unreachable"):
-                    self.view.view.sendError('002')
-                    self.instrument.state = "unreachable"
+                self.view.view.sendError('002')
+                self.instrument.state = "unreachable"
                 return(-1)
 
         else:
@@ -112,9 +108,8 @@ class PowerSupplyController():
                 self.instrument.ressource = self.resourceManager.open_resource(self.instrument.address)
                 self.instrument.state == "connected"
             except:
-                if(self.instrument.state != "unreachable"):
-                    self.view.view.sendError('001')
-                    self.instrument.state = "unreachable"
+                self.view.view.sendError('001')
+                self.instrument.state = "unreachable"
                 return(-1)
 
             try: 
@@ -131,9 +126,8 @@ class PowerSupplyController():
                     self.instrument.ressource.write('OUTP:CHAN OFF ')
                     self.instrument.ressource.close()
             except:
-                if(self.instrument.state != "unreachable"):
-                    self.view.view.sendError('002')
-                    self.instrument.state = "unreachable"
+                self.view.view.sendError('002')
+                self.instrument.state = "unreachable"
                 return(-1)
 
         else:
@@ -146,9 +140,8 @@ class PowerSupplyController():
                 self.instrument.ressource = self.resourceManager.open_resource(self.instrument.address)
                 self.instrument.state == "connected"
             except:
-                if(self.instrument.state != "unreachable"):
-                    self.view.view.sendError('001')
-                    self.instrument.state = "unreachable"
+                self.view.view.sendError('001')
+                self.instrument.state = "unreachable"
                 return(-1)
 
             try: 
@@ -162,9 +155,8 @@ class PowerSupplyController():
                     self.instrument.ressource.write('OUTP:MAST OFF ')
                     self.instrument.ressource.close()
             except:
-                if(self.instrument.state != "unreachable"):
-                    self.view.view.sendError('002')
-                    self.instrument.state = "unreachable"
+                self.view.view.sendError('002')
+                self.instrument.state = "unreachable"
                 return(-1)
 
         else:

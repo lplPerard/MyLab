@@ -96,7 +96,6 @@ class PowerSupplyView (DeviceFrame):
 
         self.entry_instrumentName = Entry(self.frame_instrument_name, textvariable=self.stringvar_instrumentName)
         self.entry_instrumentaddress = Entry(self.frame_instrument_address, textvariable=self.stringvar_instrumentaddress, state="readonly")
-        self.entry_instrumentaddress.bind('<ButtonRelease-1>', self.view.menu2_Connections_callBack)
 
         self.entry_voltageSource = Entry(self.frame_source_voltage, textvariable=self.doubleVar_voltageSource, width=6)
         self.entry_currentSource = Entry(self.frame_source_current, textvariable=self.doubleVar_currentSource, width=6)
@@ -113,6 +112,12 @@ class PowerSupplyView (DeviceFrame):
         self.radio_masterStateON = Radiobutton(self.frame_master_radio, text='ON', variable=self.intVar_radioValueMaster, value=2)
         
         self.img = None
+        
+    def clearInstrument(self):
+    #This method is used to clear every trace of this instrument before being deleted
+        for i in range(len(self.controller.instrument.channelUsed)):
+            if self.controller.instrument.channelUsed[i] == self.controller.instrument:
+                self.controller.instrument.channelUsed[i]=""
 
     def updateView(self):
     #This method refresh the content of the view
@@ -295,6 +300,7 @@ class PowerSupplyView (DeviceFrame):
         self.entry_instrumentName.bind("<KeyRelease>", self.entry_instrumentName_callback)
         self.entry_instrumentName.pack(side='right', padx=5)
 
+        self.entry_instrumentaddress.bind('<ButtonRelease-1>', self.view.menu2_Connections_callBack)
         self.entry_instrumentaddress.pack(side='right', padx=5)
 
         self.entry_voltageSource.bind("<Return>", self.entry_voltageSource_callback)
@@ -328,7 +334,6 @@ class PowerSupplyView (DeviceFrame):
 
     def combo_instrumentChannel_callback(self, arg=None):
     #This method sets the channel to avoid conflict
-        i=0
         for i in range(len(self.controller.instrument.channelUsed)):
             if self.controller.instrument.channelUsed[i] == self.controller.instrument:
                 self.controller.instrument.channelUsed[i]=""
@@ -356,6 +361,7 @@ class PowerSupplyView (DeviceFrame):
                     break            
 
                 i=i+1
+
         if found == 2:
             self.view.sendWarning('003')
         if found == 0:
@@ -384,33 +390,31 @@ class PowerSupplyView (DeviceFrame):
     def channel_activate_callback(self):
     #This method call the controller to change output state 
         channel = self.combo_instrumentChannel.current() + 1 
-        self.controller.setChannelState(channel)
+        if self.controller.setChannelState(channel) != -1:
+            if (self.intVar_radioValueChannel.get() == 1) and (self.controller.instrument.address != ""):
+                self.entry_currentSource_callback()
+                self.entry_voltageSource_callback()
 
-        if (self.intVar_radioValueChannel.get() == 1) and (self.controller.instrument.address != ""):
-            self.entry_currentSource_callback()
-            self.entry_voltageSource_callback()
-
-            self.intVar_radioValueChannel.set(2) 
-            self.radio_channelStateON.select() 
-            self.updateMonitoring()
-        else:
-            self.intVar_radioValueChannel.set(1)
-            self.radio_channelStateOFF.select() 
+                self.intVar_radioValueChannel.set(2) 
+                self.radio_channelStateON.select() 
+                self.updateMonitoring()
+            else:
+                self.intVar_radioValueChannel.set(1)
+                self.radio_channelStateOFF.select() 
 
     def master_activate_callback(self):
     #This method call the controller to change output state 
-        self.controller.setMasterState()
+        if self.controller.setMasterState() != -1:
+            if (self.intVar_radioValueMaster.get() == 1) and (self.controller.instrument.address != ""):
+                self.entry_currentSource_callback()
+                self.entry_voltageSource_callback()
 
-        if (self.intVar_radioValueMaster.get() == 1) and (self.controller.instrument.address != ""):
-            self.entry_currentSource_callback()
-            self.entry_voltageSource_callback()
-
-            self.intVar_radioValueMaster.set(2) 
-            self.radio_masterStateON.select() 
-            self.updateMonitoring()
-        else:
-            self.intVar_radioValueMaster.set(1)
-            self.radio_masterStateOFF.select() 
+                self.intVar_radioValueMaster.set(2) 
+                self.radio_masterStateON.select() 
+                self.updateMonitoring()
+            else:
+                self.intVar_radioValueMaster.set(1)
+                self.radio_masterStateOFF.select() 
 
     def updateMonitoring(self):
     #This method  updates the measurement content         
