@@ -46,3 +46,7 @@ class DeviceFrame():
     def updateView(self):
     #This method update the content of a device Frame
         self.view.sendError("404")
+            
+    def clearInstrument(self):
+    #This method is used to clear every trace of this instrument before being deleted
+        None

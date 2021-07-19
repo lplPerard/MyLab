@@ -120,6 +120,14 @@ class PowerSupplyView (DeviceFrame):
             if self.controller.instrument.channelUsed[i] == self.controller.instrument:
                 self.controller.instrument.channelUsed[i]=""
 
+    def renameInstrument(self):
+        i = 0
+        for item in self.view.listInstruments:
+            if self.controller.instrument.name == item.controller.instrument.name:    
+                newName = self.controller.instrument.name[:-2] + str(i) + ")"
+                self.entry_instrumentName_callback(newName=newName)
+                i = i+1
+
     def updateView(self):
     #This method refresh the content of the view
         self.stringvar_instrumentaddress.set(self.controller.instrument.address)
@@ -127,17 +135,14 @@ class PowerSupplyView (DeviceFrame):
         found=0
 
         for item in self.model.devices_dict:
-            if item in self.controller.instrument.address:
+            if (item in self.controller.instrument.address) and (self.model.devices_dict[item][1] == "Power Supply"):
                 self.controller.instrument.channelNumber = self.model.devices_dict[item][2]
                 self.combo_instrumentChannel.configure(values=self.controller.instrument.channelNumber)
                 self.controller.instrument.channelState = self.model.devices_dict[item][3]
                 self.controller.instrument.channelUsed = self.model.devices_dict[item][4]
 
-                oldname = self.controller.instrument.name
-                self.controller.instrument.name = self.model.devices_dict[item][0]
-                indexMenu = self.view.menu5.index(oldname)
-                self.view.menu5.entryconfigure(indexMenu, label=self.controller.instrument.name)
-                self.stringvar_instrumentName.set(self.controller.instrument.name)
+                newName = self.model.devices_dict[item][0] + " (0)"
+                self.entry_instrumentName_callback(newName=newName)
 
                 if self.model.devices_dict[item][0] == "HMC8042":   
                     self.img = Image.open(self.model.devices_dict[item][5])
@@ -155,8 +160,7 @@ class PowerSupplyView (DeviceFrame):
 
                 found=1
 
-        if (found==1) and (self.model.devices_dict[item][1] != "Power Supply"):
-            self.view.sendError('005')
+        self.renameInstrument()
 
         if (found == 0) and (self.controller.instrument.address != ""):                
             self.term_text.insert(END, "\nUnknown device connected")
@@ -367,10 +371,14 @@ class PowerSupplyView (DeviceFrame):
             self.view.menu5_callback(self)
             self.view.sendError('006')    
 
-    def entry_instrumentName_callback(self, arg=None):
+    def entry_instrumentName_callback(self, newName=None, arg=None):
     #This method calls the view to change instrument name
         oldname = self.controller.instrument.name
-        name = self.stringvar_instrumentName.get()
+        if newName == None:
+            name = self.stringvar_instrumentName.get()
+        else:
+            name = newName
+            self.stringvar_instrumentName.set(name)
         self.controller.instrument.name = name
         indexMenu = self.view.menu5.index(oldname)
         self.view.menu5.entryconfigure(indexMenu, label=name)
