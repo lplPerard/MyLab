@@ -152,12 +152,12 @@ class View(Tk):
                 self.localController = PowerSupplyController(view=self, term=self.term_text)
                 if len(self.listInstruments) < 4:
                     pos = len(self.listInstruments)
-                    name=deviceType + " (" + str(pos) + ")"
+                    name= deviceType + " (" + str(pos) + ")"
                     tamp = PowerSupplyView(self, terminal=self.term_text, model=self.model, controller=self.localController, name=name)
                     tamp.updateView()
                     self.localController.updateView(tamp)
                     self.listInstruments.insert(0, tamp)
-                    self.menu5.add_command(label=name, command=lambda: self.menu5_callback(deviceType, pos, tamp))
+                    self.menu5.add_command(label=name, command=lambda: self.menu5_callback(tamp))
                     self.term_text.insert(END, "New Instrument added : " + deviceType + " (" + str(pos) + ")\n")
                 else:
                     self.sendWarning("W000")
@@ -166,12 +166,12 @@ class View(Tk):
                 self.localController = PowerSupplyController(view=self, term=self.term_text)
                 if len(self.listInstruments) < 4:
                     pos = len(self.listInstruments)
-                    name=deviceType + " (" + str(pos) + ")"
+                    name= deviceType + " (" + str(pos) + ")"
                     tamp = PowerSupplyView(self, terminal=self.term_text, model=self.model, controller=self.localController, name=name)
                     tamp.updateView()
                     self.localController.updateView(tamp)
                     self.listInstruments.insert(0, tamp)
-                    self.menu5.add_command(label=name, command=lambda: self.menu5_callback(deviceType, pos, tamp))
+                    self.menu5.add_command(label=name, command=lambda: self.menu5_callback(tamp))
                     self.term_text.insert(END, "New Instrument added : " + deviceType + " (" + str(pos) + ")\n")
                 else:
                     self.sendWarning("W000")
@@ -180,12 +180,12 @@ class View(Tk):
                 self.localController = PowerSupplyController(view=self, term=self.term_text)
                 if len(self.listInstruments) < 4:
                     pos = len(self.listInstruments)
-                    name=deviceType + " (" + str(pos) + ")"
+                    name= deviceType + " (" + str(pos) + ")"
                     tamp = PowerSupplyView(self, terminal=self.term_text, model=self.model, controller=self.localController, name=name)
                     tamp.updateView()
                     self.localController.updateView(tamp)
                     self.listInstruments.insert(0, tamp)
-                    self.menu5.add_command(label=name, command=lambda: self.menu5_callback(deviceType, pos, tamp))
+                    self.menu5.add_command(label=name, command=lambda: self.menu5_callback(tamp))
                     self.term_text.insert(END, "New Instrument added : " + deviceType + " (" + str(pos) + ")\n")
                 else:
                     self.sendWarning("W000")
@@ -204,7 +204,8 @@ class View(Tk):
     #This method refresh the view and its content
         self.update_idletasks()
         for item in self.listInstruments:
-            item.updateView()
+            if item.state != "freeze":
+                item.updateView()
 
     def __initMenu(self):
     #This method generates a Menu bar which give access to the diffent software's tools
@@ -304,9 +305,9 @@ class View(Tk):
         if mbox == True:
             self.sendError("404")
 
-    def menu5_callback(self, tamp):
+    def menu5_callback(self, instrView):
     #Callback function for menu5 delete option
-        index = self.listInstruments.index(tamp)
+        index = self.listInstruments.index(instrView)
         self.menu5.delete(self.listInstruments[index].controller.instrument.name)
         self.term_text.insert(END, "An Instrument was deleted : " + self.listInstruments[index].controller.instrument.name +"\n")
         self.listInstruments[index].clearInstrument()

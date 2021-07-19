@@ -46,7 +46,8 @@ class PowerSupplyView (DeviceFrame):
         self.initEntries()
 
     def initAttributes(self):
-    #This methods initiates all attributes in the class. It is usefull to prevent double usage        
+    #This methods initiates all attributes in the class. It is usefull to prevent double usage     
+        self.state="freeze"   
         self.labelFrame_source = LabelFrame(self.frame, text="Source")
         self.labelFrame_measure = LabelFrame(self.frame, text="Measure")
 
@@ -122,6 +123,7 @@ class PowerSupplyView (DeviceFrame):
     def updateView(self):
     #This method refresh the content of the view
         self.stringvar_instrumentaddress.set(self.controller.instrument.address)
+        self.state="freeze" 
         found=0
 
         for item in self.model.devices_dict:
@@ -153,8 +155,6 @@ class PowerSupplyView (DeviceFrame):
 
                 found=1
 
-                break
-
         if (found==1) and (self.model.devices_dict[item][1] != "Power Supply"):
             self.view.sendError('005')
 
@@ -165,16 +165,15 @@ class PowerSupplyView (DeviceFrame):
                 if (item.name != self.controller.instrument.name) and (item.address == self.controller.instrument.address):
                     self.controller.instrument.channelState = item.channelState
                     self.controller.instrument.channelUsed = item.channelUsed
-                    self.combo_instrumentChannel_callback()
                     used = used + 1
 
             if used == 0:           
                 self.controller.instrument.channelState = ["", ""]
                 self.controller.instrument.channelUsed = ["", ""]
-                self.combo_instrumentChannel_callback()
             
         if self.controller.instrument.address != "":
             self.controller.connectToDevice()
+            self.combo_instrumentChannel_callback()
         
     def initLabelFrame(self):
     #This method instanciates all the LabelFrame
@@ -337,7 +336,7 @@ class PowerSupplyView (DeviceFrame):
         for i in range(len(self.controller.instrument.channelUsed)):
             if self.controller.instrument.channelUsed[i] == self.controller.instrument:
                 self.controller.instrument.channelUsed[i]=""
-
+        
         i=0
         found=0
         liste = self.controller.instrument.channelUsed
@@ -365,7 +364,8 @@ class PowerSupplyView (DeviceFrame):
         if found == 2:
             self.view.sendWarning('003')
         if found == 0:
-            self.view.sendError('006')
+            self.view.menu5_callback(self)
+            self.view.sendError('006')    
 
     def entry_instrumentName_callback(self, arg=None):
     #This method calls the view to change instrument name
