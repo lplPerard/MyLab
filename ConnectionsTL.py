@@ -28,6 +28,7 @@ class ConnectionsTL():
 
         self.initAttributes()
         self.initWidgets()
+        self.controller.VISA_connect()
 
     def initAttributes(self):
     #This method instanciate all attributes
@@ -49,23 +50,31 @@ class ConnectionsTL():
         self.frame.configure(bg=self.model.parameters_dict['backgroundColor'])
 
         self.combo_instrumentName.pack(pady=10)
+        self.combo_instrumentName.bind('<<ComboboxSelected>>', self.button_actualize_onclick)
         self.combo_type.current(0)
         self.combo_type.pack(pady=10)
 
         self.list_devices.pack(pady=5, expand='yes')
+        for item in self.view.controller.instrList:
+            self.list_devices.insert('end', item)
 
         self.button_actualize.pack(side="left", pady=5, padx=30)
-        self.button_actualize_onclick()
 
         self.button_select.pack(side="right", pady=5, padx=30)
 
-    def button_actualize_onclick(self):
-    #This method is called when user clicks on actualize 
-        self.controller.VISA_connect()
-
-        self.list_devices.delete(0, 'end')
-        for item in self.view.controller.instrList:
-            self.list_devices.insert('end', item)
+    def button_actualize_onclick(self, args=None):
+    #This method is called when user clicks on actualize    
+        index=self.combo_instrumentName.current() 
+        if self.view.listInstruments[index].controller.instrument.type == "Climatic Chamber":
+            self.controller.findSERIALInstruments()
+            self.list_devices.delete(0, 'end')
+            for item in self.view.controller.instrList:
+                self.list_devices.insert('end', item)
+        else:
+            self.controller.VISA_connect()
+            self.list_devices.delete(0, 'end')
+            for item in self.view.controller.instrList:
+                self.list_devices.insert('end', item)
 
     def button_select_onclick(self):
     #This method is called when user clicks on select
@@ -88,3 +97,4 @@ class ConnectionsTL():
 
         self.combo_instrumentName.configure(values=list)
         self.combo_instrumentName.current(0)
+        self.button_actualize_onclick()

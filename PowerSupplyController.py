@@ -111,24 +111,40 @@ class PowerSupplyController():
                 self.view.view.sendError('001')
                 self.instrument.state = "unreachable"
                 return(-1)
+        
+            if self.instrument.id == "0x05E6::0x2220":
+                try: 
+                    if self.instrument.channelState[channel-1] == 0:
+                        self.instrument.ressource.write('INST:SEL ' + str(channel))
+                        self.instrument.ressource.write('CHAN:OUTP ON ')
+                        self.instrument.ressource.close()
+                        self.instrument.channelState[channel-1] = 1
+                    else:
+                        self.instrument.ressource.write('INST:SEL ' + str(channel))
+                        self.instrument.ressource.write('CHAN:OUTP OFF ')
+                        self.instrument.ressource.close()
+                        self.instrument.channelState[channel-1] = 0
+                except:
+                    self.view.view.sendError('002')
+                    self.instrument.state = "unreachable"
+                    return(-1)
 
-            try: 
-                self.instrument.ressource.write('OUTP:STAT?')            
-                self.instrument.channelState[channel-1] = float(self.instrument.ressource.read())
-
-                if self.instrument.channelState[channel-1] == 0:
-                    self.instrument.ressource.write('INST:NSEL ' + str(channel))
-                    self.instrument.ressource.write('OUTP:CHAN ON ')
-                    self.instrument.ressource.close()
-                    self.instrument.channelState
-                else:
-                    self.instrument.ressource.write('INST:NSEL ' + str(channel))
-                    self.instrument.ressource.write('OUTP:CHAN OFF ')
-                    self.instrument.ressource.close()
-            except:
-                self.view.view.sendError('002')
-                self.instrument.state = "unreachable"
-                return(-1)
+            else:
+                try: 
+                    if self.instrument.channelState[channel-1] == 0:
+                        self.instrument.ressource.write('INST:NSEL ' + str(channel))
+                        self.instrument.ressource.write('OUTP:CHAN ON ')
+                        self.instrument.ressource.close()
+                        self.instrument.channelState[channel-1] = 1
+                    else:
+                        self.instrument.ressource.write('INST:NSEL ' + str(channel))
+                        self.instrument.ressource.write('OUTP:CHAN OFF ')
+                        self.instrument.ressource.close()
+                        self.instrument.channelState[channel-1] = 0
+                except:
+                    self.view.view.sendError('002')
+                    self.instrument.state = "unreachable"
+                    return(-1)
 
         else:
             self.view.view.sendError('004')
@@ -143,21 +159,37 @@ class PowerSupplyController():
                 self.view.view.sendError('001')
                 self.instrument.state = "unreachable"
                 return(-1)
+        
+            if self.instrument.id == "0x05E6::0x2220":
 
-            try: 
-                self.instrument.ressource.write('OUTP:MAST:STAT?')            
-                state = float(self.instrument.ressource.read())
-
-                if state == 0:
-                    self.instrument.ressource.write('OUTP:MAST ON ')
-                    self.instrument.ressource.close()
-                else:
-                    self.instrument.ressource.write('OUTP:MAST OFF ')
-                    self.instrument.ressource.close()
-            except:
-                self.view.view.sendError('002')
-                self.instrument.state = "unreachable"
-                return(-1)
+                try:            
+                    if self.instrument.masterState == 0:
+                        self.instrument.ressource.write('OUTP:ENAB 1')
+                        self.instrument.ressource.close()
+                        self.instrument.masterState = 1
+                    else:
+                        self.instrument.ressource.write('OUTP:ENAB 0')
+                        self.instrument.ressource.close()                    
+                        self.instrument.masterState = 0
+                except:
+                    self.view.view.sendError('002')
+                    self.instrument.state = "unreachable"
+                    return(-1)
+            
+            else:
+                try:            
+                    if self.instrument.masterState == 0:
+                        self.instrument.ressource.write('OUTP:MAST ON')
+                        self.instrument.ressource.close()
+                        self.instrument.masterState = 1
+                    else:
+                        self.instrument.ressource.write('OUTP:MAST OFF')
+                        self.instrument.ressource.close()                    
+                        self.instrument.masterState = 0
+                except:
+                    self.view.view.sendError('002')
+                    self.instrument.state = "unreachable"
+                    return(-1)
 
         else:
             self.view.view.sendError('004')

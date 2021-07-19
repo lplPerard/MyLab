@@ -20,4 +20,5 @@ class Instrument():
         self.address = ""
         self.masterState = 0
         self.state = "free"
+        self.id = ""
         self.ressource = None

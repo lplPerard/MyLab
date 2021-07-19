@@ -38,7 +38,7 @@ class WakeUpTL():
                                                                                    "Oscilloscope",
                                                                                    "Source Meter",
                                                                                    "Multimeter",
-                                                                                   "RLC Meter",
+                                                                                   "Waveform Generator",
                                                                                    "Climatic Chamber",
                                                                                    "VNA"])
         self.combo_instrument.configure(background="white")

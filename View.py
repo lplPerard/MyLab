@@ -6,6 +6,8 @@ File description : Class container for the application's view
 
 """
 
+from WaveformGeneratorView import WaveformGeneratorView
+from WaveformGeneratorController import WaveformGeneratorController
 from ClimaticChamberView import ClimaticChamberView
 from ClimaticChamberController import ClimaticChamberController
 from PowerSupplyController import PowerSupplyController
@@ -164,17 +166,17 @@ class View(Tk):
             else:
                 self.sendWarning("W000")
 
-        if deviceType == "Source Meter":
-            self.localController = PowerSupplyController(view=self, term=self.term_text)
+        if deviceType == "Waveform Generator":
+            self.localController = WaveformGeneratorController(view=self, term=self.term_text)
             if len(self.listInstruments) < 4:
                 pos = len(self.listInstruments)
                 name= deviceType + " (" + str(pos) + ")"
-                tamp = PowerSupplyView(self, terminal=self.term_text, model=self.model, controller=self.localController, name=name)
+                tamp = WaveformGeneratorView(self, terminal=self.term_text, model=self.model, controller=self.localController, name=name)
                 tamp.updateView()
                 self.localController.updateView(tamp)
                 self.listInstruments.insert(0, tamp)
                 self.menu5.add_command(label=name, command=lambda: self.menu5_callback(tamp))
-                self.term_text.insert(END, "New Instrument added : " + deviceType + " (" + str(pos) + ")\n")
+                self.term_text.insert(END, "New Waveform Generator added : " + deviceType + " (" + str(pos) + ")\n")
             else:
                 self.sendWarning("W000")
 
@@ -229,7 +231,7 @@ class View(Tk):
         self.menu3.add_command(label="Change logs", command=self.menu3_logs_callBack)  
 
         self.menu4.add_command(label="Oscilloscope", command=self.menu4_Oscilloscope_callBack)
-        self.menu4.add_command(label="Source Meter", command=self.menu4_SourceMeter_callBack)
+        self.menu4.add_command(label="Waveform Generator", command=self.menu4_WaveformGenerator_callBack)
         self.menu4.add_command(label="RLC Meter", command=self.menu4_RLCMeter_callBack)
         self.menu4.add_command(label="Power Supply", command=self.menu4_PowerSupply_callBack)
         self.menu4.add_command(label="Climatic Chamber", command=self.menu4_ClimaticChamber_callBack)     
@@ -283,11 +285,11 @@ class View(Tk):
         if mbox == True:
             self.sendError("404")
 
-    def menu4_SourceMeter_callBack(self):
+    def menu4_WaveformGenerator_callBack(self):
     #Callback function for menu2 2 option
         mbox = messagebox.askyesno("Add Instrument", "Do you want to add a Source Meter?")
         if mbox == True:
-            self.sendError("404")
+            self.addDeviceFrame("Waveform Generator")
 
     def menu4_RLCMeter_callBack(self):
     #Callback function for menu2 2 option
@@ -305,7 +307,7 @@ class View(Tk):
     #Callback function for menu2 2 option
         mbox = messagebox.askyesno("Add Instrument", "Do you want to add a Climatic Chamber ?")
         if mbox == True:
-            self.addDeviceFrame("Climactic Chamber")
+            self.addDeviceFrame("Climatic Chamber")
 
     def menu5_callback(self, instrView):
     #Callback function for menu5 delete option
