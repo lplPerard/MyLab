@@ -11,7 +11,7 @@ if sys.platform == 'win32':
 
 includefiles = ['Parameters.json', 'Metadata.json', 'Error.json', 'Devices.json',
                 'NIVISA_19.5.exe', 'ReadMe.txt',
-                'HMC8042.png', '2220-30-1.png', 'VT4002_EMC.png']
+                'HMC8042.png', '2220-30-1.png', 'VT4002_EMC.png', '33500B.png']
 
 executables = [
     Executable('MyLab.py', base=base, icon='icon2.ico')
