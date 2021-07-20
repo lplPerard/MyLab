@@ -49,7 +49,8 @@ class ClimaticChamberView (DeviceFrame):
     def updateView(self):
     #This method refresh the content of the view
         self.stringvar_instrumentaddress.set(self.controller.instrument.address)
-        self.state="freeze" 
+        self.state="freeze"
+        self.panel.destroy() 
         found=0
 
         for item in self.model.devices_dict:
@@ -61,8 +62,8 @@ class ClimaticChamberView (DeviceFrame):
                     self.img = Image.open(self.model.devices_dict[item][2])
                     self.img = self.img.resize((200, 300), Image.ANTIALIAS)
                     self.img = ImageTk.PhotoImage(self.img)
-                    panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColor'])
-                    panel.pack(fill = "both", expand = "yes")
+                    self.panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColor'])
+                    self.panel.pack(fill = "both", expand = "yes")
 
                 found=1
                 break
@@ -117,7 +118,7 @@ class ClimaticChamberView (DeviceFrame):
         self.entry_instrumentaddress = Entry(self.frame_instrument_address, textvariable=self.stringvar_instrumentaddress, state="readonly")
 
         self.entry_temperatureSource = Entry(self.frame_source_temperature, textvariable=self.doubleVar_temperatureSource, width=6)
-        self.entry_temperatureMeasure = Entry(self.frame_measure_temperature, textvariable=self.doubleVar_temperatureMeasure, state="readonly")
+        self.entry_temperatureMeasure = Entry(self.frame_measure_temperature, textvariable=self.doubleVar_temperatureMeasure, width=6, state="readonly")
 
         self.master_activate = Button(self.frame_master_button, text='Master ON/OFF', command=self.master_activate_callback)
 
@@ -125,6 +126,7 @@ class ClimaticChamberView (DeviceFrame):
         self.radio_masterStateON = Radiobutton(self.frame_master_radio, text='ON', variable=self.intVar_radioValueMaster, value=2)
         
         self.img = None
+        self.panel = Label(self.frame, bg=self.model.parameters_dict['backgroundColor'])
 
     def renameInstrument(self):
         i = 0

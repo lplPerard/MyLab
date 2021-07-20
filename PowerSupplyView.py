@@ -113,6 +113,7 @@ class PowerSupplyView (DeviceFrame):
         self.radio_masterStateON = Radiobutton(self.frame_master_radio, text='ON', variable=self.intVar_radioValueMaster, value=2)
         
         self.img = None
+        self.panel = Label(self.frame, bg=self.model.parameters_dict['backgroundColor'])
         
     def clearInstrument(self):
     #This method is used to clear every trace of this instrument before being deleted
@@ -132,35 +133,38 @@ class PowerSupplyView (DeviceFrame):
     #This method refresh the content of the view
         self.stringvar_instrumentaddress.set(self.controller.instrument.address)
         self.state="freeze" 
+        self.panel.destroy()
         found=0
 
         for item in self.model.devices_dict:
-            if (item in self.controller.instrument.address) and (self.model.devices_dict[item][1] == "Power Supply"):
-                self.controller.instrument.id = item
-                self.controller.instrument.channelNumber = self.model.devices_dict[item][2]
-                self.combo_instrumentChannel.configure(values=self.controller.instrument.channelNumber)
-                self.controller.instrument.channelState = self.model.devices_dict[item][3]
-                self.controller.instrument.channelUsed = self.model.devices_dict[item][4]
+            if (item in self.controller.instrument.address):
+                if self.model.devices_dict[item][1] == "Power Supply":
+                    self.controller.instrument.id = item
+                    self.controller.instrument.channelNumber = self.model.devices_dict[item][2]
+                    self.combo_instrumentChannel.configure(values=self.controller.instrument.channelNumber)
+                    self.controller.instrument.channelState = self.model.devices_dict[item][3]
+                    self.controller.instrument.channelUsed = self.model.devices_dict[item][4]
 
-                newName = self.model.devices_dict[item][0] + " (0)"
-                self.entry_instrumentName_callback(newName=newName)
+                    newName = self.model.devices_dict[item][0] + " (0)"
+                    self.entry_instrumentName_callback(newName=newName)
 
-                if self.model.devices_dict[item][0] == "HMC8042":   
-                    self.img = Image.open(self.model.devices_dict[item][5])
-                    self.img = self.img.resize((200, 100), Image.ANTIALIAS)
-                    self.img = ImageTk.PhotoImage(self.img)
-                    panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColor'])
-                    panel.pack(fill = "both", expand = "yes")
+                    if self.model.devices_dict[item][0] == "HMC8042":   
+                        self.img = Image.open(self.model.devices_dict[item][5])
+                        self.img = self.img.resize((200, 100), Image.ANTIALIAS)
+                        self.img = ImageTk.PhotoImage(self.img)
+                        self.panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColor'])
+                        self.panel.pack(fill = "both", expand = "yes")
 
-                if self.model.devices_dict[item][0] == "2220-30-1":   
-                    self.img = Image.open(self.model.devices_dict[item][5])
-                    self.img = self.img.resize((200, 200), Image.ANTIALIAS)
-                    self.img = ImageTk.PhotoImage(self.img)
-                    panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColor'])
-                    panel.pack(fill = "both", expand = "yes")
+                    if self.model.devices_dict[item][0] == "2220-30-1":   
+                        self.img = Image.open(self.model.devices_dict[item][5])
+                        self.img = self.img.resize((200, 200), Image.ANTIALIAS)
+                        self.img = ImageTk.PhotoImage(self.img)
+                        self.panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColor'])
+                        self.panel.pack(fill = "both", expand = "yes")
+
+                    break
 
                 found=1
-                break
 
         if (found==1) and (self.model.devices_dict[item][1] != "Power Supply"):
             self.view.menu5_callback(self)

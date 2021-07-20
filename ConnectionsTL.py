@@ -65,6 +65,7 @@ class ConnectionsTL():
     def button_actualize_onclick(self, args=None):
     #This method is called when user clicks on actualize    
         index=self.combo_instrumentName.current() 
+        
         if self.view.listInstruments[index].controller.instrument.type == "Climatic Chamber":
             self.controller.findSERIALInstruments()
             self.list_devices.delete(0, 'end')

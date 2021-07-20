@@ -140,7 +140,7 @@ class View(Tk):
     #This methods is used to change the device display
         if deviceType == "Power Supply":
             self.localController = PowerSupplyController(view=self, term=self.term_text)
-            if len(self.listInstruments) < 4:
+            if len(self.listInstruments) < 6:
                 pos = len(self.listInstruments)
                 name= deviceType + " (" + str(pos) + ")"
                 tamp = PowerSupplyView(self, terminal=self.term_text, model=self.model, controller=self.localController, name=name)
@@ -154,7 +154,7 @@ class View(Tk):
 
         if deviceType == "Climatic Chamber":
             self.localController = ClimaticChamberController(view=self, term=self.term_text)
-            if len(self.listInstruments) < 4:
+            if len(self.listInstruments) < 6:
                 pos = len(self.listInstruments)
                 name= deviceType + " (" + str(pos) + ")"
                 tamp = ClimaticChamberView(self, terminal=self.term_text, model=self.model, controller=self.localController, name=name)
@@ -168,7 +168,7 @@ class View(Tk):
 
         if deviceType == "Waveform Generator":
             self.localController = WaveformGeneratorController(view=self, term=self.term_text)
-            if len(self.listInstruments) < 4:
+            if len(self.listInstruments) < 6:
                 pos = len(self.listInstruments)
                 name= deviceType + " (" + str(pos) + ")"
                 tamp = WaveformGeneratorView(self, terminal=self.term_text, model=self.model, controller=self.localController, name=name)
@@ -182,7 +182,7 @@ class View(Tk):
 
         if deviceType == "RLC Meter":
             self.localController = PowerSupplyController(view=self, term=self.term_text)
-            if len(self.listInstruments) < 4:
+            if len(self.listInstruments) < 6:
                 pos = len(self.listInstruments)
                 name= deviceType + " (" + str(pos) + ")"
                 tamp = PowerSupplyView(self, terminal=self.term_text, model=self.model, controller=self.localController, name=name)
@@ -287,7 +287,7 @@ class View(Tk):
 
     def menu4_WaveformGenerator_callBack(self):
     #Callback function for menu2 2 option
-        mbox = messagebox.askyesno("Add Instrument", "Do you want to add a Source Meter?")
+        mbox = messagebox.askyesno("Add Instrument", "Do you want to add a Waveform Generator?")
         if mbox == True:
             self.addDeviceFrame("Waveform Generator")
 
