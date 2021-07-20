@@ -40,7 +40,7 @@ class ConnectionsTL():
                                                                                    "USB",
                                                                                    "Ethernet"])
 
-        self.list_devices = Listbox(self.frame, selectmode='single')
+        self.list_devices = Listbox(self.frame, selectmode='single', width=30)
 
         self.button_actualize = Button(self.frame, text="Actualize", command=self.button_actualize_onclick)
         self.button_select = Button(self.frame, text="Select", command=self.button_select_onclick)
@@ -58,9 +58,9 @@ class ConnectionsTL():
         for item in self.view.controller.instrList:
             self.list_devices.insert('end', item)
 
-        self.button_actualize.pack(side="left", pady=5, padx=30)
+        self.button_actualize.pack(side="left", pady=5, padx=5)
 
-        self.button_select.pack(side="right", pady=5, padx=30)
+        self.button_select.pack(side="right", pady=5, padx=5)
 
     def button_actualize_onclick(self, args=None):
     #This method is called when user clicks on actualize    

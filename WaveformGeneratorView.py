@@ -53,7 +53,7 @@ class WaveformGeneratorView (DeviceFrame):
         self.labelFrame_modulate = LabelFrame(self.frame, text="Modulation")
         self.labelFrame_output = LabelFrame(self.frame, text="Output")
 
-        self.canva_signal = Canvas(self.labelFrame_signal, scrollregion=(0,0,0,350), bd=0, highlightthickness=0, bg=self.model.parameters_dict['backgroundColor'])
+        self.canva_signal = Canvas(self.labelFrame_signal, scrollregion=(0,0,0,375), bd=0, highlightthickness=0, bg=self.model.parameters_dict['backgroundColor'])
         self.defilY_signal = Scrollbar(self.labelFrame_signal, orient='vertical', command=self.canva_signal.yview, bg=self.model.parameters_dict['backgroundColor'])
         
         self.canva_modulate = Canvas(self.labelFrame_modulate, scrollregion=(0,0,0,350), bd=0, highlightthickness=0, bg=self.model.parameters_dict['backgroundColor'])
@@ -76,11 +76,13 @@ class WaveformGeneratorView (DeviceFrame):
         self.frame_source_fallTime = Frame(self.scrollframe_signal)
         self.frame_source_symetry = Frame(self.scrollframe_signal)
         self.frame_source_bandwidth = Frame(self.scrollframe_signal)
+        self.frame_source_modulate = Frame(self.scrollframe_signal)
 
         self.frame_modulate_type = Frame(self.scrollframe_modulate)
         self.frame_modulate_source = Frame(self.scrollframe_modulate)
         self.frame_modulate_shape = Frame(self.scrollframe_modulate)
-
+        
+        self.frame_output_state = Frame(self.labelFrame_output)
         self.frame_master_button = Frame(self.labelFrame_output)
         self.frame_master_radio = Frame(self.labelFrame_output)
 
@@ -98,6 +100,8 @@ class WaveformGeneratorView (DeviceFrame):
         self.doubleVar_source_symetry = DoubleVar()
         self.doubleVar_source_bandwidth = DoubleVar()
         self.doubleVar_source_modulate = DoubleVar()
+        self.intVar_radioValueModulate = IntVar()
+        self.intVar_radioValueState = IntVar()
         self.intVar_radioValueMaster = IntVar()
 
         self.label_instrumentName = Label(self.frame_instrument_name, text="Name :   ")
@@ -114,11 +118,14 @@ class WaveformGeneratorView (DeviceFrame):
         self.label_source_riseTime = Label(self.frame_source_riseTime, text="Rise Time :")
         self.label_source_fallTime = Label(self.frame_source_fallTime, text="Fall Time :")
         self.label_source_bandwidth = Label(self.frame_source_bandwidth, text="Bandwidth :")
+        self.label_source_modulate = Label(self.frame_source_modulate, text="Modulation : ")
         self.label_source_dutyCycle.after(1000, self.updateMonitoring)
 
         self.label_modulate_type = Label(self.frame_modulate_type, text="Type :     ")
-        self.label_modulate_source = Label(self.frame_modulate_source, text="Frequency : ")
+        self.label_modulate_source = Label(self.frame_modulate_source, text="Source : ")
         self.label_modulate_shape = Label(self.frame_modulate_shape, text="Shape :    ")
+        
+        self.label_output_state = Label(self.frame_output_state, text="Load :    ")
 
         self.combo_source_waveform = Combobox(self.frame_source_waveform, state="readonly", width=17, values=["Sinus", "Square", "Ramp", "Pulse", "Noise"])
         self.combo_source_frequency = Combobox(self.frame_source_frequency, state="readonly", width=5, values=["Hz", "kHz", "MHz"])
@@ -150,6 +157,12 @@ class WaveformGeneratorView (DeviceFrame):
         self.entry_source_fallTime = Entry(self.frame_source_fallTime, textvariable=self.doubleVar_source_fallTime, width=10)
         self.entry_source_bandwidth = Entry(self.frame_source_bandwidth, textvariable=self.doubleVar_source_bandwidth, width=10)
         self.master_activate = Button(self.frame_master_button, text='Master ON/OFF', command=self.master_activate_callback)
+
+        self.radio_modulateStateOFF = Radiobutton(self.frame_source_modulate, text='OFF', variable=self.intVar_radioValueModulate, value=1)
+        self.radio_modulateStateON = Radiobutton(self.frame_source_modulate, text='ON', variable=self.intVar_radioValueModulate, value=2)
+
+        self.radio_outputStateHigh = Radiobutton(self.frame_output_state, text='High Z', variable=self.intVar_radioValueState, value=1)
+        self.radio_outputStateLoad = Radiobutton(self.frame_output_state, text='50Ω', variable=self.intVar_radioValueState, value=2)
 
         self.radio_masterStateOFF = Radiobutton(self.frame_master_radio, text='OFF', variable=self.intVar_radioValueMaster, value=1)
         self.radio_masterStateON = Radiobutton(self.frame_master_radio, text='ON', variable=self.intVar_radioValueMaster, value=2)
@@ -237,7 +250,7 @@ class WaveformGeneratorView (DeviceFrame):
         self.canva_modulate.create_window(0, 0, anchor='nw', window=self.scrollframe_modulate)
         self.scrollframe_modulate.configure(bg=self.model.parameters_dict['backgroundColor'])
 
-        self.canva_modulate.config(yscrollcommand= self.defilY_modulate.set, height=125, width=220)
+        self.canva_modulate.config(yscrollcommand= self.defilY_modulate.set, height=95, width=220)
         self.canva_modulate.pack(side="left", fill="both")
         self.defilY_modulate.pack(fill="y", side='left', padx='5')
 
@@ -274,6 +287,9 @@ class WaveformGeneratorView (DeviceFrame):
         self.frame_source_bandwidth.configure(bg=self.model.parameters_dict['backgroundColor'])
         self.frame_source_bandwidth.pack(fill="x",pady=5)
 
+        self.frame_source_modulate.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_source_modulate.pack(fill="x",pady=5)
+
         self.frame_modulate_type.configure(bg=self.model.parameters_dict['backgroundColor'])
         self.frame_modulate_type.pack(fill="both",pady=5)
 
@@ -282,6 +298,9 @@ class WaveformGeneratorView (DeviceFrame):
 
         self.frame_modulate_shape.configure(bg=self.model.parameters_dict['backgroundColor'])
         self.frame_modulate_shape.pack(fill="both",pady=5)
+
+        self.frame_output_state.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_output_state.pack(fill="both",pady=5)
 
         self.frame_master_button.configure(bg=self.model.parameters_dict['backgroundColor'])
         self.frame_master_button.pack(side="left", padx=5, pady=5, fill="y")
@@ -346,6 +365,9 @@ class WaveformGeneratorView (DeviceFrame):
         self.label_source_bandwidth.configure(bg=self.model.parameters_dict['backgroundColor'])
         self.label_source_bandwidth.pack(side="left")
 
+        self.label_source_modulate.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_source_modulate.pack(side="left")
+
         self.label_modulate_type.configure(bg=self.model.parameters_dict['backgroundColor'])
         self.label_modulate_type.pack(side="left")
 
@@ -355,12 +377,16 @@ class WaveformGeneratorView (DeviceFrame):
         self.label_modulate_shape.configure(bg=self.model.parameters_dict['backgroundColor'])
         self.label_modulate_shape.pack(side="left")
 
+        self.label_output_state.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_output_state.pack(side="left")
+
     def initCombo(self):
     #This methods instanciates all the combobox
-        #self.combo_source_waveform.bind("<<ComboboxSelected>>", self.combo_source_waveform_callback)
+        self.combo_source_waveform.bind("<<ComboboxSelected>>", self.combo_source_waveform_callback)
         self.combo_source_waveform.configure(background='white')
         self.combo_source_waveform.current(0)
         self.combo_source_waveform.pack(side="right")
+        self.combo_source_waveform_callback()
 
         #self.combo_source_frequency.bind("<<ComboboxSelected>>", self.combo_source_frequency_callback)
         self.combo_source_frequency.configure(background='white')
@@ -461,13 +487,196 @@ class WaveformGeneratorView (DeviceFrame):
     #This method instanciates the buttons
         self.master_activate.pack(expand="yes")
 
+        self.radio_modulateStateON.pack(side="right", expand="yes", fill="both")
+        self.radio_modulateStateON.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.radio_modulateStateOFF.pack(side="right", expand="yes", fill="both")
+        self.radio_modulateStateOFF.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.intVar_radioValueModulate.set(1)
+
+        self.radio_outputStateHigh.pack(side="right", expand="yes", fill="both")
+        self.radio_outputStateHigh.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.radio_outputStateLoad.pack(side="right", expand="yes", fill="both")
+        self.radio_outputStateLoad.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.intVar_radioValueState.set(1)
+
         self.radio_masterStateON.pack(side="top", expand="yes", fill="both")
         self.radio_masterStateON.configure(bg=self.model.parameters_dict['backgroundColor'], state="disabled", disabledforeground="black")
         self.radio_masterStateOFF.pack(side="top", expand="yes", fill="both")
         self.radio_masterStateOFF.configure(bg=self.model.parameters_dict['backgroundColor'], state="disabled", disabledforeground="black")
-
         self.intVar_radioValueMaster.set(1)
 
+    def combo_source_waveform_callback(self, args=None):
+    #This method is called when this combobow is selected
+        if self.combo_source_waveform.get() == "Sinus":
+            self.label_source_frequency.configure(state="normal")
+            self.label_source_amplitude.configure(state="normal")
+            self.label_source_offset.configure(state="normal")
+            self.label_source_phase.configure(state="normal")
+            self.label_source_dutyCycle.configure(state="disabled")
+            self.label_source_symetry.configure(state="disabled")
+            self.label_source_riseTime.configure(state="disabled")
+            self.label_source_fallTime.configure(state="disabled")
+            self.label_source_pulseWidth.configure(state="disabled")
+            self.label_source_bandwidth.configure(state="disabled")
+            
+            self.entry_source_frequency.configure(state="normal")
+            self.entry_source_amplitude.configure(state="normal")
+            self.entry_source_offset.configure(state="normal")
+            self.entry_source_phase.configure(state="normal")
+            self.entry_source_dutyCycle.configure(state="disabled")
+            self.entry_source_Symetry.configure(state="disabled")
+            self.entry_source_riseTime.configure(state="disabled")
+            self.entry_source_fallTime.configure(state="disabled")
+            self.entry_source_pulseWidth.configure(state="disabled")
+            self.entry_source_bandwidth.configure(state="disabled")
+
+            self.combo_source_frequency.configure(state="normal")
+            self.combo_source_amplitude.configure(state="normal")
+            self.combo_source_offset.configure(state="normal")
+            self.combo_source_phase.configure(state="normal")
+            self.combo_source_dutyCycle.configure(state="disabled")
+            self.combo_source_symetry.configure(state="disabled")
+            self.combo_source_riseTime.configure(state="disabled")
+            self.combo_source_fallTime.configure(state="disabled")
+            self.combo_source_pulseWidth.configure(state="disabled")
+            self.combo_source_bandwidth.configure(state="disabled")
+
+        if self.combo_source_waveform.get() == "Square":
+            self.label_source_frequency.configure(state="normal")
+            self.label_source_amplitude.configure(state="normal")
+            self.label_source_offset.configure(state="normal")
+            self.label_source_phase.configure(state="normal")
+            self.label_source_dutyCycle.configure(state="normal")
+            self.label_source_symetry.configure(state="disabled")
+            self.label_source_riseTime.configure(state="disabled")
+            self.label_source_fallTime.configure(state="disabled")
+            self.label_source_pulseWidth.configure(state="disabled")
+            self.label_source_bandwidth.configure(state="disabled")
+            
+            self.entry_source_frequency.configure(state="normal")
+            self.entry_source_amplitude.configure(state="normal")
+            self.entry_source_offset.configure(state="normal")
+            self.entry_source_phase.configure(state="normal")
+            self.entry_source_dutyCycle.configure(state="normal")
+            self.entry_source_Symetry.configure(state="disabled")
+            self.entry_source_riseTime.configure(state="disabled")
+            self.entry_source_fallTime.configure(state="disabled")
+            self.entry_source_pulseWidth.configure(state="disabled")
+            self.entry_source_bandwidth.configure(state="disabled")
+
+            self.combo_source_frequency.configure(state="normal")
+            self.combo_source_amplitude.configure(state="normal")
+            self.combo_source_offset.configure(state="normal")
+            self.combo_source_phase.configure(state="normal")
+            self.combo_source_dutyCycle.configure(state="normal")
+            self.combo_source_symetry.configure(state="disabled")
+            self.combo_source_riseTime.configure(state="disabled")
+            self.combo_source_fallTime.configure(state="disabled")
+            self.combo_source_pulseWidth.configure(state="disabled")
+            self.combo_source_bandwidth.configure(state="disabled")
+
+        if self.combo_source_waveform.get() == "Ramp":
+            self.label_source_frequency.configure(state="normal")
+            self.label_source_amplitude.configure(state="normal")
+            self.label_source_offset.configure(state="normal")
+            self.label_source_phase.configure(state="normal")
+            self.label_source_dutyCycle.configure(state="disabled")
+            self.label_source_symetry.configure(state="normal")
+            self.label_source_riseTime.configure(state="disabled")
+            self.label_source_fallTime.configure(state="disabled")
+            self.label_source_pulseWidth.configure(state="disabled")
+            self.label_source_bandwidth.configure(state="disabled")
+            
+            self.entry_source_frequency.configure(state="normal")
+            self.entry_source_amplitude.configure(state="normal")
+            self.entry_source_offset.configure(state="normal")
+            self.entry_source_phase.configure(state="normal")
+            self.entry_source_dutyCycle.configure(state="disabled")
+            self.entry_source_Symetry.configure(state="normal")
+            self.entry_source_riseTime.configure(state="disabled")
+            self.entry_source_fallTime.configure(state="disabled")
+            self.entry_source_pulseWidth.configure(state="disabled")
+            self.entry_source_bandwidth.configure(state="disabled")
+
+            self.combo_source_frequency.configure(state="normal")
+            self.combo_source_amplitude.configure(state="normal")
+            self.combo_source_offset.configure(state="normal")
+            self.combo_source_phase.configure(state="normal")
+            self.combo_source_dutyCycle.configure(state="disabled")
+            self.combo_source_symetry.configure(state="disabled")
+            self.combo_source_riseTime.configure(state="disabled")
+            self.combo_source_fallTime.configure(state="disabled")
+            self.combo_source_pulseWidth.configure(state="disabled")
+            self.combo_source_bandwidth.configure(state="disabled")
+
+        if self.combo_source_waveform.get() == "Pulse":
+            self.label_source_frequency.configure(state="normal")
+            self.label_source_amplitude.configure(state="normal")
+            self.label_source_offset.configure(state="normal")
+            self.label_source_phase.configure(state="normal")
+            self.label_source_dutyCycle.configure(state="disabled")
+            self.label_source_symetry.configure(state="disabled")
+            self.label_source_riseTime.configure(state="normal")
+            self.label_source_fallTime.configure(state="normal")
+            self.label_source_pulseWidth.configure(state="normal")
+            self.label_source_bandwidth.configure(state="disabled")
+            
+            self.entry_source_frequency.configure(state="normal")
+            self.entry_source_amplitude.configure(state="normal")
+            self.entry_source_offset.configure(state="normal")
+            self.entry_source_phase.configure(state="normal")
+            self.entry_source_dutyCycle.configure(state="disabled")
+            self.entry_source_Symetry.configure(state="disabled")
+            self.entry_source_riseTime.configure(state="normal")
+            self.entry_source_fallTime.configure(state="normal")
+            self.entry_source_pulseWidth.configure(state="normal")
+            self.entry_source_bandwidth.configure(state="disabled")
+
+            self.combo_source_frequency.configure(state="normal")
+            self.combo_source_amplitude.configure(state="normal")
+            self.combo_source_offset.configure(state="normal")
+            self.combo_source_phase.configure(state="normal")
+            self.combo_source_dutyCycle.configure(state="disabled")
+            self.combo_source_symetry.configure(state="disabled")
+            self.combo_source_riseTime.configure(state="normal")
+            self.combo_source_fallTime.configure(state="normal")
+            self.combo_source_pulseWidth.configure(state="normal")
+            self.combo_source_bandwidth.configure(state="disabled")
+
+        if self.combo_source_waveform.get() == "Noise":
+            self.label_source_frequency.configure(state="disabled")
+            self.label_source_amplitude.configure(state="normal")
+            self.label_source_offset.configure(state="normal")
+            self.label_source_phase.configure(state="disabled")
+            self.label_source_dutyCycle.configure(state="disabled")
+            self.label_source_symetry.configure(state="disabled")
+            self.label_source_riseTime.configure(state="disabled")
+            self.label_source_fallTime.configure(state="disabled")
+            self.label_source_pulseWidth.configure(state="disabled")
+            self.label_source_bandwidth.configure(state="normal")
+            
+            self.entry_source_frequency.configure(state="disabled")
+            self.entry_source_amplitude.configure(state="normal")
+            self.entry_source_offset.configure(state="normal")
+            self.entry_source_phase.configure(state="disabled")
+            self.entry_source_dutyCycle.configure(state="disabled")
+            self.entry_source_Symetry.configure(state="disabled")
+            self.entry_source_riseTime.configure(state="disabled")
+            self.entry_source_fallTime.configure(state="disabled")
+            self.entry_source_pulseWidth.configure(state="disabled")
+            self.entry_source_bandwidth.configure(state="normal")
+
+            self.combo_source_frequency.configure(state="disabled")
+            self.combo_source_amplitude.configure(state="normal")
+            self.combo_source_offset.configure(state="normal")
+            self.combo_source_phase.configure(state="disabled")
+            self.combo_source_dutyCycle.configure(state="disabled")
+            self.combo_source_symetry.configure(state="disabled")
+            self.combo_source_riseTime.configure(state="disabled")
+            self.combo_source_fallTime.configure(state="disabled")
+            self.combo_source_pulseWidth.configure(state="disabled")
+            self.combo_source_bandwidth.configure(state="normal")
+        
     def entry_instrumentName_callback(self, newName=None, arg=None):
     #This method calls the view to change instrument name
         oldname = self.controller.instrument.name
