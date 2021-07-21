@@ -5,8 +5,8 @@ Developped by : Luc PERARD
 File description : Class container for the application's Model
 
 """
-
 import json
+import jsonpickle
 
 class Model():
     """Class containing the Model for the Mylab according to the MCV model.
@@ -47,3 +47,26 @@ class Model():
         with open("Error.json") as f:
             self.error_dict = json.load(f)
             f.close()
+
+    def saveConfiguration(self, listeInstruments, path):
+        if (path != "") and (path[-5:] != "mylab"):
+            File  = open(path + ".mylab", 'w')                   
+            listeInstrumentsJSON = jsonpickle.encode(listeInstruments, unpicklable=True)
+            json.dump(listeInstrumentsJSON, File, indent=4)
+
+        if (path != "") and (path[-5:] == "mylab"):  
+            File  = open(path, 'w')         
+            listeInstrumentsJSON = jsonpickle.encode(listeInstruments, unpicklable=True)
+            json.dump(listeInstrumentsJSON, File, indent=4)
+
+        File.close()
+    
+    def openConfiguration(self, path):
+    #This method import a serialized object result into the software
+        if path != "":
+            File = open(path, 'r')
+            listeInstruments = json.load(File)
+            File.close()
+            
+            listeInstrumentJSON = jsonpickle.decode(listeInstruments)
+            return(listeInstrumentJSON)

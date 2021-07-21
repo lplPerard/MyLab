@@ -381,7 +381,7 @@ class PowerSupplyView (DeviceFrame):
             self.view.menu5_callback(self)
             self.view.sendError('006')    
 
-    def entry_instrumentName_callback(self, newName=None, arg=None):
+    def entry_instrumentName_callback(self, arg=None, newName=None):
     #This method calls the view to change instrument name
         oldname = self.controller.instrument.name
         if newName == None:
@@ -396,13 +396,15 @@ class PowerSupplyView (DeviceFrame):
     def entry_voltageSource_callback(self, arg=None):
     #This method calls the controller to change the voltage
         voltage = self.doubleVar_voltageSource.get()  
-        channel = self.combo_instrumentChannel.current() + 1        
+        channel = self.combo_instrumentChannel.current() + 1    
+        self.controller.instrument.source_voltage = voltage    
         self.controller.setVoltageSource(voltage, channel)
 
     def entry_currentSource_callback(self, arg=None):
     #This method calls the controller to change the voltage
         current = self.doubleVar_currentSource.get()    
-        channel = self.combo_instrumentChannel.current() + 1                  
+        channel = self.combo_instrumentChannel.current() + 1     
+        self.controller.instrument.source_current = current                 
         self.controller.setCurrentSource(current, channel)
 
     def channel_activate_callback(self):

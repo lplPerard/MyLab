@@ -18,10 +18,8 @@ from tkinter import Menu
 from tkinter import Toplevel
 from tkinter import Text
 from tkinter import messagebox
-from tkinter import BOTH
-from tkinter import YES
-from tkinter import END
-from tkinter.constants import BOTTOM, RIGHT
+from tkinter import filedialog
+from tkinter.constants import BOTH, YES, END, BOTTOM, RIGHT
 
 from DeviceFrame import DeviceFrame
 from ParametersTL import ParametersTL
@@ -52,6 +50,8 @@ class View(Tk):
     def initAttributes(self):
     #This method instanciates all the attributes    
         self.listInstruments=[]
+
+        self.path=""
 
         self.topLevel_wakeUp = Toplevel(self) 
         self.topLevel_term = Toplevel(self)        
@@ -136,10 +136,10 @@ class View(Tk):
         liste.reverse()
         return(liste)
    
-    def addDeviceFrame(self, deviceType):
+    def addDeviceFrame(self, deviceType=None, instrument=None):
     #This methods is used to change the device display
         if deviceType == "Power Supply":
-            self.localController = PowerSupplyController(view=self, term=self.term_text)
+            self.localController = PowerSupplyController(view=self, term=self.term_text, instrument=instrument)
             if len(self.listInstruments) < 6:
                 pos = len(self.listInstruments)
                 name= deviceType + " (" + str(pos) + ")"
@@ -240,15 +240,25 @@ class View(Tk):
 
     def menu1_Save_callBack(self):
     #Callback function for  menu1 1 option
-        self.sendError("404")
+        if self.path == "":
+            self.path = filedialog.asksaveasfilename(title = "Select file", filetypes = (("all files","*.*"), ("MyLab files","*.mylab")))
+            self.model.saveConfiguration(listeInstruments=self.getInstrList(), path=self.path)
+        else:
+            self.model.saveConfiguration(listeInstruments=self.getInstrList(), path=self.path)
 
     def menu1_SaveAs_callBack(self):
     #Callback function for menu1 2 option
-        self.sendError("404")
+        self.path = filedialog.asksaveasfilename(title = "Select file", filetypes = (("all files","*.*"), ("MyLab files","*.mylab")))
+        self.model.saveConfiguration(listeInstruments=self.getInstrList(), path=self.path)
 
     def menu1_Open_callBack(self):
     #Callback function for menu1 2 option
-        self.sendError("404")
+        self.path = filedialog.askopenfilename(title = "Select file", filetypes = (("all files","*.*"), ("MyLab files","*.mylab")))
+        self.listInstruments.clear()
+        liste = self.model.openConfiguration(path=self.path)
+
+        for item in liste:
+            self.addDeviceFrame(deviceType=item.type, instrument=item)
 
     def menu2_Parameters_callBack(self):
     #Callback function for menu2 1 option

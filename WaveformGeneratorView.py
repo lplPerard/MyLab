@@ -186,19 +186,19 @@ class WaveformGeneratorView (DeviceFrame):
         self.entry_source_fallTime = Entry(self.frame_source_fallTime, textvariable=self.doubleVar_source_fallTime, width=10)
         self.entry_source_bandwidth = Entry(self.frame_source_bandwidth, textvariable=self.doubleVar_source_bandwidth, width=10)
 
-        self.entry_sweep_time = Entry(self.frame_sweep_time, textvariable=self.doubleVar_sweep_time, width=10)
-        self.entry_sweep_startFrequency = Entry(self.frame_sweep_startFrequency, textvariable=self.doubleVar_sweep_startFrequency, width=10)
-        self.entry_sweep_stopFrequency = Entry(self.frame_sweep_stopFrequency, textvariable=self.doubleVar_sweep_stopFrequency, width=10)
-        self.entry_sweep_holdTime = Entry(self.frame_sweep_holdTime, textvariable=self.doubleVar_sweep_holdTime, width=10)
-        self.entry_sweep_returnTime = Entry(self.frame_sweep_returnTime, textvariable=self.doubleVar_sweep_returnTime, width=10)
+        self.entry_sweep_time = Entry(self.frame_sweep_time, textvariable=self.doubleVar_sweep_time, width=10, state="disabled")
+        self.entry_sweep_startFrequency = Entry(self.frame_sweep_startFrequency, textvariable=self.doubleVar_sweep_startFrequency, width=10, state="disabled")
+        self.entry_sweep_stopFrequency = Entry(self.frame_sweep_stopFrequency, textvariable=self.doubleVar_sweep_stopFrequency, width=10, state="disabled")
+        self.entry_sweep_holdTime = Entry(self.frame_sweep_holdTime, textvariable=self.doubleVar_sweep_holdTime, width=10, state="disabled")
+        self.entry_sweep_returnTime = Entry(self.frame_sweep_returnTime, textvariable=self.doubleVar_sweep_returnTime, width=10, state="disabled")
 
         self.master_activate = Button(self.frame_master_button, text='Master ON/OFF', command=self.master_activate_callback)
 
-        self.radio_modulateStateOFF = Radiobutton(self.frame_source_modulate, text='OFF', variable=self.intVar_radioValueModulate, value=1)
-        self.radio_modulateStateON = Radiobutton(self.frame_source_modulate, text='ON', variable=self.intVar_radioValueModulate, value=2)
+        self.radio_modulateStateOFF = Radiobutton(self.frame_source_modulate, text='OFF', variable=self.intVar_radioValueModulate, value=2, command=self.radio_modulateState_callback)
+        self.radio_modulateStateON = Radiobutton(self.frame_source_modulate, text='ON', variable=self.intVar_radioValueModulate, value=1, command=self.radio_modulateState_callback)
 
-        self.radio_sweepStateOFF = Radiobutton(self.frame_source_sweep, text='OFF', variable=self.intVar_radioValueSweep, value=1)
-        self.radio_sweepStateON = Radiobutton(self.frame_source_sweep, text='ON', variable=self.intVar_radioValueSweep, value=2)
+        self.radio_sweepStateOFF = Radiobutton(self.frame_source_sweep, text='OFF', variable=self.intVar_radioValueSweep, value=2, command=self.radio_sweepState_callback)
+        self.radio_sweepStateON = Radiobutton(self.frame_source_sweep, text='ON', variable=self.intVar_radioValueSweep, value=1, command=self.radio_sweepState_callback)
 
         self.radio_outputStateHigh = Radiobutton(self.frame_output_state, text='High Z', variable=self.intVar_radioValueState, value=1)
         self.radio_outputStateLoad = Radiobutton(self.frame_output_state, text='50Ω', variable=self.intVar_radioValueState, value=2)
@@ -442,37 +442,37 @@ class WaveformGeneratorView (DeviceFrame):
         self.label_source_sweep.configure(bg=self.model.parameters_dict['backgroundColor'])
         self.label_source_sweep.pack(side="left")
 
-        self.label_function_modulation.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_function_modulation.configure(bg=self.model.parameters_dict['backgroundColor'], state="disabled")
         self.label_function_modulation.pack(side="left")
 
-        self.label_modulate_type.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_modulate_type.configure(bg=self.model.parameters_dict['backgroundColor'], state="disabled")
         self.label_modulate_type.pack(side="left")
 
-        self.label_modulate_source.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_modulate_source.configure(bg=self.model.parameters_dict['backgroundColor'], state="disabled")
         self.label_modulate_source.pack(side="left")
 
-        self.label_modulate_shape.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_modulate_shape.configure(bg=self.model.parameters_dict['backgroundColor'], state="disabled")
         self.label_modulate_shape.pack(side="left")
 
-        self.label_function_sweep.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_function_sweep.configure(bg=self.model.parameters_dict['backgroundColor'], state="disabled")
         self.label_function_sweep.pack(side="left")
 
-        self.label_sweep_type.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_sweep_type.configure(bg=self.model.parameters_dict['backgroundColor'], state="disabled")
         self.label_sweep_type.pack(side="left")
 
-        self.label_sweep_time.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_sweep_time.configure(bg=self.model.parameters_dict['backgroundColor'], state="disabled")
         self.label_sweep_time.pack(side="left")
 
-        self.label_sweep_startFrequency.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_sweep_startFrequency.configure(bg=self.model.parameters_dict['backgroundColor'], state="disabled")
         self.label_sweep_startFrequency.pack(side="left")
 
-        self.label_sweep_stopFrequency.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_sweep_stopFrequency.configure(bg=self.model.parameters_dict['backgroundColor'], state="disabled")
         self.label_sweep_stopFrequency.pack(side="left")
 
-        self.label_sweep_holdTime.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_sweep_holdTime.configure(bg=self.model.parameters_dict['backgroundColor'], state="disabled")
         self.label_sweep_holdTime.pack(side="left")
 
-        self.label_sweep_returnTime.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_sweep_returnTime.configure(bg=self.model.parameters_dict['backgroundColor'], state="disabled")
         self.label_sweep_returnTime.pack(side="left")
 
         self.label_output_state.configure(bg=self.model.parameters_dict['backgroundColor'])
@@ -537,47 +537,47 @@ class WaveformGeneratorView (DeviceFrame):
         self.combo_source_bandwidth.pack(side="right")
     
         #self.combo_modulate_type.bind("<<ComboboxSelected>>", self.combo_modulate_type_callback)
-        self.combo_modulate_type.configure(background='white')
+        self.combo_modulate_type.configure(background='white', state="disabled")
         self.combo_modulate_type.current(0)
         self.combo_modulate_type.pack(side="right")
     
         #self.combo_modulate_source.bind("<<ComboboxSelected>>", self.combo_modulate_source_callback)
-        self.combo_modulate_source.configure(background='white')
+        self.combo_modulate_source.configure(background='white', state="disabled")
         self.combo_modulate_source.current(0)
         self.combo_modulate_source.pack(side="right")
     
         #self.combo_modulate_shape.bind("<<ComboboxSelected>>", self.combo_modulate_shape_callback)
-        self.combo_modulate_shape.configure(background='white')
+        self.combo_modulate_shape.configure(background='white', state="disabled")
         self.combo_modulate_shape.current(0)
         self.combo_modulate_shape.pack(side="right")
     
         #self.combo_sweep_type.bind("<<ComboboxSelected>>", self.combo_sweep_type_callback)
-        self.combo_sweep_type.configure(background='white')
+        self.combo_sweep_type.configure(background='white', state="disabled")
         self.combo_sweep_type.current(0)
         self.combo_sweep_type.pack(side="right")
     
         #self.combo_sweep_time.bind("<<ComboboxSelected>>", self.combo_sweep_time_callback)
-        self.combo_sweep_time.configure(background='white')
+        self.combo_sweep_time.configure(background='white', state="disabled")
         self.combo_sweep_time.current(0)
         self.combo_sweep_time.pack(side="right")
     
         #self.combo_sweep_startFrequency.bind("<<ComboboxSelected>>", self.combo_sweep_startFrequency_callback)
-        self.combo_sweep_startFrequency.configure(background='white')
+        self.combo_sweep_startFrequency.configure(background='white', state="disabled")
         self.combo_sweep_startFrequency.current(0)
         self.combo_sweep_startFrequency.pack(side="right")
     
         #self.combo_sweep_stopFrequency.bind("<<ComboboxSelected>>", self.combo_sweep_stopFrequency_callback)
-        self.combo_sweep_stopFrequency.configure(background='white')
+        self.combo_sweep_stopFrequency.configure(background='white', state="disabled")
         self.combo_sweep_stopFrequency.current(0)
         self.combo_sweep_stopFrequency.pack(side="right")
     
         #self.combo_sweep_holdTime.bind("<<ComboboxSelected>>", self.combo_sweep_holdTime_callback)
-        self.combo_sweep_holdTime.configure(background='white')
+        self.combo_sweep_holdTime.configure(background='white', state="disabled")
         self.combo_sweep_holdTime.current(0)
         self.combo_sweep_holdTime.pack(side="right")
     
         #self.combo_sweep_returnTime.bind("<<ComboboxSelected>>", self.combo_sweep_returnTime_callback)
-        self.combo_sweep_returnTime.configure(background='white')
+        self.combo_sweep_returnTime.configure(background='white', state="disabled")
         self.combo_sweep_returnTime.current(0)
         self.combo_sweep_returnTime.pack(side="right")
 
@@ -855,7 +855,7 @@ class WaveformGeneratorView (DeviceFrame):
             self.combo_source_pulseWidth.configure(state="disabled")
             self.combo_source_bandwidth.configure(state="disabled")
         
-    def entry_instrumentName_callback(self, newName=None, arg=None):
+    def entry_instrumentName_callback(self, arg=None, newName=None):
     #This method calls the view to change instrument name
         oldname = self.controller.instrument.name
         if newName == None:
@@ -873,7 +873,129 @@ class WaveformGeneratorView (DeviceFrame):
 
     def entry_source_amplitude_callback(self, arg=None):
     #This method calls the controller to change the voltage
-        current = self.doubleVar_source_amplitude.get()         
+        current = self.doubleVar_source_amplitude.get()        
+
+    def radio_modulateState_callback(self, args=None):
+    #This methods activates or desactivates the modulation function
+        if self.intVar_radioValueModulate.get() != 0:
+            self.intVar_radioValueSweep.set(1)
+            self.combo_modulate_shape.configure(state="normal")
+            self.combo_modulate_source.configure(state="normal")
+            self.combo_modulate_type.configure(state="normal")
+            self.combo_sweep_type.configure(state="disabled")
+            self.combo_sweep_time.configure(state="disabled")
+            self.combo_sweep_startFrequency.configure(state="disabled")
+            self.combo_sweep_stopFrequency.configure(state="disabled")
+            self.combo_sweep_holdTime.configure(state="disabled")
+            self.combo_sweep_returnTime.configure(state="disabled")
+
+            self.label_function_modulation.configure(state="normal")
+            self.label_modulate_shape.configure(state="normal")
+            self.label_modulate_source.configure(state="normal")
+            self.label_modulate_type.configure(state="normal")
+            self.label_function_sweep.configure(state="disabled")
+            self.label_sweep_type.configure(state="disabled")
+            self.label_sweep_time.configure(state="disabled")
+            self.label_sweep_startFrequency.configure(state="disabled")
+            self.label_sweep_stopFrequency.configure(state="disabled")
+            self.label_sweep_holdTime.configure(state="disabled")
+            self.label_sweep_returnTime.configure(state="disabled")
+
+            self.entry_sweep_time.configure(state="disabled")
+            self.entry_sweep_startFrequency.configure(state="disabled")
+            self.entry_sweep_stopFrequency.configure(state="disabled")
+            self.entry_sweep_holdTime.configure(state="disabled")
+            self.entry_sweep_returnTime.configure(state="disabled")
+
+        else:
+            self.combo_modulate_shape.configure(state="disabled")
+            self.combo_modulate_source.configure(state="disabled")
+            self.combo_modulate_type.configure(state="disabled")
+            self.combo_sweep_type.configure(state="disabled")
+            self.combo_sweep_time.configure(state="disabled")
+            self.combo_sweep_startFrequency.configure(state="disabled")
+            self.combo_sweep_stopFrequency.configure(state="disabled")
+            self.combo_sweep_holdTime.configure(state="disabled")
+            self.combo_sweep_returnTime.configure(state="disabled")
+            
+            self.label_function_modulation.configure(state="disabled")
+            self.label_modulate_shape.configure(state="disabled")
+            self.label_modulate_source.configure(state="disabled")
+            self.label_modulate_type.configure(state="disabled")
+            self.label_function_sweep.configure(state="disabled")
+            self.label_sweep_type.configure(state="disabled")
+            self.label_sweep_time.configure(state="disabled")
+            self.label_sweep_startFrequency.configure(state="disabled")
+            self.label_sweep_stopFrequency.configure(state="disabled")
+            self.label_sweep_holdTime.configure(state="disabled")
+            self.label_sweep_returnTime.configure(state="disabled")
+
+            self.entry_sweep_time.configure(state="disabled")
+            self.entry_sweep_startFrequency.configure(state="disabled")
+            self.entry_sweep_stopFrequency.configure(state="disabled")
+            self.entry_sweep_holdTime.configure(state="disabled")
+            self.entry_sweep_returnTime.configure(state="disabled")
+
+    def radio_sweepState_callback(self, args=None):
+    #This methods activates or desactivates the modulation function
+        if self.intVar_radioValueSweep.get() != 0:
+            self.intVar_radioValueModulate.set(1)
+            self.combo_modulate_shape.configure(state="disabled")
+            self.combo_modulate_source.configure(state="disabled")
+            self.combo_modulate_type.configure(state="disabled")
+            self.combo_sweep_type.configure(state="normal")
+            self.combo_sweep_time.configure(state="normal")
+            self.combo_sweep_startFrequency.configure(state="normal")
+            self.combo_sweep_stopFrequency.configure(state="normal")
+            self.combo_sweep_holdTime.configure(state="normal")
+            self.combo_sweep_returnTime.configure(state="normal")
+
+            self.label_function_modulation.configure(state="disabled")
+            self.label_modulate_shape.configure(state="disabled")
+            self.label_modulate_source.configure(state="disabled")
+            self.label_modulate_type.configure(state="disabled")
+            self.label_function_sweep.configure(state="normal")
+            self.label_sweep_type.configure(state="normal")
+            self.label_sweep_time.configure(state="normal")
+            self.label_sweep_startFrequency.configure(state="normal")
+            self.label_sweep_stopFrequency.configure(state="normal")
+            self.label_sweep_holdTime.configure(state="normal")
+            self.label_sweep_returnTime.configure(state="normal")
+
+            self.entry_sweep_time.configure(state="normal")
+            self.entry_sweep_startFrequency.configure(state="normal")
+            self.entry_sweep_stopFrequency.configure(state="normal")
+            self.entry_sweep_holdTime.configure(state="normal")
+            self.entry_sweep_returnTime.configure(state="normal")
+
+        else:
+            self.combo_modulate_shape.configure(state="disabled")
+            self.combo_modulate_source.configure(state="disabled")
+            self.combo_modulate_type.configure(state="disabled")
+            self.combo_sweep_type.configure(state="disabled")
+            self.combo_sweep_time.configure(state="disabled")
+            self.combo_sweep_startFrequency.configure(state="disabled")
+            self.combo_sweep_stopFrequency.configure(state="disabled")
+            self.combo_sweep_holdTime.configure(state="disabled")
+            self.combo_sweep_returnTime.configure(state="disabled")
+            
+            self.label_function_modulation.configure(state="disabled")
+            self.label_modulate_shape.configure(state="disabled")
+            self.label_modulate_source.configure(state="disabled")
+            self.label_modulate_type.configure(state="disabled")
+            self.label_function_sweep.configure(state="disabled")
+            self.label_sweep_type.configure(state="disabled")
+            self.label_sweep_time.configure(state="disabled")
+            self.label_sweep_startFrequency.configure(state="disabled")
+            self.label_sweep_stopFrequency.configure(state="disabled")
+            self.label_sweep_holdTime.configure(state="disabled")
+            self.label_sweep_returnTime.configure(state="disabled")
+
+            self.entry_sweep_time.configure(state="disabled")
+            self.entry_sweep_startFrequency.configure(state="disabled")
+            self.entry_sweep_stopFrequency.configure(state="disabled")
+            self.entry_sweep_holdTime.configure(state="disabled")
+            self.entry_sweep_returnTime.configure(state="disabled")
 
     def master_activate_callback(self):
     #This method call the controller to change output state 

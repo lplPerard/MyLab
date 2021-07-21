@@ -6,6 +6,7 @@ File description : Class container for Power Supply Instrument.
 
 """
 
+import json
 from Instrument import Instrument
 
 
@@ -22,8 +23,7 @@ class PowerSupply(Instrument):
  
         self.channelNumber = ["1", "2"]
         self.channelState = [0, 0]         # 0 => OFF state 1 => ON state
-        self.channelUsed = ["", ""]         # "0" => free state 
+        self.channelUsed = ["", ""]        # "" => free state 
 
-    
-    def get_channelUsed(self):
-        return(self.channelUsed)
+        self.source_voltage = 0
+        self.source_current = 0

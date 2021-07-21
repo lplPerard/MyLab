@@ -31,16 +31,17 @@ class WakeUpTL():
     def initWidgets(self):
     #This method init widgets displayed by main Frame
 
-        self.text = Label(self.frame, text="Please choose an instrument type to start : ", bg=self.model.parameters_dict['backgroundColor'])
+        self.text = Label(self.frame, text="Please choose an instrument or a configuration : ", bg=self.model.parameters_dict['backgroundColor'])
         self.text.pack(pady=15)
 
-        self.combo_instrument = Combobox(self.frame, state="readonly", width=20, values=["Power Supply",
-                                                                                   "Oscilloscope",
-                                                                                   "Source Meter",
-                                                                                   "Multimeter",
-                                                                                   "Waveform Generator",
-                                                                                   "Climatic Chamber",
-                                                                                   "VNA"])
+        self.combo_instrument = Combobox(self.frame, state="readonly", width=20, values=["Configuration",
+                                                                                         "Power Supply",
+                                                                                         "Oscilloscope",
+                                                                                         "Source Meter",
+                                                                                         "Multimeter",
+                                                                                         "Waveform Generator",
+                                                                                         "Climatic Chamber",
+                                                                                         "VNA"])
         self.combo_instrument.configure(background="white")
         self.combo_instrument.pack(pady=5)
         self.combo_instrument.current(0)
@@ -49,6 +50,10 @@ class WakeUpTL():
         self.button.pack(pady=5)
 
     def button_onclick(self):
-        self.view.listInstruments.clear()
-        self.view.addDeviceFrame(self.combo_instrument.get())
-        self.view.topLevel_wakeUp.withdraw()
+        if self.combo_instrument.get() == "Configuration":
+            self.view.topLevel_wakeUp.withdraw()
+            self.view.menu1_Open_callBack()
+        else:
+            self.view.listInstruments.clear()
+            self.view.addDeviceFrame(self.combo_instrument.get())
+            self.view.topLevel_wakeUp.withdraw()

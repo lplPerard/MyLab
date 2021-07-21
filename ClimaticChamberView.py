@@ -232,7 +232,7 @@ class ClimaticChamberView (DeviceFrame):
 
         self.intVar_radioValueMaster.set(1)
 
-    def entry_instrumentName_callback(self, newName=None, arg=None):
+    def entry_instrumentName_callback(self, arg=None, newName=None):
     #This method calls the view to change instrument name
         oldname = self.controller.instrument.name
         if newName == None:

@@ -6,6 +6,9 @@ File description : Class container for Instrument.
 
 """
 
+import json
+
+
 class Instrument():
     """Class containing Instrument specification.
 
@@ -13,12 +16,14 @@ class Instrument():
 
     def __init__(self):
     #Constructor for the Instrument Class
-
-        self.name = ""
+        
         self.type = ""
-        self.connectMode = ""
+        self.name = ""
         self.address = ""
-        self.masterState = 0
+        self.connectMode = ""
+        self.masterState = 0 # 0 => OFF state 1 => ON state
         self.state = "free"
         self.id = ""
         self.ressource = None
+
+        
