@@ -220,7 +220,7 @@ class WaveformGeneratorView (DeviceFrame):
                 newName = self.controller.instrument.name[:-2] + str(i) + ")"
                 self.entry_instrumentName_callback(newName=newName)
 
-    def updateView(self):
+    def updateView(self, configuration=False):
     #This method refresh the content of the view
         self.stringvar_instrumentaddress.set(self.controller.instrument.address)
         self.state="freeze" 

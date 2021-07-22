@@ -26,4 +26,6 @@ class PowerSupply(Instrument):
         self.channelUsed = ["", ""]        # "" => free state 
 
         self.source_voltage = 0
+        self.source_voltage_caliber = "V"
         self.source_current = 0
+        self.source_current_caliber = "A"

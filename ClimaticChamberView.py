@@ -46,7 +46,7 @@ class ClimaticChamberView (DeviceFrame):
         self.initEntries()
 
     
-    def updateView(self):
+    def updateView(self, configuration=False):
     #This method refresh the content of the view
         self.stringvar_instrumentaddress.set(self.controller.instrument.address)
         self.state="freeze"

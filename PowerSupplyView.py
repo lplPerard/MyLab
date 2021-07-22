@@ -129,7 +129,7 @@ class PowerSupplyView (DeviceFrame):
                 self.entry_instrumentName_callback(newName=newName)
                 i = i+1
 
-    def updateView(self):
+    def updateView(self, configuration=False):
     #This method refresh the content of the view
         self.stringvar_instrumentaddress.set(self.controller.instrument.address)
         self.state="freeze" 
@@ -184,6 +184,12 @@ class PowerSupplyView (DeviceFrame):
             if used == 0:           
                 self.controller.instrument.channelState = [0, 0]
                 self.controller.instrument.channelUsed = ["", ""]
+
+        if configuration == True:
+            self.doubleVar_voltageSource.set(self.controller.instrument.source_voltage)
+            self.combo_voltageSource.set(self.controller.instrument.source_voltage_caliber)
+            self.doubleVar_currentSource.set(self.controller.instrument.source_current)
+            self.combo_currentSource.set(self.controller.instrument.source_current_caliber)
             
         if self.controller.instrument.address != "":
             self.controller.connectToDevice()
@@ -283,12 +289,12 @@ class PowerSupplyView (DeviceFrame):
         self.combo_instrumentChannel.pack(side="right")
         self.combo_instrumentChannel_callback()
 
-        #self.combo_voltageSource.bind("<<ComboboxSelected>>", self.combo_voltageSource_callback)
+        self.combo_voltageSource.bind("<<ComboboxSelected>>", self.combo_voltageSource_callback)
         self.combo_voltageSource.configure(background='white')
         self.combo_voltageSource.current(0)
         self.combo_voltageSource.pack(side="right")
     
-        #self.combo_currentSource.bind("<<ComboboxSelected>>", self.combo_currentSource_callback)
+        self.combo_currentSource.bind("<<ComboboxSelected>>", self.combo_currentSource_callback)
         self.combo_currentSource.configure(background='white')
         self.combo_currentSource.current(0)
         self.combo_currentSource.pack(side="right")
@@ -381,6 +387,14 @@ class PowerSupplyView (DeviceFrame):
             self.view.menu5_callback(self)
             self.view.sendError('006')    
 
+    def combo_voltageSource_callback(self, args=None):
+    #This method is called when clicking on combobox
+        self.controller.instrument.source_voltage_caliber = self.combo_voltageSource.get()
+
+    def combo_currentSource_callback(self, args=None):
+    #This method is called when clicking on combobox
+        self.controller.instrument.source_current_caliber = self.combo_currentSource.get()
+
     def entry_instrumentName_callback(self, arg=None, newName=None):
     #This method calls the view to change instrument name
         oldname = self.controller.instrument.name
@@ -397,7 +411,7 @@ class PowerSupplyView (DeviceFrame):
     #This method calls the controller to change the voltage
         voltage = self.doubleVar_voltageSource.get()  
         channel = self.combo_instrumentChannel.current() + 1    
-        self.controller.instrument.source_voltage = voltage    
+        self.controller.instrument.source_voltage = voltage   
         self.controller.setVoltageSource(voltage, channel)
 
     def entry_currentSource_callback(self, arg=None):

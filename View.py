@@ -133,7 +133,7 @@ class View(Tk):
         liste.reverse()
         return(liste)
    
-    def addDeviceFrame(self, deviceType=None, instrument=None):
+    def addDeviceFrame(self, deviceType=None, instrument=None, configuration=False):
     #This methods is used to change the device display
         if deviceType == "Power Supply":
             self.localController = PowerSupplyController(view=self, term=self.term_text, instrument=instrument)
@@ -142,7 +142,7 @@ class View(Tk):
                 name= deviceType + " (" + str(pos) + ")"
                 tamp = PowerSupplyView(self, terminal=self.term_text, model=self.model, controller=self.localController, name=name)
                 self.menu5.add_command(label=name, command=lambda: self.menu5_callback(tamp))
-                tamp.updateView()
+                tamp.updateView(configuration)
                 self.localController.updateView(tamp)
                 self.listInstruments.insert(0, tamp)
                 self.term_text.insert(END, "New Power Supply added : " + deviceType + " (" + str(pos) + ")\n")
@@ -156,7 +156,7 @@ class View(Tk):
                 name= deviceType + " (" + str(pos) + ")"
                 tamp = ClimaticChamberView(self, terminal=self.term_text, model=self.model, controller=self.localController, name=name)
                 self.menu5.add_command(label=name, command=lambda: self.menu5_callback(tamp))
-                tamp.updateView()
+                tamp.updateView(configuration)
                 self.localController.updateView(tamp)
                 self.listInstruments.insert(0, tamp)
                 self.term_text.insert(END, "New Climatic Chamber added : " + deviceType + " (" + str(pos) + ")\n")
@@ -170,7 +170,7 @@ class View(Tk):
                 name= deviceType + " (" + str(pos) + ")"
                 tamp = WaveformGeneratorView(self, terminal=self.term_text, model=self.model, controller=self.localController, name=name)
                 self.menu5.add_command(label=name, command=lambda: self.menu5_callback(tamp))
-                tamp.updateView()
+                tamp.updateView(configuration)
                 self.localController.updateView(tamp)
                 self.listInstruments.insert(0, tamp)
                 self.term_text.insert(END, "New Waveform Generator added : " + deviceType + " (" + str(pos) + ")\n")
@@ -184,7 +184,7 @@ class View(Tk):
                 name= deviceType + " (" + str(pos) + ")"
                 tamp = PowerSupplyView(self, terminal=self.term_text, model=self.model, controller=self.localController, name=name)
                 self.menu5.add_command(label=name, command=lambda: self.menu5_callback(tamp))
-                tamp.updateView()
+                tamp.updateView(configuration)
                 self.localController.updateView(tamp)
                 self.listInstruments.insert(0, tamp)
                 self.term_text.insert(END, "New Instrument added : " + deviceType + " (" + str(pos) + ")\n")
@@ -253,14 +253,19 @@ class View(Tk):
         self.path = filedialog.askopenfilename(title = "Select file", filetypes = (("all files","*.*"), ("MyLab files","*.mylab")))
         if (self.listInstruments != []) and (self.path != ""):
             for item in self.listInstruments:
-                self.menu5_callback(item)
+                index = self.listInstruments.index(item)
+                self.listInstruments[index].clearInstrument()
+                self.listInstruments[index].clearFrame()
+                self.menu5.delete(self.listInstruments[index].controller.instrument.name)
+
+            self.listInstruments.clear()
         
         if self.path != "":
             
             liste = self.model.openConfiguration(path=self.path)
 
             for item in liste:
-                self.addDeviceFrame(deviceType=item.type, instrument=item)
+                self.addDeviceFrame(deviceType=item.type, instrument=item, configuration=True)
 
     def menu2_Parameters_callBack(self):
     #Callback function for menu2 1 option
