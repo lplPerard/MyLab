@@ -15,13 +15,15 @@ class ClimaticChamberController():
 
     """
 
-    def __init__(self, view=None, term=None):
+    def __init__(self, view=None, term=None, instrument=None):
     #Constructor for the Controller class   
 
         self.view = view  
         self.term = term
 
         self.instrument = ClimaticChamber()
+        if instrument != None:
+            self.instrument = instrument
         #self.resourceManager = pyvisa.ResourceManager()
     
     def updateView(self, view):

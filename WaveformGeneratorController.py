@@ -17,13 +17,15 @@ class WaveformGeneratorController():
 
     """
 
-    def __init__(self, view=None, term=None):
+    def __init__(self, view=None, term=None, instrument=None):
     #Constructor for the Controller class   
 
         self.view = view  
         self.term = term
 
         self.instrument = WaveformGenerator()
+        if instrument != None:
+            self.instrument = instrument
         self.resourceManager = pyvisa.ResourceManager()
 
     def updateView(self, view):
@@ -45,6 +47,7 @@ class WaveformGeneratorController():
                 self.instrument.ressource.write('*RST')
                 self.instrument.ressource.write('*CLS')
                 self.instrument.ressource.close()
+                self.instrument.ressource = None
             except:
                 if(self.instrument.state != "unreachable"):
                     self.view.view.sendError('002')
@@ -69,10 +72,12 @@ class WaveformGeneratorController():
                 if self.instrument.masterState == 0:
                     self.instrument.ressource.write('OUTP:MAST ON')
                     self.instrument.ressource.close()
+                    self.instrument.ressource = None
                     self.instrument.masterState = 1
                 else:
                     self.instrument.ressource.write('OUTP:MAST OFF')
-                    self.instrument.ressource.close()                    
+                    self.instrument.ressource.close()    
+                    self.instrument.ressource = None                
                     self.instrument.masterState = 0
             except:
                 self.view.view.sendError('002')

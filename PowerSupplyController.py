@@ -48,6 +48,7 @@ class PowerSupplyController():
                 self.instrument.ressource.write('*RST')
                 self.instrument.ressource.write('*CLS')
                 self.instrument.ressource.close()
+                self.instrument.ressource = None
             except:
                 if(self.instrument.state != "unreachable"):
                     self.view.view.sendError('002')
@@ -72,6 +73,7 @@ class PowerSupplyController():
                 self.instrument.ressource.write('INST:NSEL ' + str(channel))
                 self.instrument.ressource.write('SOUR:VOLT ' + str(voltage))
                 self.instrument.ressource.close()
+                self.instrument.ressource = None
             except:
                 self.view.view.sendError('002')
                 self.instrument.state = "unreachable"
@@ -95,6 +97,7 @@ class PowerSupplyController():
                 self.instrument.ressource.write('INST:NSEL ' + str(channel))
                 self.instrument.ressource.write('SOUR:CURR ' + str(current))
                 self.instrument.ressource.close()
+                self.instrument.ressource = None
             except:
                 self.view.view.sendError('002')
                 self.instrument.state = "unreachable"
@@ -120,11 +123,13 @@ class PowerSupplyController():
                         self.instrument.ressource.write('INST:SEL ' + str(channel))
                         self.instrument.ressource.write('CHAN:OUTP ON ')
                         self.instrument.ressource.close()
+                        self.instrument.ressource = None
                         self.instrument.channelState[channel-1] = 1
                     else:
                         self.instrument.ressource.write('INST:SEL ' + str(channel))
                         self.instrument.ressource.write('CHAN:OUTP OFF ')
                         self.instrument.ressource.close()
+                        self.instrument.ressource = None
                         self.instrument.channelState[channel-1] = 0
                 except:
                     self.view.view.sendError('002')
@@ -137,11 +142,13 @@ class PowerSupplyController():
                         self.instrument.ressource.write('INST:NSEL ' + str(channel))
                         self.instrument.ressource.write('OUTP:CHAN ON ')
                         self.instrument.ressource.close()
+                        self.instrument.ressource = None
                         self.instrument.channelState[channel-1] = 1
                     else:
                         self.instrument.ressource.write('INST:NSEL ' + str(channel))
                         self.instrument.ressource.write('OUTP:CHAN OFF ')
                         self.instrument.ressource.close()
+                        self.instrument.ressource = None
                         self.instrument.channelState[channel-1] = 0
                 except:
                     self.view.view.sendError('002')
@@ -168,10 +175,12 @@ class PowerSupplyController():
                     if self.instrument.masterState == 0:
                         self.instrument.ressource.write('OUTP:ENAB 1')
                         self.instrument.ressource.close()
+                        self.instrument.ressource = None
                         self.instrument.masterState = 1
                     else:
                         self.instrument.ressource.write('OUTP:ENAB 0')
-                        self.instrument.ressource.close()                    
+                        self.instrument.ressource.close()  
+                        self.instrument.ressource = None                  
                         self.instrument.masterState = 0
                 except:
                     self.view.view.sendError('002')
@@ -183,10 +192,12 @@ class PowerSupplyController():
                     if self.instrument.masterState == 0:
                         self.instrument.ressource.write('OUTP:MAST ON')
                         self.instrument.ressource.close()
+                        self.instrument.ressource = None
                         self.instrument.masterState = 1
                     else:
                         self.instrument.ressource.write('OUTP:MAST OFF')
-                        self.instrument.ressource.close()                    
+                        self.instrument.ressource.close() 
+                        self.instrument.ressource = None                   
                         self.instrument.masterState = 0
                 except:
                     self.view.view.sendError('002')
@@ -225,6 +236,8 @@ class PowerSupplyController():
                 power = float(self.instrument.ressource.read())
                 self.view.doubleVar_powerMeasure.set(power)
                 self.term.insert(END, "power : " + str(power) + " W\n\n")
+                self.instrument.ressource.close()
+                self.instrument.ressource = None
                 
             except:
                 if(self.instrument.state != "unreachable"):

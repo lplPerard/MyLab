@@ -120,9 +120,6 @@ class View(Tk):
         self.topLevel_connect.attributes('-alpha', self.model.parameters_dict['backgroundAlpha'])
         self.connectionsTL.frame.pack()
 
-        self.listInstruments.append(DeviceFrame(self, terminal=self.term_text, model=self.model))
-        self.listInstruments[0].initFrame(text="Device Name")
-
         self.__initMenu()
 
         self.copyright.pack(side = BOTTOM, padx=5, pady=5)
@@ -144,52 +141,52 @@ class View(Tk):
                 pos = len(self.listInstruments)
                 name= deviceType + " (" + str(pos) + ")"
                 tamp = PowerSupplyView(self, terminal=self.term_text, model=self.model, controller=self.localController, name=name)
+                self.menu5.add_command(label=name, command=lambda: self.menu5_callback(tamp))
                 tamp.updateView()
                 self.localController.updateView(tamp)
                 self.listInstruments.insert(0, tamp)
-                self.menu5.add_command(label=name, command=lambda: self.menu5_callback(tamp))
                 self.term_text.insert(END, "New Power Supply added : " + deviceType + " (" + str(pos) + ")\n")
             else:
                 self.sendWarning("W000")
 
         if deviceType == "Climatic Chamber":
-            self.localController = ClimaticChamberController(view=self, term=self.term_text)
+            self.localController = ClimaticChamberController(view=self, term=self.term_text, instrument=instrument)
             if len(self.listInstruments) < 6:
                 pos = len(self.listInstruments)
                 name= deviceType + " (" + str(pos) + ")"
                 tamp = ClimaticChamberView(self, terminal=self.term_text, model=self.model, controller=self.localController, name=name)
+                self.menu5.add_command(label=name, command=lambda: self.menu5_callback(tamp))
                 tamp.updateView()
                 self.localController.updateView(tamp)
                 self.listInstruments.insert(0, tamp)
-                self.menu5.add_command(label=name, command=lambda: self.menu5_callback(tamp))
                 self.term_text.insert(END, "New Climatic Chamber added : " + deviceType + " (" + str(pos) + ")\n")
             else:
                 self.sendWarning("W000")
 
         if deviceType == "Waveform Generator":
-            self.localController = WaveformGeneratorController(view=self, term=self.term_text)
+            self.localController = WaveformGeneratorController(view=self, term=self.term_text, instrument=instrument)
             if len(self.listInstruments) < 6:
                 pos = len(self.listInstruments)
                 name= deviceType + " (" + str(pos) + ")"
                 tamp = WaveformGeneratorView(self, terminal=self.term_text, model=self.model, controller=self.localController, name=name)
+                self.menu5.add_command(label=name, command=lambda: self.menu5_callback(tamp))
                 tamp.updateView()
                 self.localController.updateView(tamp)
                 self.listInstruments.insert(0, tamp)
-                self.menu5.add_command(label=name, command=lambda: self.menu5_callback(tamp))
                 self.term_text.insert(END, "New Waveform Generator added : " + deviceType + " (" + str(pos) + ")\n")
             else:
                 self.sendWarning("W000")
 
         if deviceType == "RLC Meter":
-            self.localController = PowerSupplyController(view=self, term=self.term_text)
+            self.localController = PowerSupplyController(view=self, term=self.term_text, instrument=instrument)
             if len(self.listInstruments) < 6:
                 pos = len(self.listInstruments)
                 name= deviceType + " (" + str(pos) + ")"
                 tamp = PowerSupplyView(self, terminal=self.term_text, model=self.model, controller=self.localController, name=name)
+                self.menu5.add_command(label=name, command=lambda: self.menu5_callback(tamp))
                 tamp.updateView()
                 self.localController.updateView(tamp)
                 self.listInstruments.insert(0, tamp)
-                self.menu5.add_command(label=name, command=lambda: self.menu5_callback(tamp))
                 self.term_text.insert(END, "New Instrument added : " + deviceType + " (" + str(pos) + ")\n")
             else:
                 self.sendWarning("W000")
@@ -254,11 +251,16 @@ class View(Tk):
     def menu1_Open_callBack(self):
     #Callback function for menu1 2 option
         self.path = filedialog.askopenfilename(title = "Select file", filetypes = (("all files","*.*"), ("MyLab files","*.mylab")))
-        self.listInstruments.clear()
-        liste = self.model.openConfiguration(path=self.path)
+        if (self.listInstruments != []) and (self.path != ""):
+            for item in self.listInstruments:
+                self.menu5_callback(item)
+        
+        if self.path != "":
+            
+            liste = self.model.openConfiguration(path=self.path)
 
-        for item in liste:
-            self.addDeviceFrame(deviceType=item.type, instrument=item)
+            for item in liste:
+                self.addDeviceFrame(deviceType=item.type, instrument=item)
 
     def menu2_Parameters_callBack(self):
     #Callback function for menu2 1 option
