@@ -130,7 +130,7 @@ class ClimaticChamberView (DeviceFrame):
 
     def renameInstrument(self):
         i = 0
-        liste = self.view.listInstruments
+        liste = self.view.listViews
         for item in liste:
             if self.controller.instrument.name == item.controller.instrument.name:    
                 newName = self.controller.instrument.name[:-2] + str(i) + ")"

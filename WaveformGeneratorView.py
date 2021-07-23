@@ -215,8 +215,8 @@ class WaveformGeneratorView (DeviceFrame):
 
     def renameInstrument(self):
         i = 0
-        for i in range(len(self.view.listInstruments)):
-            if self.controller.instrument.name == self.view.listInstruments[i].controller.instrument.name:    
+        for i in range(len(self.view.listViews)):
+            if self.controller.instrument.name == self.view.listViews[i].controller.instrument.name:    
                 newName = self.controller.instrument.name[:-2] + str(i) + ")"
                 self.entry_instrumentName_callback(newName=newName)
 

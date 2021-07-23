@@ -43,13 +43,14 @@ class View(Tk):
         
         self.model = model
         self.controller = controller
+        self.protocol("WM_DELETE_WINDOW", self.closeView)
 
         self.initAttributes()
         self.__initWidgets()
 
     def initAttributes(self):
     #This method instanciates all the attributes    
-        self.listInstruments=[]
+        self.listViews=[]
 
         self.path=""
 
@@ -74,6 +75,7 @@ class View(Tk):
         self.menu3 = Menu(self.menubar, tearoff=0)
         self.menu4 = Menu(self.menubar, tearoff=0)
         self.menu5 = Menu(self.menubar, tearoff=0)
+        self.menu6 = Menu(self.menubar, tearoff=0)
 
     def __initWidgets(self):
     #This method is used to encapsulate the creation of sequences and menues
@@ -124,10 +126,21 @@ class View(Tk):
 
         self.copyright.pack(side = BOTTOM, padx=5, pady=5)
 
+    def closeView(self):
+    #This method is called before the main windows is closed
+        canClose = True
+        for item in self.getInstrList():
+            if item.masterState == 1:
+                self.sendError("009")
+                canClose = False
+
+        if canClose == True:
+            self.destroy()
+
     def getInstrList(self):
     #This method returns a list of instruments from listInstrument
         liste = []
-        for item in self.listInstruments:
+        for item in self.listViews:
             liste.append(item.controller.instrument)
 
         liste.reverse()
@@ -137,56 +150,56 @@ class View(Tk):
     #This methods is used to change the device display
         if deviceType == "Power Supply":
             self.localController = PowerSupplyController(view=self, term=self.term_text, instrument=instrument)
-            if len(self.listInstruments) < 6:
-                pos = len(self.listInstruments)
+            if len(self.listViews) < 6:
+                pos = len(self.listViews)
                 name= deviceType + " (" + str(pos) + ")"
                 tamp = PowerSupplyView(self, terminal=self.term_text, model=self.model, controller=self.localController, name=name)
                 self.menu5.add_command(label=name, command=lambda: self.menu5_callback(tamp))
                 tamp.updateView(configuration)
                 self.localController.updateView(tamp)
-                self.listInstruments.insert(0, tamp)
+                self.listViews.insert(0, tamp)
                 self.term_text.insert(END, "New Power Supply added : " + deviceType + " (" + str(pos) + ")\n")
             else:
                 self.sendWarning("W000")
 
         if deviceType == "Climatic Chamber":
             self.localController = ClimaticChamberController(view=self, term=self.term_text, instrument=instrument)
-            if len(self.listInstruments) < 6:
-                pos = len(self.listInstruments)
+            if len(self.listViews) < 6:
+                pos = len(self.listViews)
                 name= deviceType + " (" + str(pos) + ")"
                 tamp = ClimaticChamberView(self, terminal=self.term_text, model=self.model, controller=self.localController, name=name)
                 self.menu5.add_command(label=name, command=lambda: self.menu5_callback(tamp))
                 tamp.updateView(configuration)
                 self.localController.updateView(tamp)
-                self.listInstruments.insert(0, tamp)
+                self.listViews.insert(0, tamp)
                 self.term_text.insert(END, "New Climatic Chamber added : " + deviceType + " (" + str(pos) + ")\n")
             else:
                 self.sendWarning("W000")
 
         if deviceType == "Waveform Generator":
             self.localController = WaveformGeneratorController(view=self, term=self.term_text, instrument=instrument)
-            if len(self.listInstruments) < 6:
-                pos = len(self.listInstruments)
+            if len(self.listViews) < 6:
+                pos = len(self.listViews)
                 name= deviceType + " (" + str(pos) + ")"
                 tamp = WaveformGeneratorView(self, terminal=self.term_text, model=self.model, controller=self.localController, name=name)
                 self.menu5.add_command(label=name, command=lambda: self.menu5_callback(tamp))
                 tamp.updateView(configuration)
                 self.localController.updateView(tamp)
-                self.listInstruments.insert(0, tamp)
+                self.listViews.insert(0, tamp)
                 self.term_text.insert(END, "New Waveform Generator added : " + deviceType + " (" + str(pos) + ")\n")
             else:
                 self.sendWarning("W000")
 
         if deviceType == "RLC Meter":
             self.localController = PowerSupplyController(view=self, term=self.term_text, instrument=instrument)
-            if len(self.listInstruments) < 6:
-                pos = len(self.listInstruments)
+            if len(self.listViews) < 6:
+                pos = len(self.listViews)
                 name= deviceType + " (" + str(pos) + ")"
                 tamp = PowerSupplyView(self, terminal=self.term_text, model=self.model, controller=self.localController, name=name)
                 self.menu5.add_command(label=name, command=lambda: self.menu5_callback(tamp))
                 tamp.updateView(configuration)
                 self.localController.updateView(tamp)
-                self.listInstruments.insert(0, tamp)
+                self.listViews.insert(0, tamp)
                 self.term_text.insert(END, "New Instrument added : " + deviceType + " (" + str(pos) + ")\n")
             else:
                 self.sendWarning("W000")
@@ -202,10 +215,10 @@ class View(Tk):
         self.term_text.insert(END, "\nWarning : " + warning + "\n  " + self.model.error_dict[warning] + "\n")  
 
     def refresh(self):
-    #This method refresh the view and its content
+    #This method refresh the view and its content     
         self.update_idletasks()
-        for item in self.listInstruments:
-            if item.state != "freeze":
+        for item in self.listViews:
+            if item.controller.instrument.masterState == 0:
                 item.updateView()
 
     def __initMenu(self):
@@ -217,7 +230,9 @@ class View(Tk):
 
         self.menubar.add_cascade(label="Edit", menu=self.menu2)
         self.menu2.add_cascade(label="Add Instrument", menu=self.menu4)
-        self.menu2.add_cascade(label="Delete Instrument", menu=self.menu5) 
+        self.menu2.add_cascade(label="Add TestBench", menu=self.menu6)
+        self.menu2.add_cascade(label="Add Script", command=self.menu2_Script_callBack)
+        self.menu2.add_cascade(label="Delete", menu=self.menu5) 
         self.menu2.add_separator()
         self.menu2.add_command(label="Parameters", command=self.menu2_Parameters_callBack)
         self.menu2.add_command(label="Connections", command=self.menu2_Connections_callBack)
@@ -233,39 +248,72 @@ class View(Tk):
         self.menu4.add_command(label="Power Supply", command=self.menu4_PowerSupply_callBack)
         self.menu4.add_command(label="Climatic Chamber", command=self.menu4_ClimaticChamber_callBack)     
         
+        self.menu6.add_command(label="HTOL", command=self.menu6_HTOL_callBack)
+        self.menu6.add_command(label="Bode", command=self.menu6_Bode_callBack)
+        self.menu6.add_command(label="I/V Characteristic", command=self.menu6_IV_callBack)
+        
         self.config(menu=self.menubar)
 
     def menu1_Save_callBack(self):
-    #Callback function for  menu1 1 option
-        if self.path == "":
-            self.path = filedialog.asksaveasfilename(title = "Select file", filetypes = (("all files","*.*"), ("MyLab files","*.mylab")))
-            self.model.saveConfiguration(listeInstruments=self.getInstrList(), path=self.path)
-        else:
-            self.model.saveConfiguration(listeInstruments=self.getInstrList(), path=self.path)
+    #Callback function for  menu1 1 option        
+        canSave = True
+        for item in self.getInstrList():
+            if item.masterState == 1:
+                self.sendError("007")
+                canSave = False
+            else:
+                item.ressource = None
+
+        if canSave == True:
+            if self.path == "":
+                self.path = filedialog.asksaveasfilename(title = "Select file", filetypes = (("all files","*.*"), ("MyLab files","*.mylab")))
+                self.model.saveConfiguration(listeInstruments=self.getInstrList(), path=self.path)
+            else:
+                self.model.saveConfiguration(listeInstruments=self.getInstrList(), path=self.path)
 
     def menu1_SaveAs_callBack(self):
-    #Callback function for menu1 2 option
-        self.path = filedialog.asksaveasfilename(title = "Select file", filetypes = (("all files","*.*"), ("MyLab files","*.mylab")))
-        self.model.saveConfiguration(listeInstruments=self.getInstrList(), path=self.path)
+    #Callback function for menu1 2 option     
+        canSave = True
+        for item in self.getInstrList():
+            if item.masterState == 1:
+                self.sendError("007")
+                canSave = False
+            else:
+                item.ressource = None
+
+        if canSave == True:
+            self.path = filedialog.asksaveasfilename(title = "Select file", filetypes = (("all files","*.*"), ("MyLab files","*.mylab")))
+            self.model.saveConfiguration(listeInstruments=self.getInstrList(), path=self.path)
 
     def menu1_Open_callBack(self):
     #Callback function for menu1 2 option
-        self.path = filedialog.askopenfilename(title = "Select file", filetypes = (("all files","*.*"), ("MyLab files","*.mylab")))
-        if (self.listInstruments != []) and (self.path != ""):
-            for item in self.listInstruments:
-                index = self.listInstruments.index(item)
-                self.listInstruments[index].clearInstrument()
-                self.listInstruments[index].clearFrame()
-                self.menu5.delete(self.listInstruments[index].controller.instrument.name)
+        canOpen = True
+        for item in self.getInstrList():
+            if item.masterState == 1:
+                self.sendError("008")
+                canOpen = False
 
-            self.listInstruments.clear()
-        
-        if self.path != "":
+        if canOpen == True:
+            self.path = filedialog.askopenfilename(title = "Select file", filetypes = (("all files","*.*"), ("MyLab files","*.mylab")))
+            if (self.listViews != []) and (self.path != ""):
+                for item in self.listViews:
+                    index = self.listViews.index(item)
+                    self.listViews[index].clearInstrument()
+                    self.listViews[index].clearFrame()
+                    self.menu5.delete(self.listViews[index].controller.instrument.name)
+
+                self.listViews.clear()
             
-            liste = self.model.openConfiguration(path=self.path)
+            if self.path != "":
+                
+                liste = self.model.openConfiguration(path=self.path)
 
-            for item in liste:
-                self.addDeviceFrame(deviceType=item.type, instrument=item, configuration=True)
+                for item in liste:
+                    self.addDeviceFrame(deviceType=item.type, instrument=item, configuration=True)
+
+    def menu2_Script_callBack(self):
+    #Callback function for menu2 1 option
+        self.sendError("404")
 
     def menu2_Parameters_callBack(self):
     #Callback function for menu2 1 option
@@ -328,9 +376,24 @@ class View(Tk):
 
     def menu5_callback(self, instrView):
     #Callback function for menu5 delete option
-        index = self.listInstruments.index(instrView)
-        self.menu5.delete(self.listInstruments[index].controller.instrument.name)
-        self.term_text.insert(END, "An Instrument was deleted : " + self.listInstruments[index].controller.instrument.name +"\n")
-        self.listInstruments[index].clearInstrument()
-        self.listInstruments[index].clearFrame()
-        del self.listInstruments[index]
+        index = self.listViews.index(instrView)
+        if self.listViews[index].controller.instrument.masterState == 0:
+            self.menu5.delete(self.listViews[index].controller.instrument.name)
+            self.term_text.insert(END, "An Instrument was deleted : " + self.listViews[index].controller.instrument.name +"\n")
+            self.listViews[index].clearInstrument()
+            self.listViews[index].clearFrame()
+            del self.listViews[index]
+        else:
+            self.sendError("007")
+
+    def menu6_HTOL_callBack(self):
+    #Callback function for menu2 2 option
+        self.sendError("404")
+
+    def menu6_Bode_callBack(self):
+    #Callback function for menu2 2 option
+        self.sendError("404")
+
+    def menu6_IV_callBack(self):
+    #Callback function for menu2 2 option
+        self.sendError("404")

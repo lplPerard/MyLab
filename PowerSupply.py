@@ -29,3 +29,10 @@ class PowerSupply(Instrument):
         self.source_voltage_caliber = "V"
         self.source_current = 0
         self.source_current_caliber = "A"
+
+        self.measure_voltage = 0
+        self.measure_voltage_caliber = "V"
+        self.measure_current = 0
+        self.measure_current_caliber = "A"
+        self.measure_power = 0
+        self.measure_power_caliber = "W"

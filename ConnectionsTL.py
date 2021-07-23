@@ -66,7 +66,7 @@ class ConnectionsTL():
     #This method is called when user clicks on actualize    
         index=self.combo_instrumentName.current() 
         
-        if self.view.listInstruments[index].controller.instrument.type == "Climatic Chamber":
+        if self.view.listViews[index].controller.instrument.type == "Climatic Chamber":
             self.controller.findSERIALInstruments()
             self.list_devices.delete(0, 'end')
             for item in self.view.controller.instrList:
@@ -81,19 +81,19 @@ class ConnectionsTL():
     #This method is called when user clicks on select
 
         index = self.combo_instrumentName.current()
-        self.view.listInstruments[index].controller.instrument.address = self.list_devices.get(ANCHOR)
+        self.view.listViews[index].controller.instrument.address = self.list_devices.get(ANCHOR)
         
-        if self.view.listInstruments[self.combo_instrumentName.current()].controller.instrument.address != "":
+        if self.view.listViews[self.combo_instrumentName.current()].controller.instrument.address != "":
             self.view.topLevel_connect.withdraw()
-            self.view.term_text.insert(END, "address changed for : " + self.view.listInstruments[index].controller.instrument.name + "\n")   
-            self.view.term_text.insert(END, "   New address is : " + self.view.listInstruments[index].controller.instrument.address + "\n")   
-            self.view.listInstruments[self.combo_instrumentName.current()].controller.instrument.state="free"  
-            self.view.listInstruments[self.combo_instrumentName.current()].state="changed"  
+            self.view.term_text.insert(END, "address changed for : " + self.view.listViews[index].controller.instrument.name + "\n")   
+            self.view.term_text.insert(END, "   New address is : " + self.view.listViews[index].controller.instrument.address + "\n")   
+            self.view.listViews[self.combo_instrumentName.current()].controller.instrument.state="free"  
+            self.view.listViews[self.combo_instrumentName.current()].state="changed"  
             self.view.refresh()
 
     def actualizeInstruments(self):
         list=[]
-        for item in self.view.listInstruments:
+        for item in self.view.listViews:
             list.append(item.controller.instrument.name)
 
         self.combo_instrumentName.configure(values=list)

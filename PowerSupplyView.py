@@ -46,8 +46,7 @@ class PowerSupplyView (DeviceFrame):
         self.initEntries()
 
     def initAttributes(self):
-    #This methods initiates all attributes in the class. It is usefull to prevent double usage     
-        self.state="freeze"   
+    #This methods initiates all attributes in the class. It is usefull to prevent double usage   
         self.labelFrame_source = LabelFrame(self.frame, text="Source")
         self.labelFrame_measure = LabelFrame(self.frame, text="Measure")
 
@@ -123,7 +122,7 @@ class PowerSupplyView (DeviceFrame):
 
     def renameInstrument(self):
         i = 0
-        for item in self.view.listInstruments:
+        for item in self.view.listViews:
             if self.controller.instrument.name == item.controller.instrument.name:    
                 newName = self.controller.instrument.name[:-2] + str(i) + ")"
                 self.entry_instrumentName_callback(newName=newName)
@@ -132,7 +131,6 @@ class PowerSupplyView (DeviceFrame):
     def updateView(self, configuration=False):
     #This method refresh the content of the view
         self.stringvar_instrumentaddress.set(self.controller.instrument.address)
-        self.state="freeze" 
         self.panel.destroy()
         found=0
 
@@ -444,16 +442,21 @@ class PowerSupplyView (DeviceFrame):
                 self.entry_voltageSource_callback()
 
                 self.intVar_radioValueMaster.set(2) 
-                self.radio_masterStateON.select() 
+                self.radio_masterStateON.select()  
+                channel = self.combo_instrumentChannel.current() + 1  
+                thread = Thread(target=self.controller.Measure, args=(channel,)) 
+                thread.start()
                 self.updateMonitoring()
             else:
                 self.intVar_radioValueMaster.set(1)
                 self.radio_masterStateOFF.select() 
 
     def updateMonitoring(self):
-    #This method  updates the measurement content         
-        channel = self.combo_instrumentChannel.current() + 1  
+    #This method  updates the measurement content
+        if (self.intVar_radioValueChannel.get() == 2) and (self.intVar_radioValueMaster.get() == 2): 
 
-        if (self.intVar_radioValueChannel.get() == 2) and (self.intVar_radioValueMaster.get() == 2):    
-            if self.controller.updateMonitoring(channel) != -1:
-                self.label_powerMeasure.after(1000, self.updateMonitoring)
+            self.doubleVar_currentMeasure.set(self.controller.instrument.measure_current)
+            self.doubleVar_voltageMeasure.set(self.controller.instrument.measure_voltage)
+            self.doubleVar_powerMeasure.set(self.controller.instrument.measure_power)
+
+            self.label_powerMeasure.after(500, self.updateMonitoring)
