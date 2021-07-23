@@ -65,19 +65,19 @@ class WaveformGeneratorView (DeviceFrame):
         self.scrollframe_signal = Frame(self.canva_signal)
         self.scrollframe_function = Frame(self.canva_function)
 
-        self.frame_source_waveform = Frame(self.scrollframe_signal)
-        self.frame_source_frequency = Frame(self.scrollframe_signal)
-        self.frame_source_amplitude = Frame(self.scrollframe_signal)
-        self.frame_source_offset = Frame(self.scrollframe_signal)
-        self.frame_source_phase = Frame(self.scrollframe_signal)
-        self.frame_source_dutyCycle = Frame(self.scrollframe_signal)
-        self.frame_source_pulseWidth = Frame(self.scrollframe_signal)
-        self.frame_source_riseTime = Frame(self.scrollframe_signal)
-        self.frame_source_fallTime = Frame(self.scrollframe_signal)
-        self.frame_source_symetry = Frame(self.scrollframe_signal)
-        self.frame_source_bandwidth = Frame(self.scrollframe_signal)
-        self.frame_source_modulate = Frame(self.scrollframe_signal)
-        self.frame_source_sweep = Frame(self.scrollframe_signal)
+        self.frame_signal_waveform = Frame(self.scrollframe_signal)
+        self.frame_signal_frequency = Frame(self.scrollframe_signal)
+        self.frame_signal_amplitude = Frame(self.scrollframe_signal)
+        self.frame_signal_offset = Frame(self.scrollframe_signal)
+        self.frame_signal_phase = Frame(self.scrollframe_signal)
+        self.frame_signal_dutyCycle = Frame(self.scrollframe_signal)
+        self.frame_signal_pulseWidth = Frame(self.scrollframe_signal)
+        self.frame_signal_riseTime = Frame(self.scrollframe_signal)
+        self.frame_signal_fallTime = Frame(self.scrollframe_signal)
+        self.frame_signal_symetry = Frame(self.scrollframe_signal)
+        self.frame_signal_bandwidth = Frame(self.scrollframe_signal)
+        self.frame_signal_modulate = Frame(self.scrollframe_signal)
+        self.frame_signal_sweep = Frame(self.scrollframe_signal)
 
         self.frame_function_modulation = Frame(self.scrollframe_function)
         self.frame_modulate_type = Frame(self.scrollframe_function)
@@ -98,16 +98,16 @@ class WaveformGeneratorView (DeviceFrame):
 
         self.stringvar_instrumentName = StringVar()    
         self.stringvar_instrumentaddress = StringVar()
-        self.doubleVar_source_frequency = DoubleVar()
-        self.doubleVar_source_amplitude = DoubleVar()
-        self.doubleVar_source_offset = DoubleVar()
-        self.doubleVar_source_phase = DoubleVar()
-        self.doubleVar_source_dutyCycle = DoubleVar()
-        self.doubleVar_source_pulseWidth = DoubleVar()
-        self.doubleVar_source_riseTime = DoubleVar()
-        self.doubleVar_source_fallTime = DoubleVar()
-        self.doubleVar_source_symetry = DoubleVar()
-        self.doubleVar_source_bandwidth = DoubleVar()
+        self.doubleVar_signal_frequency = DoubleVar()
+        self.doubleVar_signal_amplitude = DoubleVar()
+        self.doubleVar_signal_offset = DoubleVar()
+        self.doubleVar_signal_phase = DoubleVar()
+        self.doubleVar_signal_dutyCycle = DoubleVar()
+        self.doubleVar_signal_pulseWidth = DoubleVar()
+        self.doubleVar_signal_riseTime = DoubleVar()
+        self.doubleVar_signal_fallTime = DoubleVar()
+        self.doubleVar_signal_symetry = DoubleVar()
+        self.doubleVar_signal_bandwidth = DoubleVar()
         self.doubleVar_sweep_time = DoubleVar()
         self.doubleVar_sweep_startFrequency = DoubleVar()
         self.doubleVar_sweep_stopFrequency = DoubleVar()
@@ -121,20 +121,20 @@ class WaveformGeneratorView (DeviceFrame):
         self.label_instrumentName = Label(self.frame_instrument_name, text="Name :   ")
         self.label_instrumentaddress = Label(self.frame_instrument_address, text="Address :")
 
-        self.label_source_waveform = Label(self.frame_source_waveform, text="Waveform :")
-        self.label_source_frequency = Label(self.frame_source_frequency, text="Frequency :")
-        self.label_source_amplitude = Label(self.frame_source_amplitude, text="Amplitude :")
-        self.label_source_offset = Label(self.frame_source_offset, text="Offset :")
-        self.label_source_phase = Label(self.frame_source_phase, text="Phase :")
-        self.label_source_dutyCycle = Label(self.frame_source_dutyCycle, text="Duty Cycle :")
-        self.label_source_symetry = Label(self.frame_source_symetry, text="Symetry :")
-        self.label_source_pulseWidth = Label(self.frame_source_pulseWidth, text="Pulse Width :")
-        self.label_source_riseTime = Label(self.frame_source_riseTime, text="Rise Time :")
-        self.label_source_fallTime = Label(self.frame_source_fallTime, text="Fall Time :")
-        self.label_source_bandwidth = Label(self.frame_source_bandwidth, text="Bandwidth :")
-        self.label_source_modulate = Label(self.frame_source_modulate, text="Modulation : ")
-        self.label_source_sweep = Label(self.frame_source_sweep, text="Sweep :      ")
-        self.label_source_dutyCycle.after(1000, self.updateMonitoring)
+        self.label_signal_waveform = Label(self.frame_signal_waveform, text="Waveform :")
+        self.label_signal_frequency = Label(self.frame_signal_frequency, text="Frequency :")
+        self.label_signal_amplitude = Label(self.frame_signal_amplitude, text="Amplitude :")
+        self.label_signal_offset = Label(self.frame_signal_offset, text="Offset :")
+        self.label_signal_phase = Label(self.frame_signal_phase, text="Phase :")
+        self.label_signal_dutyCycle = Label(self.frame_signal_dutyCycle, text="Duty Cycle :")
+        self.label_signal_symetry = Label(self.frame_signal_symetry, text="Symetry :")
+        self.label_signal_pulseWidth = Label(self.frame_signal_pulseWidth, text="Pulse Width :")
+        self.label_signal_riseTime = Label(self.frame_signal_riseTime, text="Rise Time :")
+        self.label_signal_fallTime = Label(self.frame_signal_fallTime, text="Fall Time :")
+        self.label_signal_bandwidth = Label(self.frame_signal_bandwidth, text="Bandwidth :")
+        self.label_signal_modulate = Label(self.frame_signal_modulate, text="Modulation : ")
+        self.label_signal_sweep = Label(self.frame_signal_sweep, text="Sweep :      ")
+        self.label_signal_dutyCycle.after(1000, self.updateMonitoring)
 
         self.label_function_modulation = Label(self.frame_function_modulation, text="Modulation")
         self.label_modulate_type = Label(self.frame_modulate_type, text="Type :     ")
@@ -150,17 +150,17 @@ class WaveformGeneratorView (DeviceFrame):
         
         self.label_output_state = Label(self.frame_output_state, text="Load :    ")
 
-        self.combo_source_waveform = Combobox(self.frame_source_waveform, state="readonly", width=17, values=["Sinus", "Square", "Ramp", "Pulse", "Noise", "Arbitrary"])
-        self.combo_source_frequency = Combobox(self.frame_source_frequency, state="readonly", width=5, values=["Hz", "kHz", "MHz"])
-        self.combo_source_amplitude = Combobox(self.frame_source_amplitude, state="readonly", width=5, values=["V", "mV"])
-        self.combo_source_offset = Combobox(self.frame_source_offset, state="readonly", width=5, values=["V", "mV"])
-        self.combo_source_phase = Combobox(self.frame_source_phase, state="readonly", width=5, values=["deg"])
-        self.combo_source_dutyCycle = Combobox(self.frame_source_dutyCycle, state="readonly", width=5, values=["%"])
-        self.combo_source_symetry = Combobox(self.frame_source_symetry, state="readonly", width=5, values=["%"])
-        self.combo_source_pulseWidth = Combobox(self.frame_source_pulseWidth, state="readonly", width=5, values=["s", "ms", "µs", "ns"])
-        self.combo_source_riseTime = Combobox(self.frame_source_riseTime, state="readonly", width=5, values=["s", "ms", "µs", "ns"])
-        self.combo_source_fallTime = Combobox(self.frame_source_fallTime, state="readonly", width=5, values=["s", "ms", "µs", "ns"])
-        self.combo_source_bandwidth = Combobox(self.frame_source_bandwidth, state="readonly", width=5, values=["Hz", "kHz", "MHz"])
+        self.combo_signal_waveform = Combobox(self.frame_signal_waveform, state="readonly", width=17, values=["Sinus", "Square", "Ramp", "Pulse", "Noise", "Arbitrary"])
+        self.combo_signal_frequency = Combobox(self.frame_signal_frequency, state="readonly", width=5, values=["Hz", "kHz", "MHz"])
+        self.combo_signal_amplitude = Combobox(self.frame_signal_amplitude, state="readonly", width=5, values=["V", "mV"])
+        self.combo_signal_offset = Combobox(self.frame_signal_offset, state="readonly", width=5, values=["V", "mV"])
+        self.combo_signal_phase = Combobox(self.frame_signal_phase, state="readonly", width=5, values=["deg"])
+        self.combo_signal_dutyCycle = Combobox(self.frame_signal_dutyCycle, state="readonly", width=5, values=["%"])
+        self.combo_signal_symetry = Combobox(self.frame_signal_symetry, state="readonly", width=5, values=["%"])
+        self.combo_signal_pulseWidth = Combobox(self.frame_signal_pulseWidth, state="readonly", width=5, values=["s", "ms", "µs", "ns"])
+        self.combo_signal_riseTime = Combobox(self.frame_signal_riseTime, state="readonly", width=5, values=["s", "ms", "µs", "ns"])
+        self.combo_signal_fallTime = Combobox(self.frame_signal_fallTime, state="readonly", width=5, values=["s", "ms", "µs", "ns"])
+        self.combo_signal_bandwidth = Combobox(self.frame_signal_bandwidth, state="readonly", width=5, values=["Hz", "kHz", "MHz"])
         
         self.combo_modulate_type = Combobox(self.frame_modulate_type, state="readonly", width=20, values=["AM", "FM", "PM", "FSK", "BPSK"])
         self.combo_modulate_source = Combobox(self.frame_modulate_source, state="readonly", width=20, values=["Internal", "External"])
@@ -175,16 +175,16 @@ class WaveformGeneratorView (DeviceFrame):
         self.entry_instrumentName = Entry(self.frame_instrument_name, width=30, textvariable=self.stringvar_instrumentName)
         self.entry_instrumentaddress = Entry(self.frame_instrument_address, width=30, textvariable=self.stringvar_instrumentaddress, state="readonly")
 
-        self.entry_source_frequency = Entry(self.frame_source_frequency, textvariable=self.doubleVar_source_frequency, width=10)
-        self.entry_source_amplitude = Entry(self.frame_source_amplitude, textvariable=self.doubleVar_source_amplitude, width=10)
-        self.entry_source_offset = Entry(self.frame_source_offset, textvariable=self.doubleVar_source_offset, width=10)
-        self.entry_source_phase = Entry(self.frame_source_phase, textvariable=self.doubleVar_source_phase, width=10)
-        self.entry_source_dutyCycle = Entry(self.frame_source_dutyCycle, textvariable=self.doubleVar_source_dutyCycle, width=10)
-        self.entry_source_Symetry = Entry(self.frame_source_symetry, textvariable=self.doubleVar_source_symetry, width=10)
-        self.entry_source_pulseWidth = Entry(self.frame_source_pulseWidth, textvariable=self.doubleVar_source_pulseWidth, width=10)
-        self.entry_source_riseTime = Entry(self.frame_source_riseTime, textvariable=self.doubleVar_source_riseTime, width=10)
-        self.entry_source_fallTime = Entry(self.frame_source_fallTime, textvariable=self.doubleVar_source_fallTime, width=10)
-        self.entry_source_bandwidth = Entry(self.frame_source_bandwidth, textvariable=self.doubleVar_source_bandwidth, width=10)
+        self.entry_signal_frequency = Entry(self.frame_signal_frequency, textvariable=self.doubleVar_signal_frequency, width=10)
+        self.entry_signal_amplitude = Entry(self.frame_signal_amplitude, textvariable=self.doubleVar_signal_amplitude, width=10)
+        self.entry_signal_offset = Entry(self.frame_signal_offset, textvariable=self.doubleVar_signal_offset, width=10)
+        self.entry_signal_phase = Entry(self.frame_signal_phase, textvariable=self.doubleVar_signal_phase, width=10)
+        self.entry_signal_dutyCycle = Entry(self.frame_signal_dutyCycle, textvariable=self.doubleVar_signal_dutyCycle, width=10)
+        self.entry_signal_Symetry = Entry(self.frame_signal_symetry, textvariable=self.doubleVar_signal_symetry, width=10)
+        self.entry_signal_pulseWidth = Entry(self.frame_signal_pulseWidth, textvariable=self.doubleVar_signal_pulseWidth, width=10)
+        self.entry_signal_riseTime = Entry(self.frame_signal_riseTime, textvariable=self.doubleVar_signal_riseTime, width=10)
+        self.entry_signal_fallTime = Entry(self.frame_signal_fallTime, textvariable=self.doubleVar_signal_fallTime, width=10)
+        self.entry_signal_bandwidth = Entry(self.frame_signal_bandwidth, textvariable=self.doubleVar_signal_bandwidth, width=10)
 
         self.entry_sweep_time = Entry(self.frame_sweep_time, textvariable=self.doubleVar_sweep_time, width=10, state="disabled")
         self.entry_sweep_startFrequency = Entry(self.frame_sweep_startFrequency, textvariable=self.doubleVar_sweep_startFrequency, width=10, state="disabled")
@@ -194,17 +194,17 @@ class WaveformGeneratorView (DeviceFrame):
 
         self.master_activate = Button(self.frame_master_button, text='Master ON/OFF', command=self.master_activate_callback)
 
-        self.radio_modulateStateOFF = Radiobutton(self.frame_source_modulate, text='OFF', variable=self.intVar_radioValueModulate, value=2, command=self.radio_modulateState_callback)
-        self.radio_modulateStateON = Radiobutton(self.frame_source_modulate, text='ON', variable=self.intVar_radioValueModulate, value=1, command=self.radio_modulateState_callback)
+        self.radio_modulateStateOFF = Radiobutton(self.frame_signal_modulate, text='OFF', variable=self.intVar_radioValueModulate, value=0, command=self.radio_modulateState_callback)
+        self.radio_modulateStateON = Radiobutton(self.frame_signal_modulate, text='ON', variable=self.intVar_radioValueModulate, value=1, command=self.radio_modulateState_callback)
 
-        self.radio_sweepStateOFF = Radiobutton(self.frame_source_sweep, text='OFF', variable=self.intVar_radioValueSweep, value=2, command=self.radio_sweepState_callback)
-        self.radio_sweepStateON = Radiobutton(self.frame_source_sweep, text='ON', variable=self.intVar_radioValueSweep, value=1, command=self.radio_sweepState_callback)
+        self.radio_sweepStateOFF = Radiobutton(self.frame_signal_sweep, text='OFF', variable=self.intVar_radioValueSweep, value=0, command=self.radio_sweepState_callback)
+        self.radio_sweepStateON = Radiobutton(self.frame_signal_sweep, text='ON', variable=self.intVar_radioValueSweep, value=1, command=self.radio_sweepState_callback)
 
-        self.radio_outputStateHigh = Radiobutton(self.frame_output_state, text='High Z', variable=self.intVar_radioValueState, value=1)
-        self.radio_outputStateLoad = Radiobutton(self.frame_output_state, text='50Ω', variable=self.intVar_radioValueState, value=2)
+        self.radio_outputStateLoad = Radiobutton(self.frame_output_state, text='50Ω', variable=self.intVar_radioValueState, value=0, command=self.radio_outputState_callback)
+        self.radio_outputStateHigh = Radiobutton(self.frame_output_state, text='High Z', variable=self.intVar_radioValueState, value=1, command=self.radio_outputState_callback)
 
-        self.radio_masterStateOFF = Radiobutton(self.frame_master_radio, text='OFF', variable=self.intVar_radioValueMaster, value=1)
-        self.radio_masterStateON = Radiobutton(self.frame_master_radio, text='ON', variable=self.intVar_radioValueMaster, value=2)
+        self.radio_masterStateOFF = Radiobutton(self.frame_master_radio, text='OFF', variable=self.intVar_radioValueMaster, value=0)
+        self.radio_masterStateON = Radiobutton(self.frame_master_radio, text='ON', variable=self.intVar_radioValueMaster, value=1)
         
         self.img = None
         self.panel = Label(self.frame, bg=self.model.parameters_dict['backgroundColor'])
@@ -253,6 +253,9 @@ class WaveformGeneratorView (DeviceFrame):
 
         if (found == 0) and (self.controller.instrument.address != ""):                
             self.term_text.insert(END, "\nUnknown device connected")
+
+        if configuration == True:
+            self.openConfiguration()
             
         if self.controller.instrument.address != "":
             self.controller.connectToDevice()
@@ -293,44 +296,44 @@ class WaveformGeneratorView (DeviceFrame):
         self.canva_function.pack(side="left", fill="both")
         self.defilY_function.pack(fill="y", side='left', padx='5')
 
-        self.frame_source_waveform.configure(bg=self.model.parameters_dict['backgroundColor'])
-        self.frame_source_waveform.pack(fill="x", pady=5)
+        self.frame_signal_waveform.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_signal_waveform.pack(fill="x", pady=5)
 
-        self.frame_source_frequency.configure(bg=self.model.parameters_dict['backgroundColor'])
-        self.frame_source_frequency.pack(fill="x", pady=5)
+        self.frame_signal_frequency.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_signal_frequency.pack(fill="x", pady=5)
 
-        self.frame_source_amplitude.configure(bg=self.model.parameters_dict['backgroundColor'])
-        self.frame_source_amplitude.pack(fill="x", pady=5)
+        self.frame_signal_amplitude.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_signal_amplitude.pack(fill="x", pady=5)
 
-        self.frame_source_offset.configure(bg=self.model.parameters_dict['backgroundColor'])
-        self.frame_source_offset.pack(fill="x", pady=5)
+        self.frame_signal_offset.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_signal_offset.pack(fill="x", pady=5)
 
-        self.frame_source_phase.configure(bg=self.model.parameters_dict['backgroundColor'])
-        self.frame_source_phase.pack(fill="x", pady=5)
+        self.frame_signal_phase.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_signal_phase.pack(fill="x", pady=5)
 
-        self.frame_source_dutyCycle.configure(bg=self.model.parameters_dict['backgroundColor'])
-        self.frame_source_dutyCycle.pack(fill="x",pady=5)
+        self.frame_signal_dutyCycle.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_signal_dutyCycle.pack(fill="x",pady=5)
 
-        self.frame_source_pulseWidth.configure(bg=self.model.parameters_dict['backgroundColor'])
-        self.frame_source_pulseWidth.pack(fill="x",pady=5)
+        self.frame_signal_pulseWidth.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_signal_pulseWidth.pack(fill="x",pady=5)
 
-        self.frame_source_riseTime.configure(bg=self.model.parameters_dict['backgroundColor'])
-        self.frame_source_riseTime.pack(fill="x",pady=5)
+        self.frame_signal_riseTime.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_signal_riseTime.pack(fill="x",pady=5)
 
-        self.frame_source_fallTime.configure(bg=self.model.parameters_dict['backgroundColor'])
-        self.frame_source_fallTime.pack(fill="x",pady=5)
+        self.frame_signal_fallTime.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_signal_fallTime.pack(fill="x",pady=5)
 
-        self.frame_source_symetry.configure(bg=self.model.parameters_dict['backgroundColor'])
-        self.frame_source_symetry.pack(fill="x",pady=5)
+        self.frame_signal_symetry.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_signal_symetry.pack(fill="x",pady=5)
 
-        self.frame_source_bandwidth.configure(bg=self.model.parameters_dict['backgroundColor'])
-        self.frame_source_bandwidth.pack(fill="x",pady=5)
+        self.frame_signal_bandwidth.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_signal_bandwidth.pack(fill="x",pady=5)
 
-        self.frame_source_modulate.configure(bg=self.model.parameters_dict['backgroundColor'])
-        self.frame_source_modulate.pack(fill="x",pady=5)
+        self.frame_signal_modulate.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_signal_modulate.pack(fill="x",pady=5)
 
-        self.frame_source_sweep.configure(bg=self.model.parameters_dict['backgroundColor'])
-        self.frame_source_sweep.pack(fill="x",pady=5)
+        self.frame_signal_sweep.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_signal_sweep.pack(fill="x",pady=5)
 
         self.frame_function_modulation.configure(bg=self.model.parameters_dict['backgroundColor'])
         self.frame_function_modulation.pack(fill="both",pady=5)
@@ -379,16 +382,16 @@ class WaveformGeneratorView (DeviceFrame):
         self.stringvar_instrumentName.set(self.controller.instrument.name)    
         self.stringvar_instrumentaddress.set(self.controller.instrument.address)
 
-        self.doubleVar_source_frequency.set(1000)
-        self.doubleVar_source_amplitude.set(1)
-        self.doubleVar_source_offset.set(0)
-        self.doubleVar_source_phase.set(0)
-        self.doubleVar_source_dutyCycle.set(50)
-        self.doubleVar_source_symetry.set(50)
-        self.doubleVar_source_pulseWidth.set(1)
-        self.doubleVar_source_riseTime.set(0)
-        self.doubleVar_source_fallTime.set(0)
-        self.doubleVar_source_bandwidth.set(1000)
+        self.doubleVar_signal_frequency.set(1000)
+        self.doubleVar_signal_amplitude.set(1)
+        self.doubleVar_signal_offset.set(0)
+        self.doubleVar_signal_phase.set(0)
+        self.doubleVar_signal_dutyCycle.set(50)
+        self.doubleVar_signal_symetry.set(50)
+        self.doubleVar_signal_pulseWidth.set(1)
+        self.doubleVar_signal_riseTime.set(0)
+        self.doubleVar_signal_fallTime.set(0)
+        self.doubleVar_signal_bandwidth.set(1000)
         self.doubleVar_sweep_time.set(1)
         self.doubleVar_sweep_startFrequency.set(1)
         self.doubleVar_sweep_stopFrequency.set(1000)
@@ -403,44 +406,44 @@ class WaveformGeneratorView (DeviceFrame):
         self.label_instrumentaddress.configure(bg=self.model.parameters_dict['backgroundColor'])
         self.label_instrumentaddress.pack(side="left")
 
-        self.label_source_waveform.configure(bg=self.model.parameters_dict['backgroundColor'])
-        self.label_source_waveform.pack(side="left")
+        self.label_signal_waveform.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_signal_waveform.pack(side="left")
 
-        self.label_source_frequency.configure(bg=self.model.parameters_dict['backgroundColor'])
-        self.label_source_frequency.pack(side="left")
+        self.label_signal_frequency.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_signal_frequency.pack(side="left")
 
-        self.label_source_amplitude.configure(bg=self.model.parameters_dict['backgroundColor'])
-        self.label_source_amplitude.pack(side="left")
+        self.label_signal_amplitude.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_signal_amplitude.pack(side="left")
 
-        self.label_source_offset.configure(bg=self.model.parameters_dict['backgroundColor'])
-        self.label_source_offset.pack(side="left")
+        self.label_signal_offset.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_signal_offset.pack(side="left")
 
-        self.label_source_phase.configure(bg=self.model.parameters_dict['backgroundColor'])
-        self.label_source_phase.pack(side="left")
+        self.label_signal_phase.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_signal_phase.pack(side="left")
 
-        self.label_source_dutyCycle.configure(bg=self.model.parameters_dict['backgroundColor'])
-        self.label_source_dutyCycle.pack(side="left")
+        self.label_signal_dutyCycle.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_signal_dutyCycle.pack(side="left")
 
-        self.label_source_pulseWidth.configure(bg=self.model.parameters_dict['backgroundColor'])
-        self.label_source_pulseWidth.pack(side="left")
+        self.label_signal_pulseWidth.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_signal_pulseWidth.pack(side="left")
 
-        self.label_source_riseTime.configure(bg=self.model.parameters_dict['backgroundColor'])
-        self.label_source_riseTime.pack(side="left")
+        self.label_signal_riseTime.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_signal_riseTime.pack(side="left")
 
-        self.label_source_fallTime.configure(bg=self.model.parameters_dict['backgroundColor'])
-        self.label_source_fallTime.pack(side="left")
+        self.label_signal_fallTime.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_signal_fallTime.pack(side="left")
 
-        self.label_source_symetry.configure(bg=self.model.parameters_dict['backgroundColor'])
-        self.label_source_symetry.pack(side="left")
+        self.label_signal_symetry.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_signal_symetry.pack(side="left")
 
-        self.label_source_bandwidth.configure(bg=self.model.parameters_dict['backgroundColor'])
-        self.label_source_bandwidth.pack(side="left")
+        self.label_signal_bandwidth.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_signal_bandwidth.pack(side="left")
 
-        self.label_source_modulate.configure(bg=self.model.parameters_dict['backgroundColor'])
-        self.label_source_modulate.pack(side="left")
+        self.label_signal_modulate.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_signal_modulate.pack(side="left")
 
-        self.label_source_sweep.configure(bg=self.model.parameters_dict['backgroundColor'])
-        self.label_source_sweep.pack(side="left")
+        self.label_signal_sweep.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_signal_sweep.pack(side="left")
 
         self.label_function_modulation.configure(bg=self.model.parameters_dict['backgroundColor'], state="disabled")
         self.label_function_modulation.pack(side="left")
@@ -480,103 +483,103 @@ class WaveformGeneratorView (DeviceFrame):
 
     def initCombo(self):
     #This methods instanciates all the combobox
-        self.combo_source_waveform.bind("<<ComboboxSelected>>", self.combo_source_waveform_callback)
-        self.combo_source_waveform.configure(background='white')
-        self.combo_source_waveform.current(0)
-        self.combo_source_waveform.pack(side="right")
-        self.combo_source_waveform_callback()
+        self.combo_signal_waveform.bind("<<ComboboxSelected>>", self.combo_signal_waveform_callback)
+        self.combo_signal_waveform.configure(background='white')
+        self.combo_signal_waveform.current(0)
+        self.combo_signal_waveform.pack(side="right")
+        self.combo_signal_waveform_callback(init=True)
 
-        #self.combo_source_frequency.bind("<<ComboboxSelected>>", self.combo_source_frequency_callback)
-        self.combo_source_frequency.configure(background='white')
-        self.combo_source_frequency.current(0)
-        self.combo_source_frequency.pack(side="right")
+        self.combo_signal_frequency.bind("<<ComboboxSelected>>", self.combo_signal_frequency_callback)
+        self.combo_signal_frequency.configure(background='white')
+        self.combo_signal_frequency.current(0)
+        self.combo_signal_frequency.pack(side="right")
     
-        #self.combo_source_amplitude.bind("<<ComboboxSelected>>", self.combo_source_amplitude_callback)
-        self.combo_source_amplitude.configure(background='white')
-        self.combo_source_amplitude.current(0)
-        self.combo_source_amplitude.pack(side="right")
+        self.combo_signal_amplitude.bind("<<ComboboxSelected>>", self.combo_signal_amplitude_callback)
+        self.combo_signal_amplitude.configure(background='white')
+        self.combo_signal_amplitude.current(0)
+        self.combo_signal_amplitude.pack(side="right")
     
-        #self.combo_source_offset.bind("<<ComboboxSelected>>", self.combo_source_offset_callback)
-        self.combo_source_offset.configure(background='white')
-        self.combo_source_offset.current(0)
-        self.combo_source_offset.pack(side="right")
+        self.combo_signal_offset.bind("<<ComboboxSelected>>", self.combo_signal_offset_callback)
+        self.combo_signal_offset.configure(background='white')
+        self.combo_signal_offset.current(0)
+        self.combo_signal_offset.pack(side="right")
     
-        #self.combo_source_phase.bind("<<ComboboxSelected>>", self.combo_source_phase_callback)
-        self.combo_source_phase.configure(background='white')
-        self.combo_source_phase.current(0)
-        self.combo_source_phase.pack(side="right")
+        self.combo_signal_phase.bind("<<ComboboxSelected>>", self.combo_signal_phase_callback)
+        self.combo_signal_phase.configure(background='white')
+        self.combo_signal_phase.current(0)
+        self.combo_signal_phase.pack(side="right")
     
-        #self.combo_source_phase.bind("<<ComboboxSelected>>", self.combo_source_phase_callback)
-        self.combo_source_dutyCycle.configure(background='white')
-        self.combo_source_dutyCycle.current(0)
-        self.combo_source_dutyCycle.pack(side="right")
+        self.combo_signal_phase.bind("<<ComboboxSelected>>", self.combo_signal_phase_callback)
+        self.combo_signal_dutyCycle.configure(background='white')
+        self.combo_signal_dutyCycle.current(0)
+        self.combo_signal_dutyCycle.pack(side="right")
 
-        #self.combo_source_symetry.bind("<<ComboboxSelected>>", self.combo_source_symetry_callback)
-        self.combo_source_symetry.configure(background='white')
-        self.combo_source_symetry.current(0)
-        self.combo_source_symetry.pack(side="right")
+        self.combo_signal_symetry.bind("<<ComboboxSelected>>", self.combo_signal_symetry_callback)
+        self.combo_signal_symetry.configure(background='white')
+        self.combo_signal_symetry.current(0)
+        self.combo_signal_symetry.pack(side="right")
     
-        #self.combo_source_pulseWidth.bind("<<ComboboxSelected>>", self.combo_source_pulseWidth_callback)
-        self.combo_source_pulseWidth.configure(background='white')
-        self.combo_source_pulseWidth.current(0)
-        self.combo_source_pulseWidth.pack(side="right")
+        self.combo_signal_pulseWidth.bind("<<ComboboxSelected>>", self.combo_signal_pulseWidth_callback)
+        self.combo_signal_pulseWidth.configure(background='white')
+        self.combo_signal_pulseWidth.current(0)
+        self.combo_signal_pulseWidth.pack(side="right")
     
-        #self.combo_source_riseTime.bind("<<ComboboxSelected>>", self.combo_source_riseTime_callback)
-        self.combo_source_riseTime.configure(background='white')
-        self.combo_source_riseTime.current(0)
-        self.combo_source_riseTime.pack(side="right")
+        self.combo_signal_riseTime.bind("<<ComboboxSelected>>", self.combo_signal_riseTime_callback)
+        self.combo_signal_riseTime.configure(background='white')
+        self.combo_signal_riseTime.current(0)
+        self.combo_signal_riseTime.pack(side="right")
     
-        #self.combo_source_fallTime.bind("<<ComboboxSelected>>", self.combo_source_fallTime_callback)
-        self.combo_source_fallTime.configure(background='white')
-        self.combo_source_fallTime.current(0)
-        self.combo_source_fallTime.pack(side="right")
+        self.combo_signal_fallTime.bind("<<ComboboxSelected>>", self.combo_signal_fallTime_callback)
+        self.combo_signal_fallTime.configure(background='white')
+        self.combo_signal_fallTime.current(0)
+        self.combo_signal_fallTime.pack(side="right")
     
-        #self.combo_source_bandwidth.bind("<<ComboboxSelected>>", self.combo_source_bandwidth_callback)
-        self.combo_source_bandwidth.configure(background='white')
-        self.combo_source_bandwidth.current(0)
-        self.combo_source_bandwidth.pack(side="right")
+        self.combo_signal_bandwidth.bind("<<ComboboxSelected>>", self.combo_signal_bandwidth_callback)
+        self.combo_signal_bandwidth.configure(background='white')
+        self.combo_signal_bandwidth.current(0)
+        self.combo_signal_bandwidth.pack(side="right")
     
-        #self.combo_modulate_type.bind("<<ComboboxSelected>>", self.combo_modulate_type_callback)
+        self.combo_modulate_type.bind("<<ComboboxSelected>>", self.combo_modulate_type_callback)
         self.combo_modulate_type.configure(background='white', state="disabled")
         self.combo_modulate_type.current(0)
         self.combo_modulate_type.pack(side="right")
     
-        #self.combo_modulate_source.bind("<<ComboboxSelected>>", self.combo_modulate_source_callback)
+        self.combo_modulate_source.bind("<<ComboboxSelected>>", self.combo_modulate_source_callback)
         self.combo_modulate_source.configure(background='white', state="disabled")
         self.combo_modulate_source.current(0)
         self.combo_modulate_source.pack(side="right")
     
-        #self.combo_modulate_shape.bind("<<ComboboxSelected>>", self.combo_modulate_shape_callback)
+        self.combo_modulate_shape.bind("<<ComboboxSelected>>", self.combo_modulate_shape_callback)
         self.combo_modulate_shape.configure(background='white', state="disabled")
         self.combo_modulate_shape.current(0)
         self.combo_modulate_shape.pack(side="right")
     
-        #self.combo_sweep_type.bind("<<ComboboxSelected>>", self.combo_sweep_type_callback)
+        self.combo_sweep_type.bind("<<ComboboxSelected>>", self.combo_sweep_type_callback)
         self.combo_sweep_type.configure(background='white', state="disabled")
         self.combo_sweep_type.current(0)
         self.combo_sweep_type.pack(side="right")
     
-        #self.combo_sweep_time.bind("<<ComboboxSelected>>", self.combo_sweep_time_callback)
+        self.combo_sweep_time.bind("<<ComboboxSelected>>", self.combo_sweep_time_callback)
         self.combo_sweep_time.configure(background='white', state="disabled")
         self.combo_sweep_time.current(0)
         self.combo_sweep_time.pack(side="right")
     
-        #self.combo_sweep_startFrequency.bind("<<ComboboxSelected>>", self.combo_sweep_startFrequency_callback)
+        self.combo_sweep_startFrequency.bind("<<ComboboxSelected>>", self.combo_sweep_startFrequency_callback)
         self.combo_sweep_startFrequency.configure(background='white', state="disabled")
         self.combo_sweep_startFrequency.current(0)
         self.combo_sweep_startFrequency.pack(side="right")
     
-        #self.combo_sweep_stopFrequency.bind("<<ComboboxSelected>>", self.combo_sweep_stopFrequency_callback)
+        self.combo_sweep_stopFrequency.bind("<<ComboboxSelected>>", self.combo_sweep_stopFrequency_callback)
         self.combo_sweep_stopFrequency.configure(background='white', state="disabled")
         self.combo_sweep_stopFrequency.current(0)
         self.combo_sweep_stopFrequency.pack(side="right")
     
-        #self.combo_sweep_holdTime.bind("<<ComboboxSelected>>", self.combo_sweep_holdTime_callback)
+        self.combo_sweep_holdTime.bind("<<ComboboxSelected>>", self.combo_sweep_holdTime_callback)
         self.combo_sweep_holdTime.configure(background='white', state="disabled")
         self.combo_sweep_holdTime.current(0)
         self.combo_sweep_holdTime.pack(side="right")
     
-        #self.combo_sweep_returnTime.bind("<<ComboboxSelected>>", self.combo_sweep_returnTime_callback)
+        self.combo_sweep_returnTime.bind("<<ComboboxSelected>>", self.combo_sweep_returnTime_callback)
         self.combo_sweep_returnTime.configure(background='white', state="disabled")
         self.combo_sweep_returnTime.current(0)
         self.combo_sweep_returnTime.pack(side="right")
@@ -589,36 +592,49 @@ class WaveformGeneratorView (DeviceFrame):
         self.entry_instrumentaddress.bind('<ButtonRelease-1>', self.view.menu2_Connections_callBack)
         self.entry_instrumentaddress.pack(side='left', padx=5)
 
-        self.entry_source_frequency.bind("<Return>", self.entry_source_frequency_callback)
-        self.entry_source_frequency.pack(side='right', padx=5)
+        self.entry_signal_frequency.bind("<Return>", self.entry_signal_frequency_callback)
+        self.entry_signal_frequency.pack(side='right', padx=5)
 
-        self.entry_source_amplitude.bind("<Return>", self.entry_source_amplitude_callback)
-        self.entry_source_amplitude.pack(side='right', padx=5)
+        self.entry_signal_amplitude.bind("<Return>", self.entry_signal_amplitude_callback)
+        self.entry_signal_amplitude.pack(side='right', padx=5)
 
-        self.entry_source_offset.pack(side='right', padx=5)
+        self.entry_signal_offset.bind("<Return>", self.entry_signal_offset_callback)
+        self.entry_signal_offset.pack(side='right', padx=5)
 
-        self.entry_source_phase.pack(side='right', padx=5)
+        self.entry_signal_phase.bind("<Return>", self.entry_signal_phase_callback)
+        self.entry_signal_phase.pack(side='right', padx=5)
 
-        self.entry_source_dutyCycle.pack(side='right', padx=5)
+        self.entry_signal_dutyCycle.bind("<Return>", self.entry_signal_dutyCycle_callback)
+        self.entry_signal_dutyCycle.pack(side='right', padx=5)
 
-        self.entry_source_Symetry.pack(side='right', padx=5)
+        self.entry_signal_Symetry.bind("<Return>", self.entry_signal_symetry_callback)
+        self.entry_signal_Symetry.pack(side='right', padx=5)
 
-        self.entry_source_pulseWidth.pack(side='right', padx=5)
+        self.entry_signal_pulseWidth.bind("<Return>", self.entry_signal_pulseWidth_callback)
+        self.entry_signal_pulseWidth.pack(side='right', padx=5)
 
-        self.entry_source_riseTime.pack(side='right', padx=5)
+        self.entry_signal_riseTime.bind("<Return>", self.entry_signal_riseTime_callback)
+        self.entry_signal_riseTime.pack(side='right', padx=5)
 
-        self.entry_source_fallTime.pack(side='right', padx=5)
+        self.entry_signal_fallTime.bind("<Return>", self.entry_signal_fallTime_callback)
+        self.entry_signal_fallTime.pack(side='right', padx=5)
 
-        self.entry_source_bandwidth.pack(side='right', padx=5)
+        self.entry_signal_bandwidth.bind("<Return>", self.entry_signal_bandwidth_callback)
+        self.entry_signal_bandwidth.pack(side='right', padx=5)
 
+        self.entry_sweep_time.bind("<Return>", self.entry_sweep_time_callback)
         self.entry_sweep_time.pack(side='right', padx=5)
 
+        self.entry_sweep_startFrequency.bind("<Return>", self.entry_sweep_startFrequency_callback)
         self.entry_sweep_startFrequency.pack(side='right', padx=5)
 
+        self.entry_sweep_stopFrequency.bind("<Return>", self.entry_sweep_stopFrequency_callback)
         self.entry_sweep_stopFrequency.pack(side='right', padx=5)
 
+        self.entry_sweep_holdTime.bind("<Return>", self.entry_sweep_holdTime_callback)
         self.entry_sweep_holdTime.pack(side='right', padx=5)
 
+        self.entry_sweep_returnTime.bind("<Return>", self.entry_sweep_returnTime_callback)
         self.entry_sweep_returnTime.pack(side='right', padx=5)
 
     def initButton(self):
@@ -629,232 +645,368 @@ class WaveformGeneratorView (DeviceFrame):
         self.radio_sweepStateON.configure(bg=self.model.parameters_dict['backgroundColor'])
         self.radio_sweepStateOFF.pack(side="right", expand="yes", fill="both")
         self.radio_sweepStateOFF.configure(bg=self.model.parameters_dict['backgroundColor'])
-        self.intVar_radioValueSweep.set(1)
+        self.intVar_radioValueSweep.set(0)
 
         self.radio_modulateStateON.pack(side="right", expand="yes", fill="both")
         self.radio_modulateStateON.configure(bg=self.model.parameters_dict['backgroundColor'])
         self.radio_modulateStateOFF.pack(side="right", expand="yes", fill="both")
         self.radio_modulateStateOFF.configure(bg=self.model.parameters_dict['backgroundColor'])
-        self.intVar_radioValueModulate.set(1)
+        self.intVar_radioValueModulate.set(0)
 
         self.radio_outputStateHigh.pack(side="right", expand="yes", fill="both")
         self.radio_outputStateHigh.configure(bg=self.model.parameters_dict['backgroundColor'])
         self.radio_outputStateLoad.pack(side="right", expand="yes", fill="both")
         self.radio_outputStateLoad.configure(bg=self.model.parameters_dict['backgroundColor'])
-        self.intVar_radioValueState.set(1)
+        self.intVar_radioValueState.set(0)
 
         self.radio_masterStateON.pack(side="top", expand="yes", fill="both")
         self.radio_masterStateON.configure(bg=self.model.parameters_dict['backgroundColor'], state="disabled", disabledforeground="black")
         self.radio_masterStateOFF.pack(side="top", expand="yes", fill="both")
         self.radio_masterStateOFF.configure(bg=self.model.parameters_dict['backgroundColor'], state="disabled", disabledforeground="black")
-        self.intVar_radioValueMaster.set(1)
+        self.intVar_radioValueMaster.set(0)
 
-    def combo_source_waveform_callback(self, args=None):
+    def openConfiguration(self):
+    #This method is called when the device is an opened configuration        
+        self.doubleVar_signal_frequency.set(self.controller.instrument.signal_frequency)
+        self.doubleVar_signal_amplitude.set(self.controller.instrument.signal_amplitude)
+        self.doubleVar_signal_offset.set(self.controller.instrument.signal_offset)
+        self.doubleVar_signal_phase.set(self.controller.instrument.signal_phase)
+        self.doubleVar_signal_dutyCycle.set(self.controller.instrument.signal_dutyCycle)
+        self.doubleVar_signal_pulseWidth.set(self.controller.instrument.signal_pulseWidth)
+        self.doubleVar_signal_riseTime.set(self.controller.instrument.signal_riseTime)
+        self.doubleVar_signal_fallTime.set(self.controller.instrument.signal_fallTime)
+        self.doubleVar_signal_symetry.set(self.controller.instrument.signal_symetry)
+        self.doubleVar_signal_bandwidth.set(self.controller.instrument.signal_bandwidth)
+        self.doubleVar_sweep_time.set(self.controller.instrument.sweep_time)
+        self.doubleVar_sweep_startFrequency.set(self.controller.instrument.sweep_startFrequency)
+        self.doubleVar_sweep_stopFrequency.set(self.controller.instrument.sweep_stopFrequency)
+        self.doubleVar_sweep_holdTime.set(self.controller.instrument.sweep_holdTime)
+        self.doubleVar_sweep_returnTime.set(self.controller.instrument.sweep_returnTime)
+
+        self.intVar_radioValueModulate.set(self.controller.instrument.signal_modulation_state)
+        self.intVar_radioValueSweep.set(self.controller.instrument.signal_sweep_state)
+        self.intVar_radioValueState.set(self.controller.instrument.output_state)
+        if self.intVar_radioValueSweep.get() == 1:
+            self.radio_sweepState_callback()
+        if self.intVar_radioValueModulate.get() == 1:
+            self.radio_modulateState_callback()
+
+        self.combo_signal_waveform.set(self.controller.instrument.signal_waveform)
+        self.combo_signal_waveform_callback(init=False)
+        self.combo_signal_frequency.set(self.controller.instrument.signal_frequency_caliber)
+        self.combo_signal_amplitude.set(self.controller.instrument.signal_amplitude_caliber)
+        self.combo_signal_offset.set(self.controller.instrument.signal_offset_caliber)
+        self.combo_signal_phase.set(self.controller.instrument.signal_phase_caliber)
+        self.combo_signal_dutyCycle.set(self.controller.instrument.signal_dutyCycle_caliber)
+        self.combo_signal_symetry.set(self.controller.instrument.signal_symetry_caliber)
+        self.combo_signal_pulseWidth.set(self.controller.instrument.signal_pulseWidth_caliber)
+        self.combo_signal_riseTime.set(self.controller.instrument.signal_riseTime_caliber)
+        self.combo_signal_fallTime.set(self.controller.instrument.signal_fallTime_caliber)
+        self.combo_signal_bandwidth.set(self.controller.instrument.signal_bandwidth_caliber)
+        self.combo_modulate_type.set(self.controller.instrument.modulation_type)
+        #self.combo_modulate_type_callback()
+        self.combo_modulate_source.set(self.controller.instrument.modulation_source)
+        #self.combo_modulate_source_callback()
+        self.combo_modulate_shape.set(self.controller.instrument.modulation_shape)
+        #self.combo_modulate_shape_callback()
+        self.combo_sweep_type.set(self.controller.instrument.sweep_type)
+        self.combo_sweep_time.set(self.controller.instrument.sweep_time_caliber)
+        self.combo_sweep_startFrequency.set(self.controller.instrument.sweep_startFrequency_caliber)
+        self.combo_sweep_stopFrequency.set(self.controller.instrument.sweep_stopFrequency_caliber)
+        self.combo_sweep_holdTime.set(self.controller.instrument.sweep_holdTime_caliber)
+        self.combo_sweep_returnTime.set(self.controller.instrument.sweep_returnTime_caliber)
+
+    def combo_signal_waveform_callback(self, args=None, init=False):
     #This method is called when this combobow is selected
-        if self.combo_source_waveform.get() == "Sinus":
-            self.label_source_frequency.configure(state="normal")
-            self.label_source_amplitude.configure(state="normal")
-            self.label_source_offset.configure(state="normal")
-            self.label_source_phase.configure(state="normal")
-            self.label_source_dutyCycle.configure(state="disabled")
-            self.label_source_symetry.configure(state="disabled")
-            self.label_source_riseTime.configure(state="disabled")
-            self.label_source_fallTime.configure(state="disabled")
-            self.label_source_pulseWidth.configure(state="disabled")
-            self.label_source_bandwidth.configure(state="disabled")
+        if init == True:
+            self.combo_signal_waveform.set(self.controller.instrument.signal_waveform)
+
+        self.controller.instrument.signal_waveform = self.combo_signal_waveform.get()
+
+        if self.combo_signal_waveform.get() == "Sinus":
+            self.label_signal_frequency.configure(state="normal")
+            self.label_signal_amplitude.configure(state="normal")
+            self.label_signal_offset.configure(state="normal")
+            self.label_signal_phase.configure(state="normal")
+            self.label_signal_dutyCycle.configure(state="disabled")
+            self.label_signal_symetry.configure(state="disabled")
+            self.label_signal_riseTime.configure(state="disabled")
+            self.label_signal_fallTime.configure(state="disabled")
+            self.label_signal_pulseWidth.configure(state="disabled")
+            self.label_signal_bandwidth.configure(state="disabled")
             
-            self.entry_source_frequency.configure(state="normal")
-            self.entry_source_amplitude.configure(state="normal")
-            self.entry_source_offset.configure(state="normal")
-            self.entry_source_phase.configure(state="normal")
-            self.entry_source_dutyCycle.configure(state="disabled")
-            self.entry_source_Symetry.configure(state="disabled")
-            self.entry_source_riseTime.configure(state="disabled")
-            self.entry_source_fallTime.configure(state="disabled")
-            self.entry_source_pulseWidth.configure(state="disabled")
-            self.entry_source_bandwidth.configure(state="disabled")
+            self.entry_signal_frequency.configure(state="normal")
+            self.entry_signal_amplitude.configure(state="normal")
+            self.entry_signal_offset.configure(state="normal")
+            self.entry_signal_phase.configure(state="normal")
+            self.entry_signal_dutyCycle.configure(state="disabled")
+            self.entry_signal_Symetry.configure(state="disabled")
+            self.entry_signal_riseTime.configure(state="disabled")
+            self.entry_signal_fallTime.configure(state="disabled")
+            self.entry_signal_pulseWidth.configure(state="disabled")
+            self.entry_signal_bandwidth.configure(state="disabled")
 
-            self.combo_source_frequency.configure(state="normal")
-            self.combo_source_amplitude.configure(state="normal")
-            self.combo_source_offset.configure(state="normal")
-            self.combo_source_phase.configure(state="normal")
-            self.combo_source_dutyCycle.configure(state="disabled")
-            self.combo_source_symetry.configure(state="disabled")
-            self.combo_source_riseTime.configure(state="disabled")
-            self.combo_source_fallTime.configure(state="disabled")
-            self.combo_source_pulseWidth.configure(state="disabled")
-            self.combo_source_bandwidth.configure(state="disabled")
+            self.combo_signal_frequency.configure(state="normal")
+            self.combo_signal_amplitude.configure(state="normal")
+            self.combo_signal_offset.configure(state="normal")
+            self.combo_signal_phase.configure(state="normal")
+            self.combo_signal_dutyCycle.configure(state="disabled")
+            self.combo_signal_symetry.configure(state="disabled")
+            self.combo_signal_riseTime.configure(state="disabled")
+            self.combo_signal_fallTime.configure(state="disabled")
+            self.combo_signal_pulseWidth.configure(state="disabled")
+            self.combo_signal_bandwidth.configure(state="disabled")
 
-        if self.combo_source_waveform.get() == "Square":
-            self.label_source_frequency.configure(state="normal")
-            self.label_source_amplitude.configure(state="normal")
-            self.label_source_offset.configure(state="normal")
-            self.label_source_phase.configure(state="normal")
-            self.label_source_dutyCycle.configure(state="normal")
-            self.label_source_symetry.configure(state="disabled")
-            self.label_source_riseTime.configure(state="disabled")
-            self.label_source_fallTime.configure(state="disabled")
-            self.label_source_pulseWidth.configure(state="disabled")
-            self.label_source_bandwidth.configure(state="disabled")
+        if self.combo_signal_waveform.get() == "Square":
+            self.label_signal_frequency.configure(state="normal")
+            self.label_signal_amplitude.configure(state="normal")
+            self.label_signal_offset.configure(state="normal")
+            self.label_signal_phase.configure(state="normal")
+            self.label_signal_dutyCycle.configure(state="normal")
+            self.label_signal_symetry.configure(state="disabled")
+            self.label_signal_riseTime.configure(state="disabled")
+            self.label_signal_fallTime.configure(state="disabled")
+            self.label_signal_pulseWidth.configure(state="disabled")
+            self.label_signal_bandwidth.configure(state="disabled")
             
-            self.entry_source_frequency.configure(state="normal")
-            self.entry_source_amplitude.configure(state="normal")
-            self.entry_source_offset.configure(state="normal")
-            self.entry_source_phase.configure(state="normal")
-            self.entry_source_dutyCycle.configure(state="normal")
-            self.entry_source_Symetry.configure(state="disabled")
-            self.entry_source_riseTime.configure(state="disabled")
-            self.entry_source_fallTime.configure(state="disabled")
-            self.entry_source_pulseWidth.configure(state="disabled")
-            self.entry_source_bandwidth.configure(state="disabled")
+            self.entry_signal_frequency.configure(state="normal")
+            self.entry_signal_amplitude.configure(state="normal")
+            self.entry_signal_offset.configure(state="normal")
+            self.entry_signal_phase.configure(state="normal")
+            self.entry_signal_dutyCycle.configure(state="normal")
+            self.entry_signal_Symetry.configure(state="disabled")
+            self.entry_signal_riseTime.configure(state="disabled")
+            self.entry_signal_fallTime.configure(state="disabled")
+            self.entry_signal_pulseWidth.configure(state="disabled")
+            self.entry_signal_bandwidth.configure(state="disabled")
 
-            self.combo_source_frequency.configure(state="normal")
-            self.combo_source_amplitude.configure(state="normal")
-            self.combo_source_offset.configure(state="normal")
-            self.combo_source_phase.configure(state="normal")
-            self.combo_source_dutyCycle.configure(state="normal")
-            self.combo_source_symetry.configure(state="disabled")
-            self.combo_source_riseTime.configure(state="disabled")
-            self.combo_source_fallTime.configure(state="disabled")
-            self.combo_source_pulseWidth.configure(state="disabled")
-            self.combo_source_bandwidth.configure(state="disabled")
+            self.combo_signal_frequency.configure(state="normal")
+            self.combo_signal_amplitude.configure(state="normal")
+            self.combo_signal_offset.configure(state="normal")
+            self.combo_signal_phase.configure(state="normal")
+            self.combo_signal_dutyCycle.configure(state="normal")
+            self.combo_signal_symetry.configure(state="disabled")
+            self.combo_signal_riseTime.configure(state="disabled")
+            self.combo_signal_fallTime.configure(state="disabled")
+            self.combo_signal_pulseWidth.configure(state="disabled")
+            self.combo_signal_bandwidth.configure(state="disabled")
 
-        if self.combo_source_waveform.get() == "Ramp":
-            self.label_source_frequency.configure(state="normal")
-            self.label_source_amplitude.configure(state="normal")
-            self.label_source_offset.configure(state="normal")
-            self.label_source_phase.configure(state="normal")
-            self.label_source_dutyCycle.configure(state="disabled")
-            self.label_source_symetry.configure(state="normal")
-            self.label_source_riseTime.configure(state="disabled")
-            self.label_source_fallTime.configure(state="disabled")
-            self.label_source_pulseWidth.configure(state="disabled")
-            self.label_source_bandwidth.configure(state="disabled")
+        if self.combo_signal_waveform.get() == "Ramp":
+            self.label_signal_frequency.configure(state="normal")
+            self.label_signal_amplitude.configure(state="normal")
+            self.label_signal_offset.configure(state="normal")
+            self.label_signal_phase.configure(state="normal")
+            self.label_signal_dutyCycle.configure(state="disabled")
+            self.label_signal_symetry.configure(state="normal")
+            self.label_signal_riseTime.configure(state="disabled")
+            self.label_signal_fallTime.configure(state="disabled")
+            self.label_signal_pulseWidth.configure(state="disabled")
+            self.label_signal_bandwidth.configure(state="disabled")
             
-            self.entry_source_frequency.configure(state="normal")
-            self.entry_source_amplitude.configure(state="normal")
-            self.entry_source_offset.configure(state="normal")
-            self.entry_source_phase.configure(state="normal")
-            self.entry_source_dutyCycle.configure(state="disabled")
-            self.entry_source_Symetry.configure(state="normal")
-            self.entry_source_riseTime.configure(state="disabled")
-            self.entry_source_fallTime.configure(state="disabled")
-            self.entry_source_pulseWidth.configure(state="disabled")
-            self.entry_source_bandwidth.configure(state="disabled")
+            self.entry_signal_frequency.configure(state="normal")
+            self.entry_signal_amplitude.configure(state="normal")
+            self.entry_signal_offset.configure(state="normal")
+            self.entry_signal_phase.configure(state="normal")
+            self.entry_signal_dutyCycle.configure(state="disabled")
+            self.entry_signal_Symetry.configure(state="normal")
+            self.entry_signal_riseTime.configure(state="disabled")
+            self.entry_signal_fallTime.configure(state="disabled")
+            self.entry_signal_pulseWidth.configure(state="disabled")
+            self.entry_signal_bandwidth.configure(state="disabled")
 
-            self.combo_source_frequency.configure(state="normal")
-            self.combo_source_amplitude.configure(state="normal")
-            self.combo_source_offset.configure(state="normal")
-            self.combo_source_phase.configure(state="normal")
-            self.combo_source_dutyCycle.configure(state="disabled")
-            self.combo_source_symetry.configure(state="disabled")
-            self.combo_source_riseTime.configure(state="disabled")
-            self.combo_source_fallTime.configure(state="disabled")
-            self.combo_source_pulseWidth.configure(state="disabled")
-            self.combo_source_bandwidth.configure(state="disabled")
+            self.combo_signal_frequency.configure(state="normal")
+            self.combo_signal_amplitude.configure(state="normal")
+            self.combo_signal_offset.configure(state="normal")
+            self.combo_signal_phase.configure(state="normal")
+            self.combo_signal_dutyCycle.configure(state="disabled")
+            self.combo_signal_symetry.configure(state="disabled")
+            self.combo_signal_riseTime.configure(state="disabled")
+            self.combo_signal_fallTime.configure(state="disabled")
+            self.combo_signal_pulseWidth.configure(state="disabled")
+            self.combo_signal_bandwidth.configure(state="disabled")
 
-        if self.combo_source_waveform.get() == "Pulse":
-            self.label_source_frequency.configure(state="normal")
-            self.label_source_amplitude.configure(state="normal")
-            self.label_source_offset.configure(state="normal")
-            self.label_source_phase.configure(state="normal")
-            self.label_source_dutyCycle.configure(state="disabled")
-            self.label_source_symetry.configure(state="disabled")
-            self.label_source_riseTime.configure(state="normal")
-            self.label_source_fallTime.configure(state="normal")
-            self.label_source_pulseWidth.configure(state="normal")
-            self.label_source_bandwidth.configure(state="disabled")
+        if self.combo_signal_waveform.get() == "Pulse":
+            self.label_signal_frequency.configure(state="normal")
+            self.label_signal_amplitude.configure(state="normal")
+            self.label_signal_offset.configure(state="normal")
+            self.label_signal_phase.configure(state="normal")
+            self.label_signal_dutyCycle.configure(state="disabled")
+            self.label_signal_symetry.configure(state="disabled")
+            self.label_signal_riseTime.configure(state="normal")
+            self.label_signal_fallTime.configure(state="normal")
+            self.label_signal_pulseWidth.configure(state="normal")
+            self.label_signal_bandwidth.configure(state="disabled")
             
-            self.entry_source_frequency.configure(state="normal")
-            self.entry_source_amplitude.configure(state="normal")
-            self.entry_source_offset.configure(state="normal")
-            self.entry_source_phase.configure(state="normal")
-            self.entry_source_dutyCycle.configure(state="disabled")
-            self.entry_source_Symetry.configure(state="disabled")
-            self.entry_source_riseTime.configure(state="normal")
-            self.entry_source_fallTime.configure(state="normal")
-            self.entry_source_pulseWidth.configure(state="normal")
-            self.entry_source_bandwidth.configure(state="disabled")
+            self.entry_signal_frequency.configure(state="normal")
+            self.entry_signal_amplitude.configure(state="normal")
+            self.entry_signal_offset.configure(state="normal")
+            self.entry_signal_phase.configure(state="normal")
+            self.entry_signal_dutyCycle.configure(state="disabled")
+            self.entry_signal_Symetry.configure(state="disabled")
+            self.entry_signal_riseTime.configure(state="normal")
+            self.entry_signal_fallTime.configure(state="normal")
+            self.entry_signal_pulseWidth.configure(state="normal")
+            self.entry_signal_bandwidth.configure(state="disabled")
 
-            self.combo_source_frequency.configure(state="normal")
-            self.combo_source_amplitude.configure(state="normal")
-            self.combo_source_offset.configure(state="normal")
-            self.combo_source_phase.configure(state="normal")
-            self.combo_source_dutyCycle.configure(state="disabled")
-            self.combo_source_symetry.configure(state="disabled")
-            self.combo_source_riseTime.configure(state="normal")
-            self.combo_source_fallTime.configure(state="normal")
-            self.combo_source_pulseWidth.configure(state="normal")
-            self.combo_source_bandwidth.configure(state="disabled")
+            self.combo_signal_frequency.configure(state="normal")
+            self.combo_signal_amplitude.configure(state="normal")
+            self.combo_signal_offset.configure(state="normal")
+            self.combo_signal_phase.configure(state="normal")
+            self.combo_signal_dutyCycle.configure(state="disabled")
+            self.combo_signal_symetry.configure(state="disabled")
+            self.combo_signal_riseTime.configure(state="normal")
+            self.combo_signal_fallTime.configure(state="normal")
+            self.combo_signal_pulseWidth.configure(state="normal")
+            self.combo_signal_bandwidth.configure(state="disabled")
 
-        if self.combo_source_waveform.get() == "Noise":
-            self.label_source_frequency.configure(state="disabled")
-            self.label_source_amplitude.configure(state="normal")
-            self.label_source_offset.configure(state="normal")
-            self.label_source_phase.configure(state="disabled")
-            self.label_source_dutyCycle.configure(state="disabled")
-            self.label_source_symetry.configure(state="disabled")
-            self.label_source_riseTime.configure(state="disabled")
-            self.label_source_fallTime.configure(state="disabled")
-            self.label_source_pulseWidth.configure(state="disabled")
-            self.label_source_bandwidth.configure(state="normal")
+        if self.combo_signal_waveform.get() == "Noise":
+            self.label_signal_frequency.configure(state="disabled")
+            self.label_signal_amplitude.configure(state="normal")
+            self.label_signal_offset.configure(state="normal")
+            self.label_signal_phase.configure(state="disabled")
+            self.label_signal_dutyCycle.configure(state="disabled")
+            self.label_signal_symetry.configure(state="disabled")
+            self.label_signal_riseTime.configure(state="disabled")
+            self.label_signal_fallTime.configure(state="disabled")
+            self.label_signal_pulseWidth.configure(state="disabled")
+            self.label_signal_bandwidth.configure(state="normal")
             
-            self.entry_source_frequency.configure(state="disabled")
-            self.entry_source_amplitude.configure(state="normal")
-            self.entry_source_offset.configure(state="normal")
-            self.entry_source_phase.configure(state="disabled")
-            self.entry_source_dutyCycle.configure(state="disabled")
-            self.entry_source_Symetry.configure(state="disabled")
-            self.entry_source_riseTime.configure(state="disabled")
-            self.entry_source_fallTime.configure(state="disabled")
-            self.entry_source_pulseWidth.configure(state="disabled")
-            self.entry_source_bandwidth.configure(state="normal")
+            self.entry_signal_frequency.configure(state="disabled")
+            self.entry_signal_amplitude.configure(state="normal")
+            self.entry_signal_offset.configure(state="normal")
+            self.entry_signal_phase.configure(state="disabled")
+            self.entry_signal_dutyCycle.configure(state="disabled")
+            self.entry_signal_Symetry.configure(state="disabled")
+            self.entry_signal_riseTime.configure(state="disabled")
+            self.entry_signal_fallTime.configure(state="disabled")
+            self.entry_signal_pulseWidth.configure(state="disabled")
+            self.entry_signal_bandwidth.configure(state="normal")
 
-            self.combo_source_frequency.configure(state="disabled")
-            self.combo_source_amplitude.configure(state="normal")
-            self.combo_source_offset.configure(state="normal")
-            self.combo_source_phase.configure(state="disabled")
-            self.combo_source_dutyCycle.configure(state="disabled")
-            self.combo_source_symetry.configure(state="disabled")
-            self.combo_source_riseTime.configure(state="disabled")
-            self.combo_source_fallTime.configure(state="disabled")
-            self.combo_source_pulseWidth.configure(state="disabled")
-            self.combo_source_bandwidth.configure(state="normal")
+            self.combo_signal_frequency.configure(state="disabled")
+            self.combo_signal_amplitude.configure(state="normal")
+            self.combo_signal_offset.configure(state="normal")
+            self.combo_signal_phase.configure(state="disabled")
+            self.combo_signal_dutyCycle.configure(state="disabled")
+            self.combo_signal_symetry.configure(state="disabled")
+            self.combo_signal_riseTime.configure(state="disabled")
+            self.combo_signal_fallTime.configure(state="disabled")
+            self.combo_signal_pulseWidth.configure(state="disabled")
+            self.combo_signal_bandwidth.configure(state="normal")
         
-        if self.combo_source_waveform.get() == "Arbitrary":
-            self.label_source_frequency.configure(state="disabled")
-            self.label_source_amplitude.configure(state="normal")
-            self.label_source_offset.configure(state="normal")
-            self.label_source_phase.configure(state="disabled")
-            self.label_source_dutyCycle.configure(state="disabled")
-            self.label_source_symetry.configure(state="disabled")
-            self.label_source_riseTime.configure(state="disabled")
-            self.label_source_fallTime.configure(state="disabled")
-            self.label_source_pulseWidth.configure(state="disabled")
-            self.label_source_bandwidth.configure(state="disabled")
+        if self.combo_signal_waveform.get() == "Arbitrary":
+            self.label_signal_frequency.configure(state="disabled")
+            self.label_signal_amplitude.configure(state="normal")
+            self.label_signal_offset.configure(state="normal")
+            self.label_signal_phase.configure(state="disabled")
+            self.label_signal_dutyCycle.configure(state="disabled")
+            self.label_signal_symetry.configure(state="disabled")
+            self.label_signal_riseTime.configure(state="disabled")
+            self.label_signal_fallTime.configure(state="disabled")
+            self.label_signal_pulseWidth.configure(state="disabled")
+            self.label_signal_bandwidth.configure(state="disabled")
             
-            self.entry_source_frequency.configure(state="disabled")
-            self.entry_source_amplitude.configure(state="normal")
-            self.entry_source_offset.configure(state="normal")
-            self.entry_source_phase.configure(state="disabled")
-            self.entry_source_dutyCycle.configure(state="disabled")
-            self.entry_source_Symetry.configure(state="disabled")
-            self.entry_source_riseTime.configure(state="disabled")
-            self.entry_source_fallTime.configure(state="disabled")
-            self.entry_source_pulseWidth.configure(state="disabled")
-            self.entry_source_bandwidth.configure(state="disabled")
+            self.entry_signal_frequency.configure(state="disabled")
+            self.entry_signal_amplitude.configure(state="normal")
+            self.entry_signal_offset.configure(state="normal")
+            self.entry_signal_phase.configure(state="disabled")
+            self.entry_signal_dutyCycle.configure(state="disabled")
+            self.entry_signal_Symetry.configure(state="disabled")
+            self.entry_signal_riseTime.configure(state="disabled")
+            self.entry_signal_fallTime.configure(state="disabled")
+            self.entry_signal_pulseWidth.configure(state="disabled")
+            self.entry_signal_bandwidth.configure(state="disabled")
 
-            self.combo_source_frequency.configure(state="disabled")
-            self.combo_source_amplitude.configure(state="normal")
-            self.combo_source_offset.configure(state="normal")
-            self.combo_source_phase.configure(state="disabled")
-            self.combo_source_dutyCycle.configure(state="disabled")
-            self.combo_source_symetry.configure(state="disabled")
-            self.combo_source_riseTime.configure(state="disabled")
-            self.combo_source_fallTime.configure(state="disabled")
-            self.combo_source_pulseWidth.configure(state="disabled")
-            self.combo_source_bandwidth.configure(state="disabled")
+            self.combo_signal_frequency.configure(state="disabled")
+            self.combo_signal_amplitude.configure(state="normal")
+            self.combo_signal_offset.configure(state="normal")
+            self.combo_signal_phase.configure(state="disabled")
+            self.combo_signal_dutyCycle.configure(state="disabled")
+            self.combo_signal_symetry.configure(state="disabled")
+            self.combo_signal_riseTime.configure(state="disabled")
+            self.combo_signal_fallTime.configure(state="disabled")
+            self.combo_signal_pulseWidth.configure(state="disabled")
+            self.combo_signal_bandwidth.configure(state="disabled")
+
+    def combo_signal_frequency_callback(self, arg=None):
+    #This method calls the controller to change the voltage
+        self.controller.instrument.signal_frequency_caliber = self.combo_signal_frequency.get()
         
+    def combo_signal_amplitude_callback(self, arg=None):
+    #This method calls the controller to change the voltage
+        self.controller.instrument.signal_amplitude_caliber = self.combo_signal_amplitude.get()          
+
+    def combo_signal_offset_callback(self, arg=None):
+    #This method calls the controller to change the voltage
+        self.controller.instrument.signal_offset_caliber = self.combo_signal_offset.get()   
+        
+    def combo_signal_phase_callback(self, arg=None):
+    #This method calls the controller to change the voltage
+        self.controller.instrument.signal_phase_caliber = self.combo_signal_phase.get()   
+        
+    def combo_signal_dutyCycle_callback(self, arg=None):
+    #This method calls the controller to change the voltage
+        self.controller.instrument.signal_dutyCycle_caliber = self.combo_signal_dutyCycle.get() 
+        
+    def combo_signal_pulseWidth_callback(self, arg=None):
+    #This method calls the controller to change the voltage
+        self.controller.instrument.signal_pulsewidth_caliber = self.combo_signal_pulseWidth.get()     
+        
+    def combo_signal_riseTime_callback(self, arg=None):
+    #This method calls the controller to change the voltage
+        self.controller.instrument.signal_riseTime_caliber = self.combo_signal_riseTime.get()     
+        
+    def combo_signal_fallTime_callback(self, arg=None):
+    #This method calls the controller to change the voltage
+        self.controller.instrument.signal_fallTime_caliber = self.combo_signal_fallTime.get() 
+        
+    def combo_signal_symetry_callback(self, arg=None):
+    #This method calls the controller to change the voltage
+        self.controller.instrument.signal_symetry_caliber = self.combo_signal_symetry.get()  
+        
+    def combo_signal_bandwidth_callback(self, arg=None):
+    #This method calls the controller to change the voltage
+        self.controller.instrument.signal_bandwidth_caliber = self.combo_signal_bandwidth.get()  
+        
+    def combo_modulate_type_callback(self, arg=None):
+    #This method calls the controller to change the voltage
+        self.controller.instrument.modulation_type = self.combo_modulate_type.get() 
+        self.view.sendError("404")    
+        
+    def combo_modulate_source_callback(self, arg=None):
+    #This method calls the controller to change the voltage
+        self.controller.instrument.modulation_source = self.combo_modulate_source.get() 
+        self.view.sendError("404")    
+        
+    def combo_modulate_shape_callback(self, arg=None):
+    #This method calls the controller to change the voltage
+        self.controller.instrument.modulation_shape = self.combo_modulate_shape.get() 
+        self.view.sendError("404")    
+        
+    def combo_sweep_type_callback(self, arg=None):
+    #This method calls the controller to change the voltage
+        self.controller.instrument.sweep_type = self.combo_sweep_type.get()
+        self.view.sendError("404")     
+        
+    def combo_sweep_time_callback(self, arg=None):
+    #This method calls the controller to change the voltage
+        self.controller.instrument.sweep_time_caliber = self.combo_sweep_time.get() 
+        
+    def combo_sweep_startFrequency_callback(self, arg=None):
+    #This method calls the controller to change the voltage
+        self.controller.instrument.sweep_startFrequency_caliber = self.combo_sweep_startFrequency.get()   
+        
+    def combo_sweep_stopFrequency_callback(self, arg=None):
+    #This method calls the controller to change the voltage
+        self.controller.instrument.sweep_stopFrequency_caliber = self.combo_sweep_stopFrequency.get()  
+        
+    def combo_sweep_holdTime_callback(self, arg=None):
+    #This method calls the controller to change the voltage
+        self.controller.instrument.sweep_holdTime_caliber = self.combo_sweep_holdTime.get() 
+        
+    def combo_sweep_returnTime_callback(self, arg=None):
+    #This method calls the controller to change the voltage
+        self.controller.instrument.sweep_returnTime_caliber = self.combo_sweep_returnTime.get()  
+
     def entry_instrumentName_callback(self, arg=None, newName=None):
     #This method calls the view to change instrument name
         oldname = self.controller.instrument.name
@@ -867,18 +1019,94 @@ class WaveformGeneratorView (DeviceFrame):
         indexMenu = self.view.menu5.index(oldname)
         self.view.menu5.entryconfigure(indexMenu, label=name)
 
-    def entry_source_frequency_callback(self, arg=None):
+    def entry_signal_frequency_callback(self, arg=None):
     #This method calls the controller to change the voltage
-        voltage = self.doubleVar_source_frequency.get()        
+        self.controller.instrument.signal_frequency = self.doubleVar_signal_frequency.get()    
+        self.view.sendError("404")    
 
-    def entry_source_amplitude_callback(self, arg=None):
+    def entry_signal_amplitude_callback(self, arg=None):
     #This method calls the controller to change the voltage
-        current = self.doubleVar_source_amplitude.get()        
+        self.controller.instrument.signal_amplitude = self.doubleVar_signal_amplitude.get()     
+        self.view.sendError("404")            
 
+    def entry_signal_offset_callback(self, arg=None):
+    #This method calls the controller to change the voltage
+        self.controller.instrument.signal_offset = self.doubleVar_signal_offset.get()       
+        self.view.sendError("404")        
+        
+    def entry_signal_phase_callback(self, arg=None):
+    #This method calls the controller to change the voltage
+        self.controller.instrument.signal_phase = self.doubleVar_signal_phase.get()        
+        self.view.sendError("404")      
+        
+    def entry_signal_dutyCycle_callback(self, arg=None):
+    #This method calls the controller to change the voltage
+        self.controller.instrument.signal_dutyCycle = self.doubleVar_signal_dutyCycle.get()     
+        self.view.sendError("404")      
+        
+    def entry_signal_pulseWidth_callback(self, arg=None):
+    #This method calls the controller to change the voltage
+        self.controller.instrument.signal_pulsewidth = self.doubleVar_signal_pulseWidth.get()     
+        self.view.sendError("404")      
+        
+    def entry_signal_riseTime_callback(self, arg=None):
+    #This method calls the controller to change the voltage
+        self.controller.instrument.signal_riseTime = self.doubleVar_signal_riseTime.get()     
+        self.view.sendError("404")         
+        
+    def entry_signal_fallTime_callback(self, arg=None):
+    #This method calls the controller to change the voltage
+        self.controller.instrument.signal_fallTime = self.doubleVar_signal_fallTime.get()     
+        self.view.sendError("404")        
+        
+    def entry_signal_symetry_callback(self, arg=None):
+    #This method calls the controller to change the voltage
+        self.controller.instrument.signal_symetry = self.doubleVar_signal_symetry.get()     
+        self.view.sendError("404")        
+        
+    def entry_signal_bandwidth_callback(self, arg=None):
+    #This method calls the controller to change the voltage
+        self.controller.instrument.signal_bandwidth = self.doubleVar_signal_bandwidth.get()     
+        self.view.sendError("404")           
+        
+    def entry_sweep_time_callback(self, arg=None):
+    #This method calls the controller to change the voltage
+        self.controller.instrument.sweep_time = self.doubleVar_sweep_time.get()     
+        self.view.sendError("404") 
+        
+    def entry_sweep_startFrequency_callback(self, arg=None):
+    #This method calls the controller to change the voltage
+        self.controller.instrument.sweep_startFrequency = self.doubleVar_sweep_startFrequency.get()     
+        self.view.sendError("404")            
+        
+    def entry_sweep_stopFrequency_callback(self, arg=None):
+    #This method calls the controller to change the voltage
+        self.controller.instrument.sweep_stopFrequency = self.doubleVar_sweep_stopFrequency.get()     
+        self.view.sendError("404")      
+        
+    def entry_sweep_holdTime_callback(self, arg=None):
+    #This method calls the controller to change the voltage
+        self.controller.instrument.sweep_holdTime = self.doubleVar_sweep_holdTime.get()     
+        self.view.sendError("404")    
+        
+    def entry_sweep_returnTime_callback(self, arg=None):
+    #This method calls the controller to change the voltage
+        self.controller.instrument.sweep_returnTime = self.doubleVar_sweep_returnTime.get()     
+        self.view.sendError("404")     
+
+    def radio_outputState_callback(self, args=None):
+    #This method is called when modifying the output impedance state
+        self.controller.instrument.output_state = self.intVar_radioValueState.get()   
+        if self.intVar_radioValueState.get() == 0:   
+            self.radio_outputStateLoad.select()    
+        else:          
+            self.radio_outputStateHigh.select()
+    
     def radio_modulateState_callback(self, args=None):
     #This methods activates or desactivates the modulation function
+        self.controller.instrument.signal_modulation_state = self.intVar_radioValueModulate.get()
         if self.intVar_radioValueModulate.get() != 0:
-            self.intVar_radioValueSweep.set(1)
+            self.intVar_radioValueSweep.set(0)
             self.combo_modulate_shape.configure(state="normal")
             self.combo_modulate_source.configure(state="normal")
             self.combo_modulate_type.configure(state="normal")
@@ -938,8 +1166,9 @@ class WaveformGeneratorView (DeviceFrame):
 
     def radio_sweepState_callback(self, args=None):
     #This methods activates or desactivates the modulation function
+        self.controller.instrument.signal_sweep_state = self.intVar_radioValueSweep.get()
         if self.intVar_radioValueSweep.get() != 0:
-            self.intVar_radioValueModulate.set(1)
+            self.intVar_radioValueModulate.set(0)
             self.combo_modulate_shape.configure(state="disabled")
             self.combo_modulate_source.configure(state="disabled")
             self.combo_modulate_type.configure(state="disabled")
@@ -1000,18 +1229,18 @@ class WaveformGeneratorView (DeviceFrame):
     def master_activate_callback(self):
     #This method call the controller to change output state 
         if self.controller.setMasterState() != -1:
-            if (self.intVar_radioValueMaster.get() == 1) and (self.controller.instrument.address != ""):
-                self.entry_source_amplitude_callback()
-                self.entry_source_frequency_callback()
+            if (self.intVar_radioValueMaster.get() == 0) and (self.controller.instrument.address != ""):
+                self.entry_signal_amplitude_callback()
+                self.entry_signal_frequency_callback()
 
-                self.intVar_radioValueMaster.set(2) 
+                self.intVar_radioValueMaster.set(1) 
                 self.radio_masterStateON.select() 
                 self.updateMonitoring()
             else:
-                self.intVar_radioValueMaster.set(1)
+                self.intVar_radioValueMaster.set(0)
                 self.radio_masterStateOFF.select() 
 
     def updateMonitoring(self):
     #This method  updates the measurement content         
             None
-            #self.label_source_dutyCycle.after(1000, self.updateMonitoring)
+            #self.label_signal_dutyCycle.after(1000, self.updateMonitoring)

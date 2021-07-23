@@ -67,8 +67,6 @@ class View(Tk):
 
         self.copyright = Label(self, text="Copyright " + self.model.meta_dict["copyright"], bg=self.model.parameters_dict['backgroundColor'])
 
-        self.localController = None
-
         self.menubar = Menu(self)
         self.menu1 = Menu(self.menubar, tearoff=0)
         self.menu2 = Menu(self.menubar, tearoff=0)
@@ -149,57 +147,57 @@ class View(Tk):
     def addDeviceFrame(self, deviceType=None, instrument=None, configuration=False):
     #This methods is used to change the device display
         if deviceType == "Power Supply":
-            self.localController = PowerSupplyController(view=self, term=self.term_text, instrument=instrument)
+            localController = PowerSupplyController(view=self, term=self.term_text, instrument=instrument)
             if len(self.listViews) < 6:
                 pos = len(self.listViews)
                 name= deviceType + " (" + str(pos) + ")"
-                tamp = PowerSupplyView(self, terminal=self.term_text, model=self.model, controller=self.localController, name=name)
+                tamp = PowerSupplyView(self, terminal=self.term_text, model=self.model, controller=localController, name=name)
+                localController.updateView(tamp)
+                self.listViews.insert(0, tamp)
                 self.menu5.add_command(label=name, command=lambda: self.menu5_callback(tamp))
                 tamp.updateView(configuration)
-                self.localController.updateView(tamp)
-                self.listViews.insert(0, tamp)
                 self.term_text.insert(END, "New Power Supply added : " + deviceType + " (" + str(pos) + ")\n")
             else:
                 self.sendWarning("W000")
 
         if deviceType == "Climatic Chamber":
-            self.localController = ClimaticChamberController(view=self, term=self.term_text, instrument=instrument)
+            localController = ClimaticChamberController(view=self, term=self.term_text, instrument=instrument)
             if len(self.listViews) < 6:
                 pos = len(self.listViews)
                 name= deviceType + " (" + str(pos) + ")"
-                tamp = ClimaticChamberView(self, terminal=self.term_text, model=self.model, controller=self.localController, name=name)
+                tamp = ClimaticChamberView(self, terminal=self.term_text, model=self.model, controller=localController, name=name)
+                localController.updateView(tamp)
+                self.listViews.insert(0, tamp)
                 self.menu5.add_command(label=name, command=lambda: self.menu5_callback(tamp))
                 tamp.updateView(configuration)
-                self.localController.updateView(tamp)
-                self.listViews.insert(0, tamp)
                 self.term_text.insert(END, "New Climatic Chamber added : " + deviceType + " (" + str(pos) + ")\n")
             else:
                 self.sendWarning("W000")
 
         if deviceType == "Waveform Generator":
-            self.localController = WaveformGeneratorController(view=self, term=self.term_text, instrument=instrument)
+            localController = WaveformGeneratorController(view=self, term=self.term_text, instrument=instrument)
             if len(self.listViews) < 6:
                 pos = len(self.listViews)
                 name= deviceType + " (" + str(pos) + ")"
-                tamp = WaveformGeneratorView(self, terminal=self.term_text, model=self.model, controller=self.localController, name=name)
+                tamp = WaveformGeneratorView(self, terminal=self.term_text, model=self.model, controller=localController, name=name)
+                localController.updateView(tamp)
+                self.listViews.insert(0, tamp)
                 self.menu5.add_command(label=name, command=lambda: self.menu5_callback(tamp))
                 tamp.updateView(configuration)
-                self.localController.updateView(tamp)
-                self.listViews.insert(0, tamp)
                 self.term_text.insert(END, "New Waveform Generator added : " + deviceType + " (" + str(pos) + ")\n")
             else:
                 self.sendWarning("W000")
 
         if deviceType == "RLC Meter":
-            self.localController = PowerSupplyController(view=self, term=self.term_text, instrument=instrument)
+            localController = PowerSupplyController(view=self, term=self.term_text, instrument=instrument)
             if len(self.listViews) < 6:
                 pos = len(self.listViews)
                 name= deviceType + " (" + str(pos) + ")"
-                tamp = PowerSupplyView(self, terminal=self.term_text, model=self.model, controller=self.localController, name=name)
+                tamp = PowerSupplyView(self, terminal=self.term_text, model=self.model, controller=localController, name=name)
+                localController.updateView(tamp)
+                self.listViews.insert(0, tamp)
                 self.menu5.add_command(label=name, command=lambda: self.menu5_callback(tamp))
                 tamp.updateView(configuration)
-                self.localController.updateView(tamp)
-                self.listViews.insert(0, tamp)
                 self.term_text.insert(END, "New Instrument added : " + deviceType + " (" + str(pos) + ")\n")
             else:
                 self.sendWarning("W000")
@@ -242,7 +240,7 @@ class View(Tk):
         self.menu3.add_separator()
         self.menu3.add_command(label="Change logs", command=self.menu3_logs_callBack)  
 
-        self.menu4.add_command(label="Oscilloscope", command=self.menu4_Oscilloscope_callBack)
+        self.menu4.add_command(label="Configuration", command=self.menu4_Configuration_callBack)
         self.menu4.add_command(label="Waveform Generator", command=self.menu4_WaveformGenerator_callBack)
         self.menu4.add_command(label="RLC Meter", command=self.menu4_RLCMeter_callBack)
         self.menu4.add_command(label="Power Supply", command=self.menu4_PowerSupply_callBack)
@@ -344,11 +342,24 @@ class View(Tk):
     #Callback function for menu2 2 option
         self.sendError("404")
 
-    def menu4_Oscilloscope_callBack(self):
+    def menu4_Configuration_callBack(self):
     #Callback function for menu2 2 option
-        mbox = messagebox.askyesno("Add Instrument", "Do you want to add an Oscilloscope ?")
-        if mbox == True:
-            self.sendError("404")
+        canOpen = True
+        for item in self.getInstrList():
+            if item.masterState == 1:
+                self.sendError("008")
+                canOpen = False
+
+        mbox = messagebox.askyesno("Add Instrument", "Do you want to add a Configuration ?")
+        if (mbox == True) and (canOpen == True):
+            self.path = filedialog.askopenfilename(title = "Select file", filetypes = (("all files","*.*"), ("MyLab files","*.mylab")))
+            if self.path != "":
+                
+                liste = self.model.openConfiguration(path=self.path)
+
+                for item in liste:
+                    self.addDeviceFrame(deviceType=item.type, instrument=item, configuration=True)
+
 
     def menu4_WaveformGenerator_callBack(self):
     #Callback function for menu2 2 option
