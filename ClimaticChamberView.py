@@ -45,7 +45,6 @@ class ClimaticChamberView (DeviceFrame):
         self.initVar()
         self.initEntries()
 
-    
     def updateView(self, configuration=False):
     #This method refresh the content of the view
         self.stringvar_instrumentaddress.set(self.controller.instrument.address)
@@ -107,8 +106,8 @@ class ClimaticChamberView (DeviceFrame):
         self.label_instrumentName = Label(self.frame_instrument_name, text="Name :")
         self.label_instrumentaddress = Label(self.frame_instrument_address, text="Address :")
 
-        self.label_temperatureSource = Label(self.frame_source_temperature, text="temperature :")
-        self.label_temperatureMeasure = Label(self.frame_measure_temperature, text="temperature :")
+        self.label_temperatureSource = Label(self.frame_source_temperature, text="Temperature :")
+        self.label_temperatureMeasure = Label(self.frame_measure_temperature, text="Temperature :")
         #self.label_powerMeasure.after(1000, self.updateMonitoring)
 
         self.combo_temperatureSource = Combobox(self.frame_source_temperature, state="readonly", width=5, values=["°C", "°F"])

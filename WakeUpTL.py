@@ -35,13 +35,12 @@ class WakeUpTL():
         self.text.pack(pady=15)
 
         self.combo_instrument = Combobox(self.frame, state="readonly", width=20, values=["Configuration",
-                                                                                         "Power Supply",
-                                                                                         "Oscilloscope",
-                                                                                         "Source Meter",
-                                                                                         "Multimeter",
-                                                                                         "Waveform Generator",
                                                                                          "Climatic Chamber",
-                                                                                         "VNA"])
+                                                                                         "Multimeter",
+                                                                                         "Oscilloscope",
+                                                                                         "Power Supply",
+                                                                                         "Source Meter",
+                                                                                         "Waveform Generator"])
         self.combo_instrument.configure(background="white")
         self.combo_instrument.pack(pady=5)
         self.combo_instrument.current(0)

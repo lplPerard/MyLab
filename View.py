@@ -6,6 +6,8 @@ File description : Class container for the application's view
 
 """
 
+from MultimeterView import MultimeterView
+from MultimeterController import MultimeterController
 from WaveformGeneratorView import WaveformGeneratorView
 from WaveformGeneratorController import WaveformGeneratorController
 from ClimaticChamberView import ClimaticChamberView
@@ -189,11 +191,11 @@ class View(Tk):
                 self.sendWarning("W000")
 
         if deviceType == "Multimeter":
-            localController = PowerSupplyController(view=self, term=self.term_text, instrument=instrument)
+            localController = MultimeterController(view=self, term=self.term_text, instrument=instrument)
             if len(self.listViews) < 6:
                 pos = len(self.listViews)
                 name= deviceType + " (" + str(pos) + ")"
-                tamp = PowerSupplyView(self, terminal=self.term_text, model=self.model, controller=localController, name=name)
+                tamp = MultimeterView(self, terminal=self.term_text, model=self.model, controller=localController, name=name)
                 localController.updateView(tamp)
                 self.listViews.insert(0, tamp)
                 self.menu5.add_command(label=name, command=lambda: self.menu5_callback(tamp))
@@ -243,6 +245,7 @@ class View(Tk):
         self.menu4.add_command(label="Configuration", command=self.menu4_Configuration_callBack)
         self.menu4.add_command(label="Climatic Chamber", command=self.menu4_ClimaticChamber_callBack) 
         self.menu4.add_command(label="Multimeter", command=self.menu4_Multimeter_callBack)
+        self.menu4.add_command(label="Oscilloscope", command=self.menu4_Oscilloscope_callBack)
         self.menu4.add_command(label="Power Supply", command=self.menu4_PowerSupply_callBack)
         self.menu4.add_command(label="Source Meter", command=self.menu4_SourceMeter_callBack)
         self.menu4.add_command(label="Waveform Generator", command=self.menu4_WaveformGenerator_callBack)  
@@ -369,13 +372,19 @@ class View(Tk):
 
     def menu4_Multimeter_callBack(self):
     #Callback function for menu2 2 option
-        mbox = messagebox.askyesno("Add Instrument", "Do you want to add a RLC Meter ?")
+        mbox = messagebox.askyesno("Add Instrument", "Do you want to add a Multimeter ?")
         if mbox == True:
             self.addDeviceFrame("Multimeter")
 
+    def menu4_Oscilloscope_callBack(self):
+    #Callback function for menu2 2 option
+        mbox = messagebox.askyesno("Add Instrument", "Do you want to add an Oscilloscope?")
+        if mbox == True:
+            self.sendError("404")
+
     def menu4_SourceMeter_callBack(self):
     #Callback function for menu2 2 option
-        mbox = messagebox.askyesno("Add Instrument", "Do you want to add a RLC Meter ?")
+        mbox = messagebox.askyesno("Add Instrument", "Do you want to add a Source Meter ?")
         if mbox == True:
             self.sendError("404")
 
