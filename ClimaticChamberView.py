@@ -213,7 +213,7 @@ class ClimaticChamberView (DeviceFrame):
         self.entry_instrumentName.bind("<KeyRelease>", self.entry_instrumentName_callback)
         self.entry_instrumentName.pack(side='right', padx=5)
 
-        self.entry_instrumentaddress.bind('<ButtonRelease-1>', self.view.menu2_Connections_callBack)
+        self.entry_instrumentaddress.bind('<Double-Button-1>', self.view.menu2_Connections_callBack)
         self.entry_instrumentaddress.pack(side='right', padx=5)
 
         #self.entry_temperatureSource.bind("<Return>", self.entry_temperatureSource_callback)

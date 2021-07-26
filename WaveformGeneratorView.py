@@ -134,7 +134,6 @@ class WaveformGeneratorView (DeviceFrame):
         self.label_signal_bandwidth = Label(self.frame_signal_bandwidth, text="Bandwidth :")
         self.label_signal_modulate = Label(self.frame_signal_modulate, text="Modulation : ")
         self.label_signal_sweep = Label(self.frame_signal_sweep, text="Sweep :      ")
-        self.label_signal_dutyCycle.after(1000, self.updateMonitoring)
 
         self.label_function_modulation = Label(self.frame_function_modulation, text="Modulation")
         self.label_modulate_type = Label(self.frame_modulate_type, text="Type :     ")
@@ -151,26 +150,26 @@ class WaveformGeneratorView (DeviceFrame):
         self.label_output_state = Label(self.frame_output_state, text="Load :    ")
 
         self.combo_signal_waveform = Combobox(self.frame_signal_waveform, state="readonly", width=17, values=["Sinus", "Square", "Ramp", "Pulse", "Noise", "Arbitrary"])
-        self.combo_signal_frequency = Combobox(self.frame_signal_frequency, state="readonly", width=5, values=["Hz", "kHz", "MHz"])
-        self.combo_signal_amplitude = Combobox(self.frame_signal_amplitude, state="readonly", width=5, values=["V", "mV"])
+        self.combo_signal_frequency = Combobox(self.frame_signal_frequency, state="readonly", width=5, values=["HZ", "KHZ", "MHZ"])
+        self.combo_signal_amplitude = Combobox(self.frame_signal_amplitude, state="readonly", width=5, values=["VPP", "VRMS", "DBM"])
         self.combo_signal_offset = Combobox(self.frame_signal_offset, state="readonly", width=5, values=["V", "mV"])
         self.combo_signal_phase = Combobox(self.frame_signal_phase, state="readonly", width=5, values=["deg"])
         self.combo_signal_dutyCycle = Combobox(self.frame_signal_dutyCycle, state="readonly", width=5, values=["%"])
         self.combo_signal_symetry = Combobox(self.frame_signal_symetry, state="readonly", width=5, values=["%"])
-        self.combo_signal_pulseWidth = Combobox(self.frame_signal_pulseWidth, state="readonly", width=5, values=["s", "ms", "µs", "ns"])
-        self.combo_signal_riseTime = Combobox(self.frame_signal_riseTime, state="readonly", width=5, values=["s", "ms", "µs", "ns"])
-        self.combo_signal_fallTime = Combobox(self.frame_signal_fallTime, state="readonly", width=5, values=["s", "ms", "µs", "ns"])
+        self.combo_signal_pulseWidth = Combobox(self.frame_signal_pulseWidth, state="readonly", width=5, values=["ms", "us", "s", "ns"])
+        self.combo_signal_riseTime = Combobox(self.frame_signal_riseTime, state="readonly", width=5, values=["ns", "us"])
+        self.combo_signal_fallTime = Combobox(self.frame_signal_fallTime, state="readonly", width=5, values=["ns", "us"])
         self.combo_signal_bandwidth = Combobox(self.frame_signal_bandwidth, state="readonly", width=5, values=["Hz", "kHz", "MHz"])
         
         self.combo_modulate_type = Combobox(self.frame_modulate_type, state="readonly", width=20, values=["AM", "FM", "PM", "FSK", "BPSK"])
         self.combo_modulate_source = Combobox(self.frame_modulate_source, state="readonly", width=20, values=["Internal", "External"])
         self.combo_modulate_shape = Combobox(self.frame_modulate_shape, state="readonly", width=20, values=["Sinus", "Square", "UpRamp", "DownRamp", "Triangle", "Noise"])
         self.combo_sweep_type = Combobox(self.frame_sweep_type, state="readonly", width=16, values=["Linear", "Logarithmic"])
-        self.combo_sweep_time = Combobox(self.frame_sweep_time, state="readonly", width=5, values=["s", "ms", "µs", "ns"])
+        self.combo_sweep_time = Combobox(self.frame_sweep_time, state="readonly", width=5, values=["s", "ms", "us", "ns"])
         self.combo_sweep_startFrequency = Combobox(self.frame_sweep_startFrequency, state="readonly", width=5, values=["Hz", "kHz", "MHz"])
         self.combo_sweep_stopFrequency = Combobox(self.frame_sweep_stopFrequency, state="readonly", width=5, values=["Hz", "kHz", "MHz"])
-        self.combo_sweep_holdTime = Combobox(self.frame_sweep_holdTime, state="readonly", width=5, values=["s", "ms", "µs", "ns"])
-        self.combo_sweep_returnTime = Combobox(self.frame_sweep_returnTime, state="readonly", width=5, values=["s", "ms", "µs", "ns"])
+        self.combo_sweep_holdTime = Combobox(self.frame_sweep_holdTime, state="readonly", width=5, values=["s", "ms", "us", "ns"])
+        self.combo_sweep_returnTime = Combobox(self.frame_sweep_returnTime, state="readonly", width=5, values=["s", "ms", "us", "ns"])
 
         self.entry_instrumentName = Entry(self.frame_instrument_name, width=30, textvariable=self.stringvar_instrumentName)
         self.entry_instrumentaddress = Entry(self.frame_instrument_address, width=30, textvariable=self.stringvar_instrumentaddress, state="readonly")
@@ -241,6 +240,21 @@ class WaveformGeneratorView (DeviceFrame):
                     self.img = ImageTk.PhotoImage(self.img)
                     self.panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColor'])
                     self.panel.pack(fill = "both", expand = "yes")
+
+                if self.model.devices_dict[item][0] == "33600A":   
+                    self.img = Image.open(self.model.devices_dict[item][2])
+                    self.img = self.img.resize((200, 120), Image.ANTIALIAS)
+                    self.img = ImageTk.PhotoImage(self.img)
+                    self.panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColor'])
+                    self.panel.pack(fill = "both", expand = "yes")
+
+                if self.model.devices_dict[item][0] == "33210A":   
+                    self.img = Image.open(self.model.devices_dict[item][2])
+                    self.img = self.img.resize((200, 120), Image.ANTIALIAS)
+                    self.img = ImageTk.PhotoImage(self.img)
+                    self.panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColor'])
+                    self.panel.pack(fill = "both", expand = "yes")
+
 
                 found=1
                 break
@@ -389,14 +403,14 @@ class WaveformGeneratorView (DeviceFrame):
         self.doubleVar_signal_dutyCycle.set(50)
         self.doubleVar_signal_symetry.set(50)
         self.doubleVar_signal_pulseWidth.set(1)
-        self.doubleVar_signal_riseTime.set(0)
-        self.doubleVar_signal_fallTime.set(0)
+        self.doubleVar_signal_riseTime.set(10)
+        self.doubleVar_signal_fallTime.set(10)
         self.doubleVar_signal_bandwidth.set(1000)
         self.doubleVar_sweep_time.set(1)
         self.doubleVar_sweep_startFrequency.set(1)
         self.doubleVar_sweep_stopFrequency.set(1000)
-        self.doubleVar_sweep_holdTime.set(0)
-        self.doubleVar_sweep_returnTime.set(0)
+        self.doubleVar_sweep_holdTime.set(10)
+        self.doubleVar_sweep_returnTime.set(10)
         
     def initLabel(self):
     #This methods instanciates all the Label
@@ -589,7 +603,7 @@ class WaveformGeneratorView (DeviceFrame):
         self.entry_instrumentName.bind("<KeyRelease>", self.entry_instrumentName_callback)
         self.entry_instrumentName.pack(side='left', padx=5)
 
-        self.entry_instrumentaddress.bind('<ButtonRelease-1>', self.view.menu2_Connections_callBack)
+        self.entry_instrumentaddress.bind('<Double-Button-1>', self.view.menu2_Connections_callBack)
         self.entry_instrumentaddress.pack(side='left', padx=5)
 
         self.entry_signal_frequency.bind("<Return>", self.entry_signal_frequency_callback)
@@ -1021,54 +1035,54 @@ class WaveformGeneratorView (DeviceFrame):
 
     def entry_signal_frequency_callback(self, arg=None):
     #This method calls the controller to change the voltage
-        self.controller.instrument.signal_frequency = self.doubleVar_signal_frequency.get()    
-        self.view.sendError("404")    
-
+        self.controller.instrument.signal_frequency = self.doubleVar_signal_frequency.get()  
+        self.updateWaveform()
+        
     def entry_signal_amplitude_callback(self, arg=None):
     #This method calls the controller to change the voltage
-        self.controller.instrument.signal_amplitude = self.doubleVar_signal_amplitude.get()     
-        self.view.sendError("404")            
-
+        self.controller.instrument.signal_amplitude = self.doubleVar_signal_amplitude.get()   
+        self.updateWaveform()
+        
     def entry_signal_offset_callback(self, arg=None):
     #This method calls the controller to change the voltage
-        self.controller.instrument.signal_offset = self.doubleVar_signal_offset.get()       
-        self.view.sendError("404")        
+        self.controller.instrument.signal_offset = self.doubleVar_signal_offset.get()    
+        self.updateWaveform()
         
     def entry_signal_phase_callback(self, arg=None):
     #This method calls the controller to change the voltage
-        self.controller.instrument.signal_phase = self.doubleVar_signal_phase.get()        
-        self.view.sendError("404")      
+        self.controller.instrument.signal_phase = self.doubleVar_signal_phase.get()  
+        self.updateWaveform()
         
     def entry_signal_dutyCycle_callback(self, arg=None):
     #This method calls the controller to change the voltage
-        self.controller.instrument.signal_dutyCycle = self.doubleVar_signal_dutyCycle.get()     
-        self.view.sendError("404")      
-        
+        self.controller.instrument.signal_dutyCycle = self.doubleVar_signal_dutyCycle.get()  
+        self.updateWaveform()
+
     def entry_signal_pulseWidth_callback(self, arg=None):
     #This method calls the controller to change the voltage
-        self.controller.instrument.signal_pulsewidth = self.doubleVar_signal_pulseWidth.get()     
-        self.view.sendError("404")      
-        
+        self.controller.instrument.signal_pulsewidth = self.doubleVar_signal_pulseWidth.get()    
+        self.updateWaveform()
+
     def entry_signal_riseTime_callback(self, arg=None):
     #This method calls the controller to change the voltage
-        self.controller.instrument.signal_riseTime = self.doubleVar_signal_riseTime.get()     
-        self.view.sendError("404")         
-        
+        self.controller.instrument.signal_riseTime = self.doubleVar_signal_riseTime.get()  
+        self.updateWaveform()
+
     def entry_signal_fallTime_callback(self, arg=None):
     #This method calls the controller to change the voltage
-        self.controller.instrument.signal_fallTime = self.doubleVar_signal_fallTime.get()     
-        self.view.sendError("404")        
-        
+        self.controller.instrument.signal_fallTime = self.doubleVar_signal_fallTime.get() 
+        self.updateWaveform()
+
     def entry_signal_symetry_callback(self, arg=None):
     #This method calls the controller to change the voltage
-        self.controller.instrument.signal_symetry = self.doubleVar_signal_symetry.get()     
-        self.view.sendError("404")        
-        
+        self.controller.instrument.signal_symetry = self.doubleVar_signal_symetry.get()   
+        self.updateWaveform()
+
     def entry_signal_bandwidth_callback(self, arg=None):
     #This method calls the controller to change the voltage
-        self.controller.instrument.signal_bandwidth = self.doubleVar_signal_bandwidth.get()     
-        self.view.sendError("404")           
-        
+        self.controller.instrument.signal_bandwidth = self.doubleVar_signal_bandwidth.get()   
+        self.updateWaveform()
+
     def entry_sweep_time_callback(self, arg=None):
     #This method calls the controller to change the voltage
         self.controller.instrument.sweep_time = self.doubleVar_sweep_time.get()     
@@ -1097,9 +1111,12 @@ class WaveformGeneratorView (DeviceFrame):
     def radio_outputState_callback(self, args=None):
     #This method is called when modifying the output impedance state
         self.controller.instrument.output_state = self.intVar_radioValueState.get()   
+        self.updateWaveform()
         if self.intVar_radioValueState.get() == 0:   
-            self.radio_outputStateLoad.select()    
+            self.radio_outputStateLoad.select()  
+            self.controller.setOutputState(state=0)  
         else:          
+            self.controller.setOutputState(state=1)  
             self.radio_outputStateHigh.select()
     
     def radio_modulateState_callback(self, args=None):
@@ -1227,20 +1244,46 @@ class WaveformGeneratorView (DeviceFrame):
             self.entry_sweep_returnTime.configure(state="disabled")
 
     def master_activate_callback(self):
-    #This method call the controller to change output state 
+    #This method call the controller to change output state
+        self.updateWaveform() 
         if self.controller.setMasterState() != -1:
             if (self.intVar_radioValueMaster.get() == 0) and (self.controller.instrument.address != ""):
-                self.entry_signal_amplitude_callback()
-                self.entry_signal_frequency_callback()
-
                 self.intVar_radioValueMaster.set(1) 
                 self.radio_masterStateON.select() 
-                self.updateMonitoring()
             else:
                 self.intVar_radioValueMaster.set(0)
                 self.radio_masterStateOFF.select() 
 
-    def updateMonitoring(self):
-    #This method  updates the measurement content         
-            None
-            #self.label_signal_dutyCycle.after(1000, self.updateMonitoring)
+    def updateWaveform(self):
+    #This method  updates the measurement content
+        amplitude = self.doubleVar_signal_amplitude.get()
+        amplitudeType = self.combo_signal_amplitude.get()
+        frequency = self.doubleVar_signal_frequency.get()
+        frequencyUnit = self.combo_signal_frequency.get()
+        offset = self.doubleVar_signal_offset.get()
+        phase = self.doubleVar_signal_phase.get()
+        bandwidth = self.doubleVar_signal_bandwidth.get()
+        dutyCycle = self.doubleVar_signal_dutyCycle.get()
+        pulseWidth = self.doubleVar_signal_pulseWidth.get()
+        pulseWidthUnit = self.combo_signal_pulseWidth.get()
+        symetry = self.doubleVar_signal_symetry.get()
+        lead = self.doubleVar_signal_riseTime.get()
+        leadUnit = self.combo_signal_riseTime.get()
+        trail = self.doubleVar_signal_fallTime.get()
+        trailUnit = self.combo_signal_fallTime.get()
+
+        if self.combo_signal_waveform.get() == "Sinus":            
+            self.controller.applySinus(amplitude=amplitude, amplitudeType=amplitudeType, frequency=frequency, frequencyUnit=frequencyUnit, offset=offset, phase=phase)    
+
+        if self.combo_signal_waveform.get() == "Square":
+            self.controller.applySquare(amplitude=amplitude, amplitudeType=amplitudeType, frequency=frequency, frequencyUnit=frequencyUnit, offset=offset, phase=phase, dutyCycle=dutyCycle)      
+
+        if self.combo_signal_waveform.get() == "Ramp":
+            self.controller.applyRamp(amplitude=amplitude, amplitudeType=amplitudeType, frequency=frequency, frequencyUnit=frequencyUnit, offset=offset, symetry=symetry, phase=phase)    
+
+        if self.combo_signal_waveform.get() == "Pulse":
+            self.controller.applyPulse(amplitude=amplitude, amplitudeType=amplitudeType, frequency=frequency, frequencyUnit=frequencyUnit, offset=offset, phase=phase, lead=lead, leadUnit=leadUnit, trail=trail, trailUnit=trailUnit, pulseWidth=pulseWidth, pulseWidthUnit=pulseWidthUnit)   
+      
+        if self.combo_signal_waveform.get() == "Noise":
+            self.controller.applyNoise(amplitude=amplitude, amplitudeType=amplitudeType, bandwidth=bandwidth, offset=offset)   
+      

@@ -76,6 +76,8 @@ class ConnectionsTL():
             self.list_devices.delete(0, 'end')
             for item in self.view.controller.instrList:
                 self.list_devices.insert('end', item)
+            self.list_devices.insert('end', 'TCPIP0::192.168.0.X::PORT::SOCKET')
+            self.list_devices.insert('end', 'TCPIP0::192.168.0.5::3490::SOCKET')
 
     def button_select_onclick(self):
     #This method is called when user clicks on select

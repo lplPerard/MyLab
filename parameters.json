@@ -1,9 +1,18 @@
 {
     "backgroundColor": "#EE7023",
+    "viewColor": "#EE7023",
     
     "backgroundAlpha": "0.95",
     "geometry": "300x650",
 
+    "widthPowerSupply": 300,
+    "widthWaveformGenerator": 300,
+    "widthClimaticChamber": 300,
+    "widthOscilloscope": 300,
+    "widthMultimeter": 300,
+    "widthRLCmeter": 300,
+    "widthSourceMeter": 300,
+    "labelFont": "Helvetica",
     "geometryWakeUpTL": "300x120",
 
     "geometryConnectionsTL": "200x300"

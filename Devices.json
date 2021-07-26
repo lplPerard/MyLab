@@ -3,6 +3,8 @@
     "0x05E6::0x2220":   ["2220-30-1", "Power Supply", ["1", "2"], [0, 0], ["", ""], "2220-30-1.png"],
 
     "0x0957::0x2507":   ["33500B", "Waveform Generator", "33500B.png"],
+    "0x0957::0x4807":   ["33600A", "Waveform Generator", "33600A.png"],
+    "0x0957::0x1507":   ["33210A", "Waveform Generator", "33210A.png"],
 
     
     "COM3":   ["VT4002 EMC", "Climatic Chamber", "VT4002_EMC.png"]

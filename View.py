@@ -82,7 +82,7 @@ class View(Tk):
         self.title("MyLab")
         self.geometry(self.model.parameters_dict['geometry'])
         self.attributes('-alpha', self.model.parameters_dict['backgroundAlpha'])
-        self.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.configure(bg=self.model.parameters_dict['viewColor'])
 
         self.topLevel_term.title("Terminal")
         self.topLevel_term.resizable(True, True)
@@ -188,7 +188,7 @@ class View(Tk):
             else:
                 self.sendWarning("W000")
 
-        if deviceType == "RLC Meter":
+        if deviceType == "Multimeter":
             localController = PowerSupplyController(view=self, term=self.term_text, instrument=instrument)
             if len(self.listViews) < 6:
                 pos = len(self.listViews)
@@ -241,10 +241,11 @@ class View(Tk):
         self.menu3.add_command(label="Change logs", command=self.menu3_logs_callBack)  
 
         self.menu4.add_command(label="Configuration", command=self.menu4_Configuration_callBack)
-        self.menu4.add_command(label="Waveform Generator", command=self.menu4_WaveformGenerator_callBack)
-        self.menu4.add_command(label="RLC Meter", command=self.menu4_RLCMeter_callBack)
+        self.menu4.add_command(label="Climatic Chamber", command=self.menu4_ClimaticChamber_callBack) 
+        self.menu4.add_command(label="Multimeter", command=self.menu4_Multimeter_callBack)
         self.menu4.add_command(label="Power Supply", command=self.menu4_PowerSupply_callBack)
-        self.menu4.add_command(label="Climatic Chamber", command=self.menu4_ClimaticChamber_callBack)     
+        self.menu4.add_command(label="Source Meter", command=self.menu4_SourceMeter_callBack)
+        self.menu4.add_command(label="Waveform Generator", command=self.menu4_WaveformGenerator_callBack)  
         
         self.menu6.add_command(label="HTOL", command=self.menu6_HTOL_callBack)
         self.menu6.add_command(label="Bode", command=self.menu6_Bode_callBack)
@@ -360,14 +361,19 @@ class View(Tk):
                 for item in liste:
                     self.addDeviceFrame(deviceType=item.type, instrument=item, configuration=True)
 
-
     def menu4_WaveformGenerator_callBack(self):
     #Callback function for menu2 2 option
         mbox = messagebox.askyesno("Add Instrument", "Do you want to add a Waveform Generator?")
         if mbox == True:
             self.addDeviceFrame("Waveform Generator")
 
-    def menu4_RLCMeter_callBack(self):
+    def menu4_Multimeter_callBack(self):
+    #Callback function for menu2 2 option
+        mbox = messagebox.askyesno("Add Instrument", "Do you want to add a RLC Meter ?")
+        if mbox == True:
+            self.addDeviceFrame("Multimeter")
+
+    def menu4_SourceMeter_callBack(self):
     #Callback function for menu2 2 option
         mbox = messagebox.askyesno("Add Instrument", "Do you want to add a RLC Meter ?")
         if mbox == True:
