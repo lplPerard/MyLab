@@ -26,10 +26,10 @@ class PowerSupplyView (DeviceFrame):
 
     """
 
-    def __init__(self, view, terminal, model, controller, name):
+    def __init__(self, view, frame, terminal, model, controller, name):
     #Constructor for the PowerSupply's View
 
-        DeviceFrame.__init__(self, view, controller, terminal, model)
+        DeviceFrame.__init__(self, frame, controller, terminal, model)
 
         self.controller.instrument.name = name
         self.view=view

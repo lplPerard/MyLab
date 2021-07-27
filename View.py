@@ -14,7 +14,7 @@ from ClimaticChamberView import ClimaticChamberView
 from ClimaticChamberController import ClimaticChamberController
 from PowerSupplyController import PowerSupplyController
 from PowerSupplyView import PowerSupplyView
-from tkinter import Tk   
+from tkinter import Canvas, Frame, Scrollbar, Tk   
 from tkinter import Label
 from tkinter import Menu 
 from tkinter import Toplevel
@@ -77,6 +77,11 @@ class View(Tk):
         self.menu5 = Menu(self.menubar, tearoff=0)
         self.menu6 = Menu(self.menubar, tearoff=0)
 
+        self.mainCanva= Canvas(self, scrollregion=(0,0,0,1000), bd=0, highlightthickness=0, bg=self.model.parameters_dict['backgroundColor'])
+        self.defilX_setup = Scrollbar(self, orient='horizontal', command=self.mainCanva.xview, bg=self.model.parameters_dict['backgroundColor'])
+        self.mainFrame= Frame(self.mainCanva)
+
+
     def __initWidgets(self):
     #This method is used to encapsulate the creation of sequences and menues
         
@@ -85,6 +90,16 @@ class View(Tk):
         self.geometry(self.model.parameters_dict['geometry'])
         self.attributes('-alpha', self.model.parameters_dict['backgroundAlpha'])
         self.configure(bg=self.model.parameters_dict['viewColor'])
+        
+        self.mainFrame.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.mainFrame.pack(padx=5, pady=5, fill="x", expand="yes")
+
+        self.mainCanva.create_window(0, 0, anchor='nw', window=self.mainFrame)
+        self.mainFrame.configure(bg=self.model.parameters_dict['backgroundColor'])
+
+        self.mainCanva.config(yscrollcommand= self.defilX_setup.set, height=600, width=120)
+        self.mainCanva.pack(fill="both", expand="yes")
+        self.defilX_setup.pack(fill="x", side='bottom', padx='5') 
 
         self.topLevel_term.title("Terminal")
         self.topLevel_term.resizable(True, True)
@@ -153,7 +168,7 @@ class View(Tk):
             if len(self.listViews) < 6:
                 pos = len(self.listViews)
                 name= deviceType + " (" + str(pos) + ")"
-                tamp = PowerSupplyView(self, terminal=self.term_text, model=self.model, controller=localController, name=name)
+                tamp = PowerSupplyView(self, frame=self.mainFrame, terminal=self.term_text, model=self.model, controller=localController, name=name)
                 localController.updateView(tamp)
                 self.listViews.insert(0, tamp)
                 self.menu5.add_command(label=name, command=lambda: self.menu5_callback(tamp))
@@ -167,7 +182,7 @@ class View(Tk):
             if len(self.listViews) < 6:
                 pos = len(self.listViews)
                 name= deviceType + " (" + str(pos) + ")"
-                tamp = ClimaticChamberView(self, terminal=self.term_text, model=self.model, controller=localController, name=name)
+                tamp = ClimaticChamberView(self, frame=self.mainFrame, terminal=self.term_text, model=self.model, controller=localController, name=name)
                 localController.updateView(tamp)
                 self.listViews.insert(0, tamp)
                 self.menu5.add_command(label=name, command=lambda: self.menu5_callback(tamp))
@@ -181,7 +196,7 @@ class View(Tk):
             if len(self.listViews) < 6:
                 pos = len(self.listViews)
                 name= deviceType + " (" + str(pos) + ")"
-                tamp = WaveformGeneratorView(self, terminal=self.term_text, model=self.model, controller=localController, name=name)
+                tamp = WaveformGeneratorView(self, frame=self.mainFrame, terminal=self.term_text, model=self.model, controller=localController, name=name)
                 localController.updateView(tamp)
                 self.listViews.insert(0, tamp)
                 self.menu5.add_command(label=name, command=lambda: self.menu5_callback(tamp))
@@ -195,7 +210,7 @@ class View(Tk):
             if len(self.listViews) < 6:
                 pos = len(self.listViews)
                 name= deviceType + " (" + str(pos) + ")"
-                tamp = MultimeterView(self, terminal=self.term_text, model=self.model, controller=localController, name=name)
+                tamp = MultimeterView(self, frame=self.mainFrame, terminal=self.term_text, model=self.model, controller=localController, name=name)
                 localController.updateView(tamp)
                 self.listViews.insert(0, tamp)
                 self.menu5.add_command(label=name, command=lambda: self.menu5_callback(tamp))

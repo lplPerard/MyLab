@@ -33,7 +33,7 @@ class DeviceFrame():
 
     def initFrame(self, text="", padx=10, pady=10):
     #This method generates the Frame's parameters for the sequence
-        self.frame.configure(text=text, padx=padx, pady=pady, bg=self.model.parameters_dict['backgroundColor'])
+        self.frame.configure(text=text, padx=padx, pady=pady, bg=self.model.parameters_dict['backgroundColor'], height=620)
         self.frame.pack(fill="y", expand="yes", side="left")
 
         self.labelFrame_instrument = LabelFrame(self.frame, text="Instrument", bg=self.model.parameters_dict['backgroundColor'])
@@ -43,10 +43,5 @@ class DeviceFrame():
         self.labelFrame_instrument.destroy()
         self.frame.destroy()
 
-    def updateView(self):
-    #This method update the content of a device Frame
-        self.view.sendError("404")
-            
-    def clearInstrument(self):
-    #This method is used to clear every trace of this instrument before being deleted
+    def  clearInstrument(self):
         None
