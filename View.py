@@ -6,6 +6,7 @@ File description : Class container for the application's view
 
 """
 
+from ScriptView import ScriptView
 from MultimeterView import MultimeterView
 from MultimeterController import MultimeterController
 from WaveformGeneratorView import WaveformGeneratorView
@@ -67,8 +68,6 @@ class View(Tk):
         self.parametersTL = ParametersTL(self.topLevel_param, model=self.model)
         self.connectionsTL = ConnectionsTL(self.topLevel_connect, view=self)
 
-        self.copyright = Label(self, text="Copyright " + self.model.meta_dict["copyright"], bg=self.model.parameters_dict['backgroundColor'])
-
         self.menubar = Menu(self)
         self.menu1 = Menu(self.menubar, tearoff=0)
         self.menu2 = Menu(self.menubar, tearoff=0)
@@ -77,10 +76,14 @@ class View(Tk):
         self.menu5 = Menu(self.menubar, tearoff=0)
         self.menu6 = Menu(self.menubar, tearoff=0)
 
-        self.mainCanva= Canvas(self, scrollregion=(0,0,0,1000), bd=0, highlightthickness=0, bg=self.model.parameters_dict['backgroundColor'])
-        self.defilX_setup = Scrollbar(self, orient='horizontal', command=self.mainCanva.xview, bg=self.model.parameters_dict['backgroundColor'])
+        self.frameLine_instruments = Frame(self)
+        self.frameLine_script = Frame(self)
+
+        self.mainCanva= Canvas(self.frameLine_instruments, scrollregion=(0,0,1920,0), bd=0, highlightthickness=0, bg=self.model.parameters_dict['backgroundColor'])
+        self.defilX_setup = Scrollbar(self.frameLine_instruments, orient='horizontal', command=self.mainCanva.xview, bg=self.model.parameters_dict['backgroundColor'])
         self.mainFrame= Frame(self.mainCanva)
 
+        self.script = ScriptView(view=self.frameLine_script, model=self.model, terminal=self.term_text)
 
     def __initWidgets(self):
     #This method is used to encapsulate the creation of sequences and menues
@@ -91,13 +94,19 @@ class View(Tk):
         self.attributes('-alpha', self.model.parameters_dict['backgroundAlpha'])
         self.configure(bg=self.model.parameters_dict['viewColor'])
         
+        self.frameLine_instruments.configure(bg=self.model.parameters_dict['backgroundColor'], height=600)
+        self.frameLine_instruments.pack(padx=5, pady=5, fill="both")
+        
+        self.frameLine_script.configure(bg=self.model.parameters_dict['backgroundColor'], height=600)
+        self.frameLine_script.pack(padx=5, pady=5, fill="both", expand="yes")
+        
         self.mainFrame.configure(bg=self.model.parameters_dict['backgroundColor'])
-        self.mainFrame.pack(padx=5, pady=5, fill="x", expand="yes")
+        self.mainFrame.pack(padx=5, pady=5, fill="both", expand="yes")
 
-        self.mainCanva.create_window(0, 0, anchor='nw', window=self.mainFrame)
+        self.mainCanva.create_window(0, 0, anchor='nw', window=self.mainFrame, height=600, width=1920)
         self.mainFrame.configure(bg=self.model.parameters_dict['backgroundColor'])
 
-        self.mainCanva.config(yscrollcommand= self.defilX_setup.set, height=600, width=120)
+        self.mainCanva.config(xscrollcommand= self.defilX_setup.set, height=605)
         self.mainCanva.pack(fill="both", expand="yes")
         self.defilX_setup.pack(fill="x", side='bottom', padx='5') 
 
@@ -139,7 +148,7 @@ class View(Tk):
 
         self.__initMenu()
 
-        self.copyright.pack(side = BOTTOM, padx=5, pady=5)
+        self.script.initFrame()
 
     def closeView(self):
     #This method is called before the main windows is closed

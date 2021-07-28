@@ -345,7 +345,8 @@ class MultimeterController():
 
         if self.instrument.state == "free":
                 while self.instrument.measureState != 0:
-                    self.instrument.ressource.write('MEAS:VOLT?')         
+                    self.instrument.ressource.write('MEAS:VOLT:DC?')    
+                    time.sleep(1)      
                     voltage = float(self.instrument.ressource.read())
                     print(voltage)
                     self.instrument.measure_DCV = voltage

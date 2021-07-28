@@ -34,7 +34,7 @@ class DeviceFrame():
     def initFrame(self, text="", padx=10, pady=10):
     #This method generates the Frame's parameters for the sequence
         self.frame.configure(text=text, padx=padx, pady=pady, bg=self.model.parameters_dict['backgroundColor'], height=620)
-        self.frame.pack(fill="y", expand="yes", side="left")
+        self.frame.pack(fill="y", expand="no", side="left", anchor='nw', pady=5)
 
         self.labelFrame_instrument = LabelFrame(self.frame, text="Instrument", bg=self.model.parameters_dict['backgroundColor'])
 
