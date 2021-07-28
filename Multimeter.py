@@ -25,4 +25,4 @@ class Multimeter(Instrument):
         self.measure_DCI = 0
         self.measure_ACI = 0
 
-        self.measure_state = 0
+        self.masterState = 0

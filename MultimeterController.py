@@ -52,6 +52,7 @@ class MultimeterController():
                 self.instrument.ressource.write('*RST')
                 self.instrument.ressource.write('*CLS')
                 self.instrument.ressource.write('SYST:REM')
+                self.instrument.ressource.read_termination = "\r\n"
 
             except:
                 if(self.instrument.state != "unreachable"):
@@ -333,7 +334,6 @@ class MultimeterController():
 
     def measureDCV(self):
     #This method update the content of the view with content from device 
-        print("start")
         if self.instrument.state == "unreachable":
             try:
                 self.instrument.ressource = self.resourceManager.open_resource(self.instrument.address)
@@ -344,35 +344,36 @@ class MultimeterController():
                 return(-1)
 
         if self.instrument.state == "free":
-                while self.instrument.measureState != 0:
-                    self.instrument.ressource.write('MEAS:VOLT:DC?')    
-                    time.sleep(1)      
+            try:
+                while self.instrument.masterState != 0:
+                    self.instrument.ressource.write('MEAS:VOLT:DC?')         
                     voltage = float(self.instrument.ressource.read())
-                    print(voltage)
                     self.instrument.measure_DCV = voltage
-                    time.sleep(0.5) 
-                print("closed")   
+                    time.sleep(0.5)    
+            except:
+                self.view.view.sendError('002')
+                self.instrument.state = "unreachable"
+                self.instrument.ressource.close()
+                self.instrument.ressource = None
+                return(-1)
 
         else:
             self.view.view.sendError('004')
-            print("closed")
 
     def measureACV(self):
     #This method update the content of the view with content from device 
-        print("start")
         if self.instrument.state == "unreachable":
             try:
                 self.instrument.ressource = self.resourceManager.open_resource(self.instrument.address)
                 self.instrument.state == "free"
             except:
-                if(self.instrument.state != "unreachable"):
-                    self.view.view.sendError('001')
-                    self.instrument.state = "unreachable"
+                self.view.view.sendError('001')
+                self.instrument.state = "unreachable"
                 return(-1)
 
         if self.instrument.state == "free":
             try:
-                while self.instrument.measureState != 0:
+                while self.instrument.masterState != 0:
                     self.instrument.ressource.write('MEAS:VOLT:AC?')         
                     voltage = float(self.instrument.ressource.read())
                     self.instrument.measure_ACV = voltage
@@ -382,7 +383,6 @@ class MultimeterController():
                 self.instrument.state = "unreachable"
                 self.instrument.ressource.close()
                 self.instrument.ressource = None
-                print("closed")
                 return(-1)
 
         else:
@@ -390,20 +390,18 @@ class MultimeterController():
 
     def measureDCI(self):
     #This method update the content of the view with content from device 
-        print("start")
         if self.instrument.state == "unreachable":
             try:
                 self.instrument.ressource = self.resourceManager.open_resource(self.instrument.address)
                 self.instrument.state == "free"
             except:
-                if(self.instrument.state != "unreachable"):
-                    self.view.view.sendError('001')
-                    self.instrument.state = "unreachable"
+                self.view.view.sendError('001')
+                self.instrument.state = "unreachable"
                 return(-1)
 
         if self.instrument.state == "free":
             try:
-                while self.instrument.measureState != 0:
+                while self.instrument.masterState != 0:
                     self.instrument.ressource.write('MEAS:CURR:DC?')         
                     current = float(self.instrument.ressource.read())
                     self.instrument.measure_DCI = current
@@ -413,7 +411,6 @@ class MultimeterController():
                 self.instrument.state = "unreachable"
                 self.instrument.ressource.close()
                 self.instrument.ressource = None
-                print("closed")
                 return(-1)
 
         else:
@@ -421,20 +418,18 @@ class MultimeterController():
 
     def measureACI(self):
     #This method update the content of the view with content from device 
-        print("start")
         if self.instrument.state == "unreachable":
             try:
                 self.instrument.ressource = self.resourceManager.open_resource(self.instrument.address)
                 self.instrument.state == "free"
             except:
-                if(self.instrument.state != "unreachable"):
-                    self.view.view.sendError('001')
-                    self.instrument.state = "unreachable"
+                self.view.view.sendError('001')
+                self.instrument.state = "unreachable"
                 return(-1)
 
         if self.instrument.state == "free":
             try:
-                while self.instrument.measureState != 0:
+                while self.instrument.masterState != 0:
                     self.instrument.ressource.write('MEAS:CURR:AC?')         
                     current = float(self.instrument.ressource.read())
                     self.instrument.measure_ACI = current
@@ -444,7 +439,6 @@ class MultimeterController():
                 self.instrument.state = "unreachable"
                 self.instrument.ressource.close()
                 self.instrument.ressource = None
-                print("closed")
                 return(-1)
 
         else:

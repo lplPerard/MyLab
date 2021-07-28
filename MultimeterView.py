@@ -109,7 +109,7 @@ class MultimeterView (DeviceFrame):
         self.entry_DCV = Entry(self.frame_DCV, textvariable=self.doubleVar_DCV, state="readonly", width=10)
         self.entry_ACV = Entry(self.frame_ACV, textvariable=self.doubleVar_ACV, state="readonly", width=10)
         self.entry_DCI = Entry(self.frame_DCI, textvariable=self.doubleVar_DCI, state="readonly", width=10)
-        self.entry_ACI = Entry(self.frame_ACI, textvariable=self.doubleVar_DCI, state="readonly", width=10)
+        self.entry_ACI = Entry(self.frame_ACI, textvariable=self.doubleVar_ACI, state="readonly", width=10)
         self.entry_2WR = Entry(self.frame_2WR, textvariable=self.doubleVar_2WR, state="readonly", width=10)
         self.entry_4WR = Entry(self.frame_4WR, textvariable=self.doubleVar_4WR, state="readonly", width=10)
         self.entry_diode = Entry(self.frame_diode, textvariable=self.doubleVar_diode, state="readonly", width=14)
@@ -162,8 +162,8 @@ class MultimeterView (DeviceFrame):
         self.radio_caliberDiode01mA = Radiobutton(self.frame_diode_caliber, text='0.1mA', variable=self.intVar_radioValueCaliberDiodeA, value=1, command=self.radio_caliberDiode_callback)
 
         self.measure_activate = Button(self.frame_measure_button, text='Measure ON/OFF', command=self.measure_activate_callback)
-        self.radio_measureStateOFF = Radiobutton(self.frame_measure_radio, text='OFF', variable=self.intVar_radioValuemeasure, value=0)
-        self.radio_measureStateON = Radiobutton(self.frame_measure_radio, text='ON', variable=self.intVar_radioValuemeasure, value=1)
+        self.radio_masterStateOFF = Radiobutton(self.frame_measure_radio, text='OFF', variable=self.intVar_radioValuemeasure, value=0)
+        self.radio_masterStateON = Radiobutton(self.frame_measure_radio, text='ON', variable=self.intVar_radioValuemeasure, value=1)
 
     def updateView(self, configuration=False):
     #This method refresh the content of the view
@@ -437,10 +437,10 @@ class MultimeterView (DeviceFrame):
 
         self.measure_activate.pack(expand="yes")
 
-        self.radio_measureStateON.pack(side="top", expand="yes", fill="both")
-        self.radio_measureStateON.configure(bg=self.model.parameters_dict['backgroundColor'], state="disabled", disabledforeground="black")
-        self.radio_measureStateOFF.pack(side="top", expand="yes", fill="both")
-        self.radio_measureStateOFF.configure(bg=self.model.parameters_dict['backgroundColor'], state="disabled", disabledforeground="black")
+        self.radio_masterStateON.pack(side="top", expand="yes", fill="both")
+        self.radio_masterStateON.configure(bg=self.model.parameters_dict['backgroundColor'], state="disabled", disabledforeground="black")
+        self.radio_masterStateOFF.pack(side="top", expand="yes", fill="both")
+        self.radio_masterStateOFF.configure(bg=self.model.parameters_dict['backgroundColor'], state="disabled", disabledforeground="black")
 
         self.intVar_radioValueSetup.set(0)
         self.intVar_radioValuemeasure.set(0)
@@ -590,6 +590,9 @@ class MultimeterView (DeviceFrame):
         self.radio_frequency.configure(state='normal')
         self.radio_period.configure(state='normal')
 
+        self.radio_masterStateOFF.select() 
+        self.controller.instrument.masterState = 0
+
     def radio_caliber_callback(self):
     #This method is called when the amp caliber is changed 
         if self.intVar_radioValueCaliberA.get() == 0:
@@ -619,11 +622,11 @@ class MultimeterView (DeviceFrame):
     def measure_activate_callback(self):
     #This method call the controller to change output state                  
         if (self.intVar_radioValuemeasure.get() == 0) and (self.controller.instrument.address != ""):
-            self.radio_measureStateON.select() 
-            self.controller.instrument.measureState = 1
+            self.radio_masterStateON.select() 
+            self.controller.instrument.masterState = 1
 
             if self.intVar_radioValueSetup.get() == 0 :         
-                #self.controller.setDCV()                    
+                self.controller.setDCV()                    
                 thread = Thread(target=self.controller.measureDCV) 
                 thread.start()
 
@@ -661,14 +664,17 @@ class MultimeterView (DeviceFrame):
                 self.controller.setPeriod()
             
         else:
-            self.radio_measureStateOFF.select() 
-            self.controller.instrument.measureState = 0
+            self.radio_masterStateOFF.select() 
+            self.controller.instrument.masterState = 0
 
         self.updateMonitoring()
 
     def updateMonitoring(self):
     #This method  updates the measurement content
         if self.intVar_radioValuemeasure.get() == 1: 
-
             self.doubleVar_DCV.set(self.controller.instrument.measure_DCV)
+            self.doubleVar_ACV.set(self.controller.instrument.measure_ACV)
+            self.doubleVar_DCI.set(self.controller.instrument.measure_DCI)
+            self.doubleVar_ACI.set(self.controller.instrument.measure_ACI)
+
             self.label_instrumentName.after(500, self.updateMonitoring)
