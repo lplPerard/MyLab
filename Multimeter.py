@@ -31,3 +31,22 @@ class Multimeter(Instrument):
         self.measure_period = 0
 
         self.masterState = 0
+
+        self.commandList=["setDCV",
+                          "setACV",
+                          "setDCI",
+                          "setACI",
+                          "set2WR",
+                          "set4WR",
+                          "setDiode",
+                          "setFrequency",
+                          "setPeriod",
+                          "measureDCV",
+                          "measureACV",
+                          "measureDCI",
+                          "measureACI",
+                          "measure2WR",
+                          "measure4WR",
+                          "measureDiode",
+                          "measureFrequency",
+                          "measurePeriod"]

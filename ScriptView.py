@@ -39,7 +39,7 @@ class ScriptView():
         self.mainFrame= LabelFrame(self.mainCanva, bg=self.model.parameters_dict['backgroundColor'])
         self.defilY_setup = Scrollbar(self.mainFrame, orient='vertical', command=self.mainCanva.yview, bg=self.model.parameters_dict['backgroundColor'])
 
-        self.button_addCommandLine = Button(self.dataFrame, text="Add Command", command=self.addCommandLine)
+        self.button_addCommandLine = Button(self.dataFrame, text="Add Command Line", command=self.addCommandLine)
         
     def initFrame(self, padx=10, pady=10):
     #This method generates the Frame's parameters for the sequence
@@ -61,6 +61,10 @@ class ScriptView():
     def addCommandLine(self):
     #This method adds a new command line to be displayed by ScriptView
         number = len(self.listeCommand)
-        tamp = CommandLine(frame=self.mainFrame, root=self.root, terminal=self.term_text, model=self.model, number=number)
+        tamp = CommandLine(frame=self.mainFrame, root=self.root, script=self, terminal=self.term_text, model=self.model, number=number)
         self.listeCommand.append(tamp)
         self.term_text.insert(END, "New Command Line added at : " + str(number) + "\n")
+
+    def deleteCommandLine(self, commandLine=None):
+        self.listeCommand.remove(commandLine)
+

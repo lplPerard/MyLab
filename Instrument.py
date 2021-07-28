@@ -25,5 +25,6 @@ class Instrument():
         self.state = "free"
         self.id = ""
         self.ressource = None
+        self.commandList = ["To be updated"]
 
         

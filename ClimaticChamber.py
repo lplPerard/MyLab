@@ -19,4 +19,5 @@ class ClimaticChamber(Instrument):
         Instrument.__init__(self)
 
         self.type = "Climatic Chamber"
+        self.commandList = ["setTemperature"]
  
