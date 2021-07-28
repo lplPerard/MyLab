@@ -79,11 +79,11 @@ class View(Tk):
         self.frameLine_instruments = Frame(self)
         self.frameLine_script = Frame(self)
 
-        self.mainCanva= Canvas(self.frameLine_instruments, scrollregion=(0,0,1920,0), bd=0, highlightthickness=0, bg=self.model.parameters_dict['backgroundColor'])
-        self.defilX_setup = Scrollbar(self.frameLine_instruments, orient='horizontal', command=self.mainCanva.xview, bg=self.model.parameters_dict['backgroundColor'])
+        self.mainCanva= Canvas(self.frameLine_instruments, scrollregion=(0,0,4000,0), bd=0, highlightthickness=0, bg=self.model.parameters_dict['backgroundColor'])
+        self.defilX_setup = Scrollbar(self.frameLine_instruments, orient='horizontal', command=self.mainCanva.xview, bg=self.model.parameters_dict['backgroundColor'], troughcolor=self.model.parameters_dict['backgroundColor'])
         self.mainFrame= Frame(self.mainCanva)
 
-        self.script = ScriptView(view=self.frameLine_script, model=self.model, terminal=self.term_text)
+        self.script = ScriptView(view=self.frameLine_script, root=self, model=self.model, terminal=self.term_text)
 
     def __initWidgets(self):
     #This method is used to encapsulate the creation of sequences and menues
@@ -174,7 +174,7 @@ class View(Tk):
     #This methods is used to change the device display
         if deviceType == "Power Supply":
             localController = PowerSupplyController(view=self, term=self.term_text, instrument=instrument)
-            if len(self.listViews) < 6:
+            if len(self.listViews) < 10:
                 pos = len(self.listViews)
                 name= deviceType + " (" + str(pos) + ")"
                 tamp = PowerSupplyView(self, frame=self.mainFrame, terminal=self.term_text, model=self.model, controller=localController, name=name)
@@ -188,7 +188,7 @@ class View(Tk):
 
         if deviceType == "Climatic Chamber":
             localController = ClimaticChamberController(view=self, term=self.term_text, instrument=instrument)
-            if len(self.listViews) < 6:
+            if len(self.listViews) < 10:
                 pos = len(self.listViews)
                 name= deviceType + " (" + str(pos) + ")"
                 tamp = ClimaticChamberView(self, frame=self.mainFrame, terminal=self.term_text, model=self.model, controller=localController, name=name)
@@ -202,7 +202,7 @@ class View(Tk):
 
         if deviceType == "Waveform Generator":
             localController = WaveformGeneratorController(view=self, term=self.term_text, instrument=instrument)
-            if len(self.listViews) < 6:
+            if len(self.listViews) < 10:
                 pos = len(self.listViews)
                 name= deviceType + " (" + str(pos) + ")"
                 tamp = WaveformGeneratorView(self, frame=self.mainFrame, terminal=self.term_text, model=self.model, controller=localController, name=name)
@@ -216,7 +216,7 @@ class View(Tk):
 
         if deviceType == "Multimeter":
             localController = MultimeterController(view=self, term=self.term_text, instrument=instrument)
-            if len(self.listViews) < 6:
+            if len(self.listViews) < 10:
                 pos = len(self.listViews)
                 name= deviceType + " (" + str(pos) + ")"
                 tamp = MultimeterView(self, frame=self.mainFrame, terminal=self.term_text, model=self.model, controller=localController, name=name)

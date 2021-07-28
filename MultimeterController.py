@@ -44,9 +44,9 @@ class MultimeterController():
                 if(self.instrument.state != "unreachable"):
                     self.view.view.sendError('001')
                     self.instrument.state = "unreachable"
-                self.instrument.ressource.close()
-                self.instrument.ressource = None
-                return(-1)
+                    self.instrument.ressource.close()
+                    self.instrument.ressource = None
+                    return(-1)
 
             try:
                 self.instrument.ressource.write('*RST')
@@ -58,9 +58,9 @@ class MultimeterController():
                 if(self.instrument.state != "unreachable"):
                     self.view.view.sendError('002')
                     self.instrument.state = "unreachable"
-                self.instrument.ressource.close()
-                self.instrument.ressource = None
-                return(-1)
+                    self.instrument.ressource.close()
+                    self.instrument.ressource = None
+                    return(-1)
 
         else:
             self.view.view.sendError('004')

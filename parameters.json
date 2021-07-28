@@ -1,5 +1,6 @@
 {
     "backgroundColor": "#EE7023",
+    "backgroundColorCommandLine": "#EE6023",
     "viewColor": "#EE7023",
     
     "backgroundAlpha": "0.95",
