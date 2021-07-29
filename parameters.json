@@ -4,7 +4,7 @@
     "viewColor": "#EE7023",
     
     "backgroundAlpha": "0.95",
-    "geometry": "300x800",
+    "geometry": "500x800",
 
     "widthPowerSupply": 300,
     "widthWaveformGenerator": 300,

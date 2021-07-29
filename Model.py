@@ -48,16 +48,17 @@ class Model():
             self.error_dict = json.load(f)
             f.close()
 
-    def saveConfiguration(self, listeInstruments, path):
+    def saveConfiguration(self, listeInstruments, listeCommand, path):
+        listejson = [listeInstruments, listeCommand]
         if (path != "") and (path[-5:] != "mylab"):
             File  = open(path + ".mylab", 'w')                   
-            listeInstrumentsJSON = jsonpickle.encode(listeInstruments, unpicklable=True)
-            json.dump(listeInstrumentsJSON, File, indent=4)
+            listeInstrumentsJSON = jsonpickle.encode(listejson, unpicklable=True)
+            json.dump(listeInstrumentsJSON, File, indent=4)   
 
         if (path != "") and (path[-5:] == "mylab"):  
             File  = open(path, 'w')         
-            listeInstrumentsJSON = jsonpickle.encode(listeInstruments, unpicklable=True)
-            json.dump(listeInstrumentsJSON, File, indent=4)
+            listeInstrumentsJSON = jsonpickle.encode(listejson, unpicklable=True)
+            json.dump(listeInstrumentsJSON, File, indent=4)  
 
         File.close()
     
@@ -65,8 +66,8 @@ class Model():
     #This method import a serialized object result into the software
         if path != "":
             File = open(path, 'r')
-            listeInstruments = json.load(File)
+            listejson = json.load(File)
             File.close()
             
-            listeInstrumentJSON = jsonpickle.decode(listeInstruments)
-            return(listeInstrumentJSON)
+            listejson = jsonpickle.decode(listejson)
+            return(listejson)

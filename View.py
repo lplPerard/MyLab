@@ -293,9 +293,9 @@ class View(Tk):
         if canSave == True:
             if self.path == "":
                 self.path = filedialog.asksaveasfilename(title = "Select file", filetypes = (("all files","*.*"), ("MyLab files","*.mylab")))
-                self.model.saveConfiguration(listeInstruments=self.getInstrList(), path=self.path)
+                self.model.saveConfiguration(listeInstruments=self.getInstrList(), path=self.path, listeCommand=self.script.getListeCommand())
             else:
-                self.model.saveConfiguration(listeInstruments=self.getInstrList(), path=self.path)
+                self.model.saveConfiguration(listeInstruments=self.getInstrList(), path=self.path, listeCommand=self.script.getListeCommand())
 
     def menu1_SaveAs_callBack(self):
     #Callback function for menu1 2 option     
@@ -309,7 +309,7 @@ class View(Tk):
 
         if canSave == True:
             self.path = filedialog.asksaveasfilename(title = "Select file", filetypes = (("all files","*.*"), ("MyLab files","*.mylab")))
-            self.model.saveConfiguration(listeInstruments=self.getInstrList(), path=self.path)
+            self.model.saveConfiguration(listeInstruments=self.getInstrList(), path=self.path, listeCommand=self.script.getListeCommand())
 
     def menu1_Open_callBack(self):
     #Callback function for menu1 2 option
@@ -329,13 +329,15 @@ class View(Tk):
                     self.menu5.delete(self.listViews[index].controller.instrument.name)
 
                 self.listViews.clear()
+                self.script.clearCommandLine()
             
-            if self.path != "":
-                
+            if self.path != "":                
                 liste = self.model.openConfiguration(path=self.path)
 
-                for item in liste:
+                for item in liste[0]:
                     self.addDeviceFrame(deviceType=item.type, instrument=item, configuration=True)
+                for item in liste[1]:
+                    self.script.addCommandLine(command=item)
 
     def menu2_Script_callBack(self):
     #Callback function for menu2 1 option

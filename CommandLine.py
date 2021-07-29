@@ -6,6 +6,7 @@ File description : Class container for CommandLine
 
 """
 
+from Command import Command
 from tkinter.ttk import Button, Combobox
 
 from PIL import Image, ImageTk
@@ -25,7 +26,7 @@ class CommandLine():
 
     """
 
-    def __init__(self,  frame=None,  root=None, controller=None, script=None, terminal=None, model=None, number=999):
+    def __init__(self,  frame=None,  root=None, controller=None, script=None, terminal=None, model=None, number=None, command=None):
     #Constructor for the Sequence_view superclass
         
         self.frame = frame
@@ -35,6 +36,11 @@ class CommandLine():
         self.number=number
         self.root=root
         self.script = script
+
+        if command == None:
+            self.command = Command()
+        else:
+            self.command=command
 
         self.initAttributes()
         self.initLabel()
