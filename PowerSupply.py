@@ -20,6 +20,12 @@ class PowerSupply(Instrument):
         Instrument.__init__(self)
 
         self.type = "Power Supply"
+
+        self.commandList=["setVoltageSource",
+                          "setCurrentSource",
+                          "setChannelState",
+                          "setMasterState",
+                          "Measure"]
  
         self.channelNumber = ["1", "2"]
         self.channelState = [0, 0]         # 0 => OFF state 1 => ON state

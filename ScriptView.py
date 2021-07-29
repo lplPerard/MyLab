@@ -8,7 +8,7 @@ File description : Class container for ScriptView.
 
 from CommandLine import CommandLine
 from Instrument import Instrument
-from tkinter import Button, Canvas, Frame, LabelFrame, Scrollbar
+from tkinter import Button, Canvas, Entry, Frame, LabelFrame, Scrollbar, IntVar
 from tkinter import Label
 from tkinter import Toplevel
 from tkinter import Text
@@ -39,7 +39,13 @@ class ScriptView():
         self.mainFrame= LabelFrame(self.mainCanva, bg=self.model.parameters_dict['backgroundColor'])
         self.defilY_setup = Scrollbar(self.mainFrame, orient='vertical', command=self.mainCanva.yview, bg=self.model.parameters_dict['backgroundColor'])
 
-        self.button_addCommandLine = Button(self.dataFrame, text="Add Command Line", command=self.addCommandLine)
+        self.intvar_insertPos = IntVar()
+        self.intvar_insertPos.set(0)
+
+        self.button_addCommandLine = Button(self.dataFrame, text=" Add Command Line  ", command=self.addCommandLine)
+        self.button_insertCommandLine = Button(self.dataFrame, text="Insert Command Line", command=lambda:self.addCommandLine(pos=self.intvar_insertPos.get()))
+
+        self.entry_insertPos = Entry(self.dataFrame, textvariable=self.intvar_insertPos)
         
     def initFrame(self, padx=10, pady=10):
     #This method generates the Frame's parameters for the sequence
@@ -56,15 +62,34 @@ class ScriptView():
         self.mainFrame.pack(padx=5, pady=5, fill="both", expand="yes")
 
         self.button_addCommandLine.pack()
+        self.button_insertCommandLine.pack()
+        self.entry_insertPos.pack()
 
 
-    def addCommandLine(self):
+    def addCommandLine(self, pos=None):
     #This method adds a new command line to be displayed by ScriptView
-        number = len(self.listeCommand)
-        tamp = CommandLine(frame=self.mainFrame, root=self.root, script=self, terminal=self.term_text, model=self.model, number=number)
-        self.listeCommand.append(tamp)
-        self.term_text.insert(END, "New Command Line added at : " + str(number) + "\n")
+        if pos == None:
+            number = len(self.listeCommand)
+            tamp = CommandLine(frame=self.mainFrame, root=self.root, script=self, terminal=self.term_text, model=self.model, number=number)
+            self.listeCommand.append(tamp)
+            self.term_text.insert(END, "New Command Line added at : " + str(number) + "\n")
+        else:
+            number = pos
+            tamp = CommandLine(frame=self.mainFrame, root=self.root, script=self, terminal=self.term_text, model=self.model, number=number)
+            self.listeCommand.insert(pos, tamp)
+            for item in self.listeCommand:
+                item.line.pack_forget()   
+            for item in self.listeCommand:
+                item.line.pack(fill="x", expand="no", side="top", anchor='nw', pady=2)        
+            self.renumberLine()        
 
     def deleteCommandLine(self, commandLine=None):
+    #This method is called to delete a line from ScriptView
         self.listeCommand.remove(commandLine)
+        self.renumberLine()
+    
+    def renumberLine(self):
+    #This method is called to change each line number in the list
+        for index in range(len(self.listeCommand)):
+            self.listeCommand[index].renumberLine(index)
 

@@ -59,8 +59,10 @@ class CommandLine():
 
         self.stringVar_attribute1 = StringVar()
         self.stringVar_attribute2 = StringVar()
+        self.stringVar_attribute3 = StringVar()
         self.stringVar_defaultText1 = StringVar()
         self.stringVar_defaultText2 = StringVar()
+        self.stringVar_defaultText3 = StringVar()
 
         self.combo_attribute1 = Combobox(self.line, state="readonly", width=25, value=['Select'], postcommand=self.combo_choice1_update)
         self.combo_attribute2 = Combobox(self.line, state="readonly", width=25, value=['Select'], postcommand=self.combo_choice1_update)
@@ -69,13 +71,14 @@ class CommandLine():
         self.entry_attribute1.bind('<Button-1>', self.entry_attribute1_callback)
         self.entry_attribute2 = Entry(self.line, textvariable=self.stringVar_defaultText2, fg="gainsboro")
         self.entry_attribute2.bind('<Button-1>', self.entry_attribute2_callback)
+        self.entry_attribute3 = Entry(self.line, textvariable=self.stringVar_defaultText3, fg="gainsboro")
+        self.entry_attribute3.bind('<Button-1>', self.entry_attribute3_callback)
 
         self.label_attribute1 = Label(self.line)
         self.label_attribute2 = Label(self.line)
 
         self.button_deleteLine = Button(self.line, image=self.deleteImg, command=self.button_deleteLine_callback)
         self.button_deleteLine.pack(expand="no", side="right", anchor='ne', padx=2)
-
 
     def initLabel(self):
     #This method instanciates all labels
@@ -97,6 +100,17 @@ class CommandLine():
     def entry_attribute2_callback(self, args=None):
         self.entry_attribute2.config(textvariable=self.stringVar_attribute2, fg="black")
 
+    def entry_attribute3_callback(self, args=None):
+        self.entry_attribute3.config(textvariable=self.stringVar_attribute2, fg="black")
+
+    def renumberLine(self, number):
+    #This method changes the line number
+        self.label_number.config(text=str(number))
+
+    def button_deleteLine_callback(self, args=None):
+    #This method is called when clicking on the quit button. It deletes the line.
+        self.root.script.deleteCommandLine(self)
+        self.line.destroy()
 
     def combo_choice1_update(self):
     #This method update the line view according to the selected option
@@ -108,7 +122,9 @@ class CommandLine():
 
     def combo_choice1_callback(self, args=None):
     #This method update the line view according to the selected option
-        self.combo_instrCommand.pack_forget()
+        self.combo_instrCommand.pack_forget()  
+        self.combo_instrCommand.configure(value=[])
+        self.cleanAttributes()
 
         if self.combo_choice1.get() == 'WAIT':
             self.commandType = "WAIT"
@@ -132,13 +148,9 @@ class CommandLine():
                     self.commandType = item.type
                     break
 
-    def button_deleteLine_callback(self, args=None):
-    #This method is called when clicking on the quit button. It deletes the line.
-        self.root.script.deleteCommandLine(self)
-        self.line.destroy()
-
     def combo_instrCommand_callback(self, args=None):
     #This methods calls the appropriate attribute generator according to instrument type   
+        self.cleanAttributes()
         if self.commandType == "WAIT":            
             self.entry_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
             self.stringVar_defaultText1.set("delay (s)")
@@ -147,21 +159,89 @@ class CommandLine():
             self.generateForAttributes()   
 
         elif self.commandType == "Power Supply":
-            None
+            self.generatePowerSupplyAttributes()
         
         elif self.commandType  == "Multimeter":
-            None
+            self.generateMultimeterAttributes()
 
         elif self.commandType  == "Climatic Chamber":
             self.generateClimaticChamberAttributes()
 
+    def cleanAttributes(self):
+    #This method unpacks all attributes
+        self.entry_attribute1.pack_forget()
+        self.stringVar_defaultText1.set("")
+        self.entry_attribute2.pack_forget()
+        self.stringVar_defaultText2.set("")
+        self.entry_attribute3.pack_forget()
+        self.stringVar_defaultText3.set("")
+
+        self.combo_attribute1.pack_forget()
+        self.combo_attribute1.configure(value=[])
+        self.combo_attribute2.pack_forget()
+        self.combo_attribute2.configure(value=[])
+
     def generateForAttributes(self):
+    #This method generates the attributes for FOR command
         self.entry_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
         self.stringVar_defaultText1.set("from (int)")
         self.entry_attribute2.pack(expand="no", side="left", anchor='nw', padx=2)
         self.stringVar_defaultText2.set("to (int)")
+        self.entry_attribute3.pack(expand="no", side="left", anchor='nw', padx=2)
+        self.stringVar_defaultText3.set("step")
 
     def generateClimaticChamberAttributes(self):
+    #This method generates the attributes for Climatic Chamber commands
         if self.combo_instrCommand.get() == "setTemperature":
             self.entry_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
             self.stringVar_defaultText1.set("Temperature")
+
+    def generatePowerSupplyAttributes(self):
+    #This method generates the attributes for Power Supply commands
+        if self.combo_instrCommand.get() == "setVoltageSource":
+            self.entry_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.stringVar_defaultText1.set("Voltage")
+        if self.combo_instrCommand.get() == "setCurrentSource":
+            self.entry_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.stringVar_defaultText1.set("Current")
+        if self.combo_instrCommand.get() == "setChannelState":
+            self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.combo_attribute1.config(value=["1","2"])
+            self.combo_attribute1.current(0)
+        if self.combo_instrCommand.get() == "setMasterState":
+            self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.combo_attribute1.config(value=["OFF","ON"])
+            self.combo_attribute1.current(0)
+
+    def generateMultimeterAttributes(self):
+    #This method generates the attributes for Power Supply commands
+        if self.combo_instrCommand.get() == "setDCV":
+            self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.combo_attribute1.config(value=["Auto Range", "1V", "100mV", "1000V", "100V", "10V"])
+            self.combo_attribute1.current(0)
+        if self.combo_instrCommand.get() == "setACV":
+            self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.combo_attribute1.config(value=["Auto Range", "1V", "100mV", "750V", "100V", "10V"])
+            self.combo_attribute1.current(0)
+        if self.combo_instrCommand.get() == "setDCI":
+            self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.combo_attribute1.config(value=["Auto Range", "1mA", "100uA", "400mA", "100mA", "10mA"])
+            self.combo_attribute1.current(0)
+            self.combo_attribute2.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.combo_attribute2.config(value=["mA", "10A"])
+            self.combo_attribute2.current(0)
+        if self.combo_instrCommand.get() == "setACI":
+            self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.combo_attribute1.config(value=["Auto Range", "10mA", "400mA", "100mA"])
+            self.combo_attribute1.current(0)
+            self.combo_attribute2.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.combo_attribute2.config(value=["mA", "10A"])
+            self.combo_attribute2.current(0)
+        if self.combo_instrCommand.get() == "set2WR":
+            self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.combo_attribute1.config(value=["Auto Range", "1kΩ", "100Ω", "10kΩ", "100kΩ", "1MΩ", "10MΩ", "100MΩ"])
+            self.combo_attribute1.current(0)
+        if self.combo_instrCommand.get() == "set4WR":
+            self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.combo_attribute1.config(value=["Auto Range", "1kΩ", "100Ω", "10kΩ", "100kΩ", "1MΩ", "10MΩ", "100MΩ"])
+            self.combo_attribute1.current(0)
