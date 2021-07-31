@@ -6,6 +6,8 @@ File description : Class container for the application's view
 
 """
 
+from SourcemeterView import SourcemeterView
+from SourcemeterController import SourcemeterController
 from ScriptView import ScriptView
 from MultimeterView import MultimeterView
 from MultimeterController import MultimeterController
@@ -94,10 +96,10 @@ class View(Tk):
         self.attributes('-alpha', self.model.parameters_dict['backgroundAlpha'])
         self.configure(bg=self.model.parameters_dict['viewColor'])
         
-        self.frameLine_instruments.configure(bg=self.model.parameters_dict['backgroundColor'], height=600)
+        self.frameLine_instruments.configure(bg=self.model.parameters_dict['backgroundColor'])
         self.frameLine_instruments.pack(padx=5, pady=5, fill="both")
         
-        self.frameLine_script.configure(bg=self.model.parameters_dict['backgroundColor'], height=600)
+        self.frameLine_script.configure(bg=self.model.parameters_dict['backgroundColor'])
         self.frameLine_script.pack(padx=5, pady=5, fill="both", expand="yes")
         
         self.mainFrame.configure(bg=self.model.parameters_dict['backgroundColor'])
@@ -174,7 +176,7 @@ class View(Tk):
     #This methods is used to change the device display
         if deviceType == "Power Supply":
             localController = PowerSupplyController(view=self, term=self.term_text, instrument=instrument)
-            if len(self.listViews) < 10:
+            if len(self.listViews) < 15:
                 pos = len(self.listViews)
                 name= deviceType + " (" + str(pos) + ")"
                 tamp = PowerSupplyView(self, frame=self.mainFrame, terminal=self.term_text, model=self.model, controller=localController, name=name)
@@ -188,7 +190,7 @@ class View(Tk):
 
         if deviceType == "Climatic Chamber":
             localController = ClimaticChamberController(view=self, term=self.term_text, instrument=instrument)
-            if len(self.listViews) < 10:
+            if len(self.listViews) < 15:
                 pos = len(self.listViews)
                 name= deviceType + " (" + str(pos) + ")"
                 tamp = ClimaticChamberView(self, frame=self.mainFrame, terminal=self.term_text, model=self.model, controller=localController, name=name)
@@ -202,7 +204,7 @@ class View(Tk):
 
         if deviceType == "Waveform Generator":
             localController = WaveformGeneratorController(view=self, term=self.term_text, instrument=instrument)
-            if len(self.listViews) < 10:
+            if len(self.listViews) < 15:
                 pos = len(self.listViews)
                 name= deviceType + " (" + str(pos) + ")"
                 tamp = WaveformGeneratorView(self, frame=self.mainFrame, terminal=self.term_text, model=self.model, controller=localController, name=name)
@@ -216,7 +218,7 @@ class View(Tk):
 
         if deviceType == "Multimeter":
             localController = MultimeterController(view=self, term=self.term_text, instrument=instrument)
-            if len(self.listViews) < 10:
+            if len(self.listViews) < 15:
                 pos = len(self.listViews)
                 name= deviceType + " (" + str(pos) + ")"
                 tamp = MultimeterView(self, frame=self.mainFrame, terminal=self.term_text, model=self.model, controller=localController, name=name)
@@ -224,7 +226,21 @@ class View(Tk):
                 self.listViews.insert(0, tamp)
                 self.menu5.add_command(label=name, command=lambda: self.menu5_callback(tamp))
                 tamp.updateView(configuration)
-                self.term_text.insert(END, "New Instrument added : " + deviceType + " (" + str(pos) + ")\n")
+                self.term_text.insert(END, "New Multimeter added : " + deviceType + " (" + str(pos) + ")\n")
+            else:
+                self.sendWarning("W000")
+
+        if deviceType == "Sourcemeter":
+            localController = SourcemeterController(view=self, term=self.term_text, instrument=instrument)
+            if len(self.listViews) < 15:
+                pos = len(self.listViews)
+                name= deviceType + " (" + str(pos) + ")"
+                tamp = SourcemeterView(self, frame=self.mainFrame, terminal=self.term_text, model=self.model, controller=localController, name=name)
+                localController.updateView(tamp)
+                self.listViews.insert(0, tamp)
+                self.menu5.add_command(label=name, command=lambda: self.menu5_callback(tamp))
+                tamp.updateView(configuration)
+                self.term_text.insert(END, "New Sourcemeter added : " + deviceType + " (" + str(pos) + ")\n")
             else:
                 self.sendWarning("W000")
 
@@ -248,6 +264,7 @@ class View(Tk):
     def __initMenu(self):
     #This method generates a Menu bar which give access to the diffent software's tools
         self.menubar.add_cascade(label="File", menu=self.menu1)
+        self.menu1.add_command(label="New", command=self.menu1_New_callBack)
         self.menu1.add_command(label="Save", command=self.menu1_Save_callBack)
         self.menu1.add_command(label="Save as", command=self.menu1_SaveAs_callBack)
         self.menu1.add_command(label="Open", command=self.menu1_Open_callBack)
@@ -255,7 +272,6 @@ class View(Tk):
         self.menubar.add_cascade(label="Edit", menu=self.menu2)
         self.menu2.add_cascade(label="Add Instrument", menu=self.menu4)
         self.menu2.add_cascade(label="Add TestBench", menu=self.menu6)
-        self.menu2.add_cascade(label="Add Script", command=self.menu2_Script_callBack)
         self.menu2.add_cascade(label="Delete", menu=self.menu5) 
         self.menu2.add_separator()
         self.menu2.add_command(label="Parameters", command=self.menu2_Parameters_callBack)
@@ -263,6 +279,7 @@ class View(Tk):
 
         self.menubar.add_cascade(label="Display", menu=self.menu3)
         self.menu3.add_command(label="Terminal", command=self.menu3_Terminal_callBack)
+        self.menu3.add_command(label="Script", command=self.menu3_Script_callBack)
         self.menu3.add_separator()
         self.menu3.add_command(label="Change logs", command=self.menu3_logs_callBack)  
 
@@ -279,6 +296,30 @@ class View(Tk):
         self.menu6.add_command(label="I/V Characteristic", command=self.menu6_IV_callBack)
         
         self.config(menu=self.menubar)
+
+    def menu1_New_callBack(self, args=None):
+    #Callback function for menu1 new option
+        mbox = messagebox.askyesno("New Configuration", "Do you want to start a new configuration ?\n Current configuration will be closed.")
+        if mbox == True:
+            self.menu1_Save_callBack()
+
+            canClear = True
+            for item in self.getInstrList():
+                if item.masterState == 1:
+                    self.sendError("008")
+                    canClear = False
+
+            if canClear == True:
+                if self.listViews != []:
+                    for item in self.listViews:
+                        index = self.listViews.index(item)
+                        self.listViews[index].clearInstrument()
+                        self.listViews[index].clearFrame()
+                        self.menu5.delete(self.listViews[index].controller.instrument.name)
+
+                    self.listViews.clear()
+                    self.script.clearCommandLine()
+                    self.path = ""
 
     def menu1_Save_callBack(self):
     #Callback function for  menu1 1 option        
@@ -336,12 +377,12 @@ class View(Tk):
 
                 for item in liste[0]:
                     self.addDeviceFrame(deviceType=item.type, instrument=item, configuration=True)
+
                 for item in liste[1]:
                     self.script.addCommandLine(command=item)
-
-    def menu2_Script_callBack(self):
-    #Callback function for menu2 1 option
-        self.sendError("404")
+                
+                for item in self.script.listeCommand:
+                    item.updateLine()
 
     def menu2_Parameters_callBack(self):
     #Callback function for menu2 1 option
@@ -367,6 +408,13 @@ class View(Tk):
 
         elif self.topLevel_term.state() == "normal":
             self.topLevel_term.withdraw()
+            
+    def menu3_Script_callBack(self):
+    #Callback function for menu2 1 option
+        if self.frameLine_script.winfo_ismapped() :
+            self.frameLine_script.pack_forget()
+        else:
+            self.frameLine_script.pack(padx=5, pady=5, fill="both", expand="yes")
 
     def menu3_logs_callBack(self):
     #Callback function for menu2 2 option
@@ -387,8 +435,10 @@ class View(Tk):
                 
                 liste = self.model.openConfiguration(path=self.path)
 
-                for item in liste:
+                for item in liste[0]:
                     self.addDeviceFrame(deviceType=item.type, instrument=item, configuration=True)
+                for item in liste[1]:
+                    self.script.addCommandLine(command=item)
 
     def menu4_WaveformGenerator_callBack(self):
     #Callback function for menu2 2 option

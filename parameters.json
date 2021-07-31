@@ -1,10 +1,11 @@
 {
     "backgroundColor": "#EE7023",
     "backgroundColorCommandLine": "#EE6023",
+    "highlightBackgroundColor": "#EE6023",
     "viewColor": "#EE7023",
     
     "backgroundAlpha": "0.95",
-    "geometry": "500x800",
+    "geometry": "500x805",
 
     "widthPowerSupply": 300,
     "widthWaveformGenerator": 300,

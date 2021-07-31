@@ -20,6 +20,14 @@ class WaveformGenerator(Instrument):
 
         self.type = "Waveform Generator"
 
+        self.commandList=["applySinus",
+                          "applySquare",
+                          "applyRamp",
+                          "applyPulse",
+                          "applyNoise",
+                          "setOutputState",
+                          "setMasterState"]
+
         self.signal_waveform = "Sinus"
         self.signal_frequency = 1000
         self.signal_frequency_caliber = "Hz"
