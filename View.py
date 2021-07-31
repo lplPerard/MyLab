@@ -288,7 +288,7 @@ class View(Tk):
         self.menu4.add_command(label="Multimeter", command=self.menu4_Multimeter_callBack)
         self.menu4.add_command(label="Oscilloscope", command=self.menu4_Oscilloscope_callBack)
         self.menu4.add_command(label="Power Supply", command=self.menu4_PowerSupply_callBack)
-        self.menu4.add_command(label="Source Meter", command=self.menu4_SourceMeter_callBack)
+        self.menu4.add_command(label="Sourcemeter", command=self.menu4_SourceMeter_callBack)
         self.menu4.add_command(label="Waveform Generator", command=self.menu4_WaveformGenerator_callBack)  
         
         self.menu6.add_command(label="HTOL", command=self.menu6_HTOL_callBack)
@@ -456,13 +456,13 @@ class View(Tk):
     #Callback function for menu2 2 option
         mbox = messagebox.askyesno("Add Instrument", "Do you want to add an Oscilloscope?")
         if mbox == True:
-            self.sendError("404")
+            self.addDeviceFrame("Oscilloscope")
 
     def menu4_SourceMeter_callBack(self):
     #Callback function for menu2 2 option
-        mbox = messagebox.askyesno("Add Instrument", "Do you want to add a Source Meter ?")
+        mbox = messagebox.askyesno("Add Instrument", "Do you want to add Sourcemeter ?")
         if mbox == True:
-            self.sendError("404")
+            self.addDeviceFrame("Sourcemeter")
 
     def menu4_PowerSupply_callBack(self):
     #Callback function for menu2 2 option

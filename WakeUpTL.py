@@ -39,7 +39,7 @@ class WakeUpTL():
                                                                                          "Multimeter",
                                                                                          "Oscilloscope",
                                                                                          "Power Supply",
-                                                                                         "Source Meter",
+                                                                                         "Sourcemeter",
                                                                                          "Waveform Generator"])
         self.combo_instrument.configure(background="white")
         self.combo_instrument.pack(pady=5)
