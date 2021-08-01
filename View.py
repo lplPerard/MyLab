@@ -6,6 +6,8 @@ File description : Class container for the application's view
 
 """
 
+from OscilloscopeView import OscilloscopeView
+from OscilloscopeController import OscilloscopeController
 from SourcemeterView import SourcemeterView
 from SourcemeterController import SourcemeterController
 from ScriptView import ScriptView
@@ -236,6 +238,20 @@ class View(Tk):
                 pos = len(self.listViews)
                 name= deviceType + " (" + str(pos) + ")"
                 tamp = SourcemeterView(self, frame=self.mainFrame, terminal=self.term_text, model=self.model, controller=localController, name=name)
+                localController.updateView(tamp)
+                self.listViews.insert(0, tamp)
+                self.menu5.add_command(label=name, command=lambda: self.menu5_callback(tamp))
+                tamp.updateView(configuration)
+                self.term_text.insert(END, "New Sourcemeter added : " + deviceType + " (" + str(pos) + ")\n")
+            else:
+                self.sendWarning("W000")
+
+        if deviceType == "Oscilloscope":
+            localController = OscilloscopeController(view=self, term=self.term_text, instrument=instrument)
+            if len(self.listViews) < 15:
+                pos = len(self.listViews)
+                name= deviceType + " (" + str(pos) + ")"
+                tamp = OscilloscopeView(self, frame=self.mainFrame, terminal=self.term_text, model=self.model, controller=localController, name=name)
                 localController.updateView(tamp)
                 self.listViews.insert(0, tamp)
                 self.menu5.add_command(label=name, command=lambda: self.menu5_callback(tamp))
