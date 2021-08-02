@@ -48,7 +48,7 @@ class ScriptView():
         self.button_addCommandLine = Button(self.dataFrame, text=" Add Command Line  ", command=self.addCommandLine)
         self.button_insertCommandLine = Button(self.frameline_insert, text="Insert at ", command=lambda:self.addCommandLine(pos=self.intvar_insertPos.get()))
         self.button_clearCommandLine = Button(self.dataFrame, text=" Clear Script  ", command=self.clearCommandLine)
-        self.button_runScript = Button(self.dataFrame, text="  Run Script  ")
+        self.button_runScript = Button(self.dataFrame, text="  Run Script  ", command=self.controller.runScript)
 
         self.entry_insertPos = Entry(self.frameline_insert, textvariable=self.intvar_insertPos, width=5)
         

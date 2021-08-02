@@ -6,6 +6,7 @@ File description : Class container for the application's view
 
 """
 
+from ScriptController import ScriptController
 from OscilloscopeView import OscilloscopeView
 from OscilloscopeController import OscilloscopeController
 from SourcemeterView import SourcemeterView
@@ -87,7 +88,9 @@ class View(Tk):
         self.defilX_setup = Scrollbar(self.frameLine_instruments, orient='horizontal', command=self.mainCanva.xview, bg=self.model.parameters_dict['backgroundColor'], troughcolor=self.model.parameters_dict['backgroundColor'])
         self.mainFrame= Frame(self.mainCanva)
 
-        self.script = ScriptView(view=self.frameLine_script, root=self, model=self.model, terminal=self.term_text)
+        controller = ScriptController()
+        self.script = ScriptView(view=self.frameLine_script, root=self, model=self.model, terminal=self.term_text, controller=controller)
+        controller.updateView(self.script)
 
     def __initWidgets(self):
     #This method is used to encapsulate the creation of sequences and menues
@@ -170,6 +173,15 @@ class View(Tk):
         liste = []
         for item in self.listViews:
             liste.append(item.controller.instrument)
+
+        liste.reverse()
+        return(liste)
+        
+    def getControllerList(self):
+    #This method returns a list of controller from listInstrument
+        liste = []
+        for item in self.listViews:
+            liste.append(item.controller)
 
         liste.reverse()
         return(liste)
@@ -260,9 +272,9 @@ class View(Tk):
             else:
                 self.sendWarning("W000")
 
-    def sendError(self, error):
+    def sendError(self, error="xxx", complement=""):
     #This method generates message boxes from error returns
-        messagebox.showerror(title="Error : " + error, message=self.model.error_dict[error])
+        messagebox.showerror(title="Error : " + error, message=self.model.error_dict[error] + complement)
         self.term_text.insert(END, "\nError : " + error + "\n  " + self.model.error_dict[error] + "\n")  
 
     def sendWarning(self, warning):

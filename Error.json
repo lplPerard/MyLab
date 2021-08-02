@@ -9,11 +9,14 @@
     "007": "Configuration cannot be saved while a process is pending.\nPlease turn every instrument OFF.",
     "008": "Configuration cannot be opened while a process is pending.\nPlease turn every instrument OFF.",
     "009": "The software cannot be closed while a process is pending.\nPlease turn every instrument OFF.",
+    "100": "Unknown instrument in script.\nPlease check instrument name : ",
+    "101": " SYNTAX ERROR\nEND missing in script !",
 
 
     "404": "This functionnality is not implemented yet !\nContact the developper for further information",
 
 
 
-    "W000": "Maximum number of instrument : 15"
+    "W000": "Maximum number of instrument : 15",
+    "xxx": "Undeclared error"
 }
