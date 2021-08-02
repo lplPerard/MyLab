@@ -20,15 +20,9 @@ class Sourcemeter(Instrument):
 
         self.type = "Sourcemeter"
 
-        self.measure_DCV = 0
-        self.measure_ACV = 0
-        self.measure_DCI = 0
-        self.measure_ACI = 0
-        self.measure_2WR = 0
-        self.measure_4WR = 0
-        self.measure_diode = 0
-        self.measure_frequency = 0
-        self.measure_period = 0
+        self.measure_voltage = 0
+        self.measure_current = 0
+        self.measure_resistance = 0
 
         self.masterState = 0
 
@@ -37,5 +31,4 @@ class Sourcemeter(Instrument):
                           "setDCI",
                           "measure4WR",
                           "measureDiode",
-                          "measureFrequency",
                           "measurePeriod"]

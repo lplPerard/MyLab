@@ -243,7 +243,7 @@ class WaveformGeneratorView (DeviceFrame):
 
                 if self.model.devices_dict[item][0] == "33600A":   
                     self.img = Image.open(self.model.devices_dict[item][2])
-                    self.img = self.img.resize((200, 120), Image.ANTIALIAS)
+                    self.img = self.img.resize((180, 100), Image.ANTIALIAS)
                     self.img = ImageTk.PhotoImage(self.img)
                     self.panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColor'])
                     self.panel.pack(fill = "both", expand = "yes")
