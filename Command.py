@@ -18,9 +18,9 @@ class Command():
         self.combo_choice1 = ""
         self.combo_instrCommand = ""
         
-        self.entry_attribute1 = ""
-        self.entry_attribute2 = ""
-        self.entry_attribute3 = ""
+        self.entry_attribute1 = "0"
+        self.entry_attribute2 = "1"
+        self.entry_attribute3 = "4"
         self.entry_attribute4 = ""
         self.entry_attribute5 = ""
         self.entry_attribute6 = ""

@@ -26,81 +26,86 @@ class ScriptController():
         self.root = None
 
     def updateView(self, view):
+    #this method the view and root attributes
         self.view=view
         self.root = self.view.root
 
     def analyzeCommand(self):
+    #This method analyze the command line to generate the appropriate function
         self.listeCommand = self.view.getListeCommand().copy()
         command=None
         
         for item in self.listeCommand:
+            command=None
             if item.combo_choice1 == "WAIT":
-                command = self.generateWaitCommand(item.entry_attribute1)
+                self.generateWaitCommand(item.entry_attribute1)
                 item.combo_choice1 = "PASS"
+
             elif item.combo_choice1 == "FOR":
-                command = self.generateForCommand(self.listeCommand.index(item))
+                self.generateForCommand(self.listeCommand.index(item))
                 item.combo_choice1 = "PASS"
+
             elif item.combo_choice1 != "PASS":
                 self.getInstrument(name = item.combo_choice1)
-                command = [getattr(self.instrument, item.combo_instrCommand), self.getArgs(command=item)]
+                self.listeExecutable.append([getattr(self.instrument, item.combo_instrCommand), self.getArgs(command=item)])
                 item.combo_choice1 = "PASS"
                 
-
-            self.listeExecutable.append(command)
-
     def generateWaitCommand(self, duration):
+    #This method generates a for fucntion    
 
         def func(args=[duration]) :
-            print("I wait")
+            print("I wait for : " + duration)
             time.sleep(float(duration))
-            print("I waited")
+            print("I waited for : " + duration)
 
         args=[duration]
-        return([func, args])
+        self.listeExecutable.append([func, args])
 
     def generateForCommand(self, index=None):
-        listeFor = []
+    #This method generate a For function
         end = 0
+        endIndex = None
 
         for item in self.listeCommand[index+1:]:
-            index=self.listeCommand.index(item)
+            ind=self.listeCommand.index(item)
+            print(ind)
             if item.combo_choice1 == "FOR":
-                command = self.generateForCommand(index + self.listeCommand[index+1:].index(item))
-                self.listeCommand[index].combo_choice1 = "PASS"
-
-            if item.combo_choice1 == "WAIT":
-                command = self.generateWaitCommand(item.entry_attribute1)
-                self.listeCommand[index].combo_choice1 = "PASS"
+                command = self.generateForCommand(ind)
+                self.listeCommand[ind].combo_choice1 = "PASS"
 
             elif item.combo_choice1 == "END":
-                endIndex = self.listeCommand.index(item)
-                self.listeCommand[index].combo_choice1 = "PASS"
+                self.listeCommand[ind].combo_choice1 = "PASS"
+                endIndex = ind
                 end = 1
                 break
 
-            elif item.combo_choice1 != "PASS":
-                listeFor.append([getattr(self.instrument, item.combo_instrCommand), self.getArgs(command=item)])
-                self.listeCommand[index].combo_choice1 = "PASS"
-
         if end != 0:
-            def func(args=None):
-                start=args[1]
-                step=args[2]
-                num=args[3]
-                liste=arange(0,num)*step+start
+            subListeCommand = self.listeCommand[index+1:endIndex]
 
-                for globals()[args[0]] in liste:
-                    index = liste.index(globals()[args[0]])
-                    listeFor[index][0](listeFor[index][1])
-            
-            args = []
+            start = float(self.listeCommand[index].entry_attribute1)
+            step = float(self.listeCommand[index].entry_attribute2)
+            num = float(self.listeCommand[index].entry_attribute3)
+            togothrough = arange(0,num)*step+start
 
-            return([func, args])
+            for globals()[self.listeCommand[index].combo_instrCommand] in togothrough:
+                for item in subListeCommand :
+                    print(item.combo_choice1)
+                    if item.combo_choice1 == "WAIT":
+                        self.generateWaitCommand(item.entry_attribute1)
+
+                    elif item.combo_choice1 != "PASS":
+                        self.listeExecutable.append([getattr(self.instrument, item.combo_instrCommand), self.getArgs(command=item)])
+                
+            for item in subListeCommand :
+                item.combo_choice1 = "PASS"
+
+            self.listeCommand[index+1:endIndex] = subListeCommand
 
         else :
             self.root.sendError("101")
 
     def getInstrument(self, name=None):
+    #This method return the instrument controller corresponding to name
         found=0
         for item in self.root.getControllerList():
             if item.instrument.name == name:
@@ -112,6 +117,7 @@ class ScriptController():
             self.root.sendError("100", name)
 
     def getArgs(self, command=None):
+    #This methods generates an argument list
         args = [14]
         listeVariable = ["Temperature", "Voltage", "Current", "Frequency", "A", "B", "C", "D", "E", "F", "G"]
 
@@ -158,9 +164,10 @@ class ScriptController():
             args[6] = float(command.entry_attribute7)
 
     def runScript(self):
-       self.analyzeCommand()
+    #This method generates the executable liste and run it
+        self.analyzeCommand()
 
-       for item in self.listeExecutable:
-           print(item)
-           item[0](item[1])    
+        for item in self.listeExecutable:    
+            item[0](item[1])    
+        
 
