@@ -6,6 +6,7 @@ File description : Class container for ScriptView.
 
 """
 
+from PIL import Image, ImageTk
 from CommandLine import CommandLine
 from Instrument import Instrument
 from tkinter import Button, Canvas, Entry, Frame, LabelFrame, Scrollbar, IntVar
@@ -41,14 +42,30 @@ class ScriptView():
         self.defilX_setup = Scrollbar(self.mainCanva, orient='horizontal', command=self.mainCanva.xview, bg=self.model.parameters_dict['backgroundColor'])
 
         self.frameline_insert = Frame(self.dataFrame, bg=self.model.parameters_dict['backgroundColor'])
+        self.frameline_buttons = Frame(self.dataFrame, bg=self.model.parameters_dict['backgroundColor'])
 
         self.intvar_insertPos = IntVar()
         self.intvar_insertPos.set(0)
 
+        self.playImg = Image.open("play.png")
+        self.playImg = self.playImg.resize((15, 15), Image.ANTIALIAS)
+        self.playImg = ImageTk.PhotoImage(self.playImg)
+
+        self.pauseImg = Image.open("pause.png")
+        self.pauseImg = self.pauseImg.resize((15, 15), Image.ANTIALIAS)
+        self.pauseImg = ImageTk.PhotoImage(self.pauseImg)
+
+        self.nextImg = Image.open("next.png")
+        self.nextImg = self.nextImg.resize((15, 15), Image.ANTIALIAS)
+        self.nextImg = ImageTk.PhotoImage(self.nextImg)
+
         self.button_addCommandLine = Button(self.dataFrame, text=" Add Command Line  ", command=self.addCommandLine)
+        self.button_addCommandLine.bind_all('<Control-Key-n>', self.addCommandLine)
         self.button_insertCommandLine = Button(self.frameline_insert, text="Insert at ", command=lambda:self.addCommandLine(pos=self.intvar_insertPos.get()))
         self.button_clearCommandLine = Button(self.dataFrame, text=" Clear Script  ", command=self.clearCommandLine)
-        self.button_runScript = Button(self.dataFrame, text="  Run Script  ", command=self.controller.runScript)
+        self.button_runScript = Button(self.frameline_buttons, image=self.playImg, command=self.button_runScript_callback)
+        self.button_runScript.bind_all('<Control-Key-r>', self.controller.runScript)
+        self.button_nextInScript = Button(self.frameline_buttons, image=self.nextImg)
 
         self.entry_insertPos = Entry(self.frameline_insert, textvariable=self.intvar_insertPos, width=5)
         
@@ -65,17 +82,19 @@ class ScriptView():
 
         self.mainCanva.config(yscrollcommand= self.defilY_setup.set, xscrollcommand= self.defilX_setup.set,height=2000)
         self.mainCanva.pack(fill="both", expand="yes", side="left", anchor='nw')
-        self.defilY_setup.pack(fill="y", side='right', padx='5') 
-        self.defilX_setup.pack(fill="x", side='bottom', padx='5') 
+        self.defilX_setup.pack(fill="x", side='bottom', padx='3', pady=3) 
+        self.defilY_setup.pack(fill="y", side='right', padx='3', pady=3) 
 
         self.button_addCommandLine.pack(pady=2, padx=3)
         self.frameline_insert.pack()
         self.button_insertCommandLine.pack(side='left', anchor='nw', pady=2)
         self.entry_insertPos.pack(side='left', padx=3)
         self.button_clearCommandLine.pack(pady=2, padx=6)
-        self.button_runScript.pack(pady=2, padx=6)
+        self.frameline_buttons.pack()
+        self.button_runScript.pack(side='left', ipadx=5, pady=2, padx=6)
+        self.button_nextInScript.pack(side='left', ipadx=5, pady=2, padx=6)
 
-    def addCommandLine(self, pos=None, command=None):
+    def addCommandLine(self, args=None, pos=None, command=None):
     #This method adds a new command line to be displayed by ScriptView
         if (pos == None) and (command == None):
             number = len(self.listeCommand)
@@ -116,6 +135,7 @@ class ScriptView():
             self.listeCommand[index].renumberLine(index)
 
     def getListeCommand(self):
+    #This method returns the command for each item in listeCommand
         liste=[] 
         for item in self.listeCommand:
             liste.append(item.command)
@@ -125,4 +145,11 @@ class ScriptView():
     def _on_mousewheel(self, event):
     #This method is called when playing with MousWheel on the script view
         self.mainCanva.yview_scroll(int(-1*(event.delta/120)), "units")
+
+    def button_runScript_callback(self, args=None):
+    #This method is called when running te script
+        self.button_runScript.config(image=self.pauseImg)
+        self.button_runScript.update_idletasks()
+        self.controller.runScript()
+
 

@@ -296,6 +296,9 @@ class View(Tk):
         self.menu1.add_command(label="Save", command=self.menu1_Save_callBack)
         self.menu1.add_command(label="Save as", command=self.menu1_SaveAs_callBack)
         self.menu1.add_command(label="Open", command=self.menu1_Open_callBack)
+        self.menu1.bind_all('<Control-Key-s>', self.menu1_Save_callBack)
+        self.menu1.bind_all('<Control-Key-S>', self.menu1_SaveAs_callBack)
+        self.menu1.bind_all('<Control-Key-o>', self.menu1_Open_callBack)
 
         self.menubar.add_cascade(label="Edit", menu=self.menu2)
         self.menu2.add_cascade(label="Add Instrument", menu=self.menu4)
@@ -304,6 +307,7 @@ class View(Tk):
         self.menu2.add_separator()
         self.menu2.add_command(label="Parameters", command=self.menu2_Parameters_callBack)
         self.menu2.add_command(label="Connections", command=self.menu2_Connections_callBack)
+        self.menu2.bind_all('<Control-Key-a>', self.menu2_WakeUp_callBack)
 
         self.menubar.add_cascade(label="Display", menu=self.menu3)
         self.menu3.add_command(label="Terminal", command=self.menu3_Terminal_callBack)
@@ -349,7 +353,7 @@ class View(Tk):
                     self.script.clearCommandLine()
                     self.path = ""
 
-    def menu1_Save_callBack(self):
+    def menu1_Save_callBack(self, args=None):
     #Callback function for  menu1 1 option        
         canSave = True
         for item in self.getInstrList():
@@ -366,7 +370,7 @@ class View(Tk):
             else:
                 self.model.saveConfiguration(listeInstruments=self.getInstrList(), path=self.path, listeCommand=self.script.getListeCommand())
 
-    def menu1_SaveAs_callBack(self):
+    def menu1_SaveAs_callBack(self, args=None):
     #Callback function for menu1 2 option     
         canSave = True
         for item in self.getInstrList():
@@ -380,7 +384,7 @@ class View(Tk):
             self.path = filedialog.asksaveasfilename(title = "Select file", filetypes = (("all files","*.*"), ("MyLab files","*.mylab")))
             self.model.saveConfiguration(listeInstruments=self.getInstrList(), path=self.path, listeCommand=self.script.getListeCommand())
 
-    def menu1_Open_callBack(self):
+    def menu1_Open_callBack(self, args=None):
     #Callback function for menu1 2 option
         canOpen = True
         for item in self.getInstrList():
@@ -398,6 +402,8 @@ class View(Tk):
                     self.menu5.delete(self.listViews[index].controller.instrument.name)
 
                 self.listViews.clear()
+            
+            if (self.script.listeCommand != []) and (self.path != ""):
                 self.script.clearCommandLine()
             
             if self.path != "":                
@@ -412,13 +418,21 @@ class View(Tk):
                 for item in self.script.listeCommand:
                     item.updateLine()
 
-    def menu2_Parameters_callBack(self):
+    def menu2_Parameters_callBack(self, args=None):
     #Callback function for menu2 1 option
         if self.topLevel_param.state() == "withdrawn":
             self.topLevel_param.deiconify()
 
         elif self.topLevel_param.state() == "normal":
             self.topLevel_param.withdraw()
+
+    def menu2_WakeUp_callBack(self, args=None):
+    #Callback function for menu2 2 option
+        if self.topLevel_wakeUp.state() == "withdrawn":
+            self.topLevel_wakeUp.deiconify()
+
+        elif self.topLevel_connect.state() == "normal":
+            self.topLevel_connect.withdraw()
 
     def menu2_Connections_callBack(self, args=None):
     #Callback function for menu2 2 option
@@ -429,7 +443,7 @@ class View(Tk):
         elif self.topLevel_connect.state() == "normal":
             self.topLevel_connect.withdraw()
 
-    def menu3_Terminal_callBack(self):
+    def menu3_Terminal_callBack(self, args=None):
     #Callback function for menu2 1 option
         if self.topLevel_term.state() == "withdrawn":
             self.topLevel_term.deiconify()
@@ -437,18 +451,18 @@ class View(Tk):
         elif self.topLevel_term.state() == "normal":
             self.topLevel_term.withdraw()
             
-    def menu3_Script_callBack(self):
+    def menu3_Script_callBack(self, args=None):
     #Callback function for menu2 1 option
         if self.frameLine_script.winfo_ismapped() :
             self.frameLine_script.pack_forget()
         else:
             self.frameLine_script.pack(padx=5, pady=5, fill="both", expand="yes")
 
-    def menu3_logs_callBack(self):
+    def menu3_logs_callBack(self, args=None):
     #Callback function for menu2 2 option
         self.sendError("404")
 
-    def menu4_Configuration_callBack(self):
+    def menu4_Configuration_callBack(self, args=None):
     #Callback function for menu2 2 option
         canOpen = True
         for item in self.getInstrList():
@@ -468,37 +482,37 @@ class View(Tk):
                 for item in liste[1]:
                     self.script.addCommandLine(command=item)
 
-    def menu4_WaveformGenerator_callBack(self):
+    def menu4_WaveformGenerator_callBack(self, args=None):
     #Callback function for menu2 2 option
         mbox = messagebox.askyesno("Add Instrument", "Do you want to add a Waveform Generator?")
         if mbox == True:
             self.addDeviceFrame("Waveform Generator")
 
-    def menu4_Multimeter_callBack(self):
+    def menu4_Multimeter_callBack(self, args=None):
     #Callback function for menu2 2 option
         mbox = messagebox.askyesno("Add Instrument", "Do you want to add a Multimeter ?")
         if mbox == True:
             self.addDeviceFrame("Multimeter")
 
-    def menu4_Oscilloscope_callBack(self):
+    def menu4_Oscilloscope_callBack(self, args=None):
     #Callback function for menu2 2 option
         mbox = messagebox.askyesno("Add Instrument", "Do you want to add an Oscilloscope?")
         if mbox == True:
             self.addDeviceFrame("Oscilloscope")
 
-    def menu4_SourceMeter_callBack(self):
+    def menu4_SourceMeter_callBack(self, args=None):
     #Callback function for menu2 2 option
         mbox = messagebox.askyesno("Add Instrument", "Do you want to add Sourcemeter ?")
         if mbox == True:
             self.addDeviceFrame("Sourcemeter")
 
-    def menu4_PowerSupply_callBack(self):
+    def menu4_PowerSupply_callBack(self, args=None):
     #Callback function for menu2 2 option
         mbox = messagebox.askyesno("Add Instrument", "Do you want to add a Power Supply ?")
         if mbox == True:
             self.addDeviceFrame("Power Supply")
 
-    def menu4_ClimaticChamber_callBack(self):
+    def menu4_ClimaticChamber_callBack(self, args=None):
     #Callback function for menu2 2 option
         mbox = messagebox.askyesno("Add Instrument", "Do you want to add a Climatic Chamber ?")
         if mbox == True:
@@ -516,14 +530,14 @@ class View(Tk):
         else:
             self.sendError("007")
 
-    def menu6_HTOL_callBack(self):
+    def menu6_HTOL_callBack(self, args=None):
     #Callback function for menu2 2 option
         self.sendError("404")
 
-    def menu6_Bode_callBack(self):
+    def menu6_Bode_callBack(self, args=None):
     #Callback function for menu2 2 option
         self.sendError("404")
 
-    def menu6_IV_callBack(self):
+    def menu6_IV_callBack(self, args=None):
     #Callback function for menu2 2 option
         self.sendError("404")

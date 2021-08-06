@@ -253,18 +253,17 @@ class CommandLine():
 
         self.combo_choice1.configure(value=liste)
 
-    def combo_choice1_callback(self, load=False, args=None):
+    def combo_choice1_callback(self, args=None, load=False):
     #This method update the line view according to the selected option
+        self.combo_instrCommand.pack_forget()  
         if load == False:
-            self.combo_instrCommand.pack_forget()  
             self.combo_instrCommand.configure(value=[])
             self.cleanAttributes()
-
-        self.command.combo_choice1 = self.combo_choice1.get()
+            self.command.combo_choice1 = self.combo_choice1.get()
 
         if self.combo_choice1.get() == 'WAIT':
             self.commandType = "WAIT"
-            self.combo_instrCommand_callback()
+            self.combo_instrCommand_callback(load=load)
 
         elif self.combo_choice1.get() == 'FOR':
             self.commandType = "FOR"
@@ -273,8 +272,6 @@ class CommandLine():
 
         elif self.combo_choice1.get() == 'END':
             self.commandType = "END"
-            self.combo_instrCommand.pack(expand="no", side="left", anchor='nw', padx=2)
-            self.combo_instrCommand.config(value=self.variablesList)
         
         else:
             self.combo_instrCommand.pack(expand="no", side="left", anchor='nw', padx=2)
@@ -284,9 +281,9 @@ class CommandLine():
                     self.commandType = item.type
                     break
 
-    def combo_instrCommand_callback(self, load=False, args=None):
-    #This methods calls the appropriate attribute generator according to instrument type   
-        if load != True:
+    def combo_instrCommand_callback(self, args=None, load=False):
+    #This methods calls the appropriate attribute generator according to instrument type  
+        if load == False:
             self.cleanAttributes()
 
         if self.commandType == "WAIT":           
@@ -294,9 +291,6 @@ class CommandLine():
             
         elif self.commandType == "FOR":         
             self.generateForAttributes()   
-            
-        elif self.commandType == "END":         
-            self.generateEndAttributes()   
 
         elif self.commandType == "Power Supply":
             self.generatePowerSupplyAttributes()
@@ -362,15 +356,9 @@ class CommandLine():
         
     def generateWaitAttributes(self):
     #This method generates the attributes for END command
-        self.command.combo_instrCommand = self.combo_instrCommand.get()
-
         self.entry_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
         self.stringVar_defaultText1.set("delay (s)")
         
-    def generateEndAttributes(self):
-    #This method generates the attributes for END command
-        self.command.combo_instrCommand = self.combo_instrCommand.get()
-
     def generateClimaticChamberAttributes(self):
     #This method generates the attributes for Climatic Chamber commands
         self.command.combo_instrCommand = self.combo_instrCommand.get()
@@ -386,13 +374,19 @@ class CommandLine():
         if self.combo_instrCommand.get() == "setVoltageSource":
             self.entry_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
             self.stringVar_defaultText1.set("Voltage")
+            self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.combo_attribute1.config(value=["1","2"])
+            self.combo_attribute1.current(0)
+
         if self.combo_instrCommand.get() == "setCurrentSource":
             self.entry_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
             self.stringVar_defaultText1.set("Current")
+
         if self.combo_instrCommand.get() == "setChannelState":
             self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute1.config(value=["1","2"])
             self.combo_attribute1.current(0)
+
         if self.combo_instrCommand.get() == "setMasterState":
             self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute1.config(value=["OFF","ON"])

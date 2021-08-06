@@ -63,8 +63,10 @@ class PowerSupplyController():
         else:
             self.view.view.sendError('004')
 
-    def setVoltageSource(self, voltage, channel, calibre=0):
+    def setVoltageSource(self, args=[]):
     #This method modify the voltage source 
+        print(args[0])
+        print(args[7])
         if (self.instrument.state == "free") or (self.instrument.state == "unreachable"):
             try:
                 self.instrument.ressource = self.resourceManager.open_resource(self.instrument.address)
@@ -77,8 +79,8 @@ class PowerSupplyController():
                 return(-1)
 
             try:
-                self.instrument.ressource.write('INST:NSEL ' + str(channel))
-                self.instrument.ressource.write('SOUR:VOLT ' + str(voltage))
+                self.instrument.ressource.write('INST:NSEL ' + str(args[7]))
+                self.instrument.ressource.write('SOUR:VOLT ' + str(args[0]))
             except:
                 self.view.view.sendError('002')
                 self.instrument.state = "unreachable"

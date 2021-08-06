@@ -24,6 +24,7 @@ class ScriptController():
         self.view=None
         self.instrument = None
         self.root = None
+        self.state = "STOP"
 
     def updateView(self, view):
     #this method the view and root attributes
@@ -32,52 +33,68 @@ class ScriptController():
 
     def analyzeCommand(self):
     #This method analyze the command line to generate the appropriate function
-        self.listeCommand = self.view.getListeCommand().copy()
-        command=None
+        error=0
+        self.listeCommand.clear()
+        self.listeExecutable.clear()
+        self.listeCommand = self.view.getListeCommand()
         
         for item in self.listeCommand:
             command=None
-            if item.combo_choice1 == "WAIT":
-                self.generateWaitCommand(item.entry_attribute1)
-                item.combo_choice1 = "PASS"
+            if (item.combo_choice1 == "WAIT") and (item.state != "RUN"):
+                tmp = self.generateWaitCommand(item.entry_attribute1)                
+                self.listeExecutable.append(tmp)
+                item.state = "RUN"
 
-            elif item.combo_choice1 == "FOR":
-                self.generateForCommand(self.listeCommand.index(item))
-                item.combo_choice1 = "PASS"
+            elif (item.combo_choice1 == "FOR") and (item.state != "RUN"):
+                error = self.generateForCommand(self.listeCommand.index(item))
+                item.state = "RUN"
 
-            elif item.combo_choice1 != "PASS":
+            elif (item.state != "RUN") and (item.combo_choice1 != "END"):
                 self.getInstrument(name = item.combo_choice1)
                 self.listeExecutable.append([getattr(self.instrument, item.combo_instrCommand), self.getArgs(command=item)])
-                item.combo_choice1 = "PASS"
+                item.state = "RUN"
                 
+        return(error)
+
     def generateWaitCommand(self, duration):
     #This method generates a for fucntion    
+        listeVariable = ["Temperature", "Voltage", "Current", "Frequency", "A", "B", "C", "D", "E", "F", "G"]
+
+        try :
+            index = listeVariable.index(duration)
+            duration = globals()[listeVariable[index]]
+        except:
+            duration = float(duration)
 
         def func(args=[duration]) :
-            print("I wait for : " + duration)
-            time.sleep(float(duration))
-            print("I waited for : " + duration)
+            time.sleep(duration)
 
         args=[duration]
-        self.listeExecutable.append([func, args])
+        return([func, args])
 
-    def generateForCommand(self, index=None):
+    def generateForCommand(self, index=None, forstate=0):
     #This method generate a For function
+        subListExe = []
         end = 0
         endIndex = None
+        command=None
 
         for item in self.listeCommand[index+1:]:
             ind=self.listeCommand.index(item)
-            print(ind)
-            if item.combo_choice1 == "FOR":
-                command = self.generateForCommand(ind)
-                self.listeCommand[ind].combo_choice1 = "PASS"
+            if (item.combo_choice1 == "FOR") and (item.state != "RUN"):
+                self.listeCommand[ind].state = "RUN"
+                self.listeCommand[ind].forState = forstate
+                command = self.generateForCommand(index=ind, forstate=forstate+1)
 
-            elif item.combo_choice1 == "END":
-                self.listeCommand[ind].combo_choice1 = "PASS"
+            elif (item.combo_choice1 == "END") and (item.state != "RUN"):
+                self.listeCommand[ind].state = "RUN"
+                self.listeCommand[ind].forState = forstate
                 endIndex = ind
                 end = 1
                 break
+
+            elif (item.state != "RUN") :
+                self.listeCommand[ind].forState = forstate
 
         if end != 0:
             subListeCommand = self.listeCommand[index+1:endIndex]
@@ -87,22 +104,36 @@ class ScriptController():
             num = float(self.listeCommand[index].entry_attribute3)
             togothrough = arange(0,num)*step+start
 
+            for item in subListeCommand:
+                if item.forstate < forstate:
+                    item.forstate=forstate
+
             for globals()[self.listeCommand[index].combo_instrCommand] in togothrough:
                 for item in subListeCommand :
-                    print(item.combo_choice1)
-                    if item.combo_choice1 == "WAIT":
-                        self.generateWaitCommand(item.entry_attribute1)
+                    if (item.combo_choice1 == "WAIT") and (item.forstate == forstate):
+                        tmp=self.generateWaitCommand(item.entry_attribute1)
+                        subListExe.append(tmp)
+                        
+                    elif (item.combo_choice1 == "FOR") and (item.forstate == forstate):
+                        subListExe.extend(command)
 
-                    elif item.combo_choice1 != "PASS":
-                        self.listeExecutable.append([getattr(self.instrument, item.combo_instrCommand), self.getArgs(command=item)])
+                    elif (item.state != "RUN") and (item.forstate == forstate):
+                        self.getInstrument(name = item.combo_choice1)
+                        subListExe.append([getattr(self.instrument, item.combo_instrCommand), self.getArgs(command=item)])
                 
             for item in subListeCommand :
-                item.combo_choice1 = "PASS"
-
+                item.state = "RUN"
+                
             self.listeCommand[index+1:endIndex] = subListeCommand
+
+            if forstate != 0:
+                return(subListExe)
+            else:
+                self.listeExecutable.extend(subListExe)
 
         else :
             self.root.sendError("101")
+            return(-1)
 
     def getInstrument(self, name=None):
     #This method return the instrument controller corresponding to name
@@ -118,56 +149,79 @@ class ScriptController():
 
     def getArgs(self, command=None):
     #This methods generates an argument list
-        args = [14]
+        args = []
         listeVariable = ["Temperature", "Voltage", "Current", "Frequency", "A", "B", "C", "D", "E", "F", "G"]
 
-        index = listeVariable.index(command.entry_attribute1)
-        if index != ValueError:
-            args[0] = globals()[listeVariable[index]]
-        else:
-            args[0] = float(command.entry_attribute1)
+        try:
+            index = listeVariable.index(command.entry_attribute1)
+            args.append(globals()[listeVariable[index]])
+        except:
+            if command.entry_attribute1 != '':
+                args.append(float(command.entry_attribute1))
 
-        index = listeVariable.index(command.entry_attribute2)
-        if index != ValueError:
-            args[1] = globals()[listeVariable[index]]
-        else:
-            args[1] = float(command.entry_attribute2)
+        try:
+            index = listeVariable.index(command.entry_attribute2)
+            args.append(globals()[listeVariable[index]])
+        except:
+            if command.entry_attribute2 != '':
+                args.append(float(command.entry_attribute2))
 
-        index = listeVariable.index(command.entry_attribute3)
-        if index != ValueError:
-            args[2] = globals()[listeVariable[index]]
-        else:
-            args[2] = float(command.entry_attribute3)
+        try:
+            index = listeVariable.index(command.entry_attribute3)
+            args.append(globals()[listeVariable[index]])
+        except:
+            if command.entry_attribute3 != '':
+                args.append(float(command.entry_attribute3))
 
-        index = listeVariable.index(command.entry_attribute4)
-        if index != ValueError:
-            args[3] = globals()[listeVariable[index]]
-        else:
-            args[3] = float(command.entry_attribute4)
+        try:
+            index = listeVariable.index(command.entry_attribute4)
+            args.append(globals()[listeVariable[index]])
+        except:
+            if command.entry_attribute4 != '':
+                args.append(float(command.entry_attribute4))
 
-        index = listeVariable.index(command.entry_attribute5)
-        if index != ValueError:
-            args[4] = globals()[listeVariable[index]]
-        else:
-            args[4] = float(command.entry_attribute5)
+        try:
+            index = listeVariable.index(command.entry_attribute5)
+            args.append(globals()[listeVariable[index]])
+        except:
+            if command.entry_attribute5 != '':
+                args.append(float(command.entry_attribute5))
 
-        index = listeVariable.index(command.entry_attribute6)
-        if index != ValueError:
-            args[5] = globals()[listeVariable[index]]
-        else:
-            args[5] = float(command.entry_attribute6)
+        try:
+            index = listeVariable.index(command.entry_attribute6)
+            args.append(globals()[listeVariable[index]])
+        except:
+            if command.entry_attribute6 != '':
+                args.append(float(command.entry_attribute6))
 
-        index = listeVariable.index(command.entry_attribute7)
-        if index != ValueError:
-            args[6] = globals()[listeVariable[index]]
-        else:
-            args[6] = float(command.entry_attribute7)
+        try:
+            index = listeVariable.index(command.entry_attribute7)
+            args.append(globals()[listeVariable[index]])
+        except:
+            if command.entry_attribute7 != '':
+                args.append(float(command.entry_attribute7))
 
-    def runScript(self):
+        args.append(command.combo_attribute1)
+        args.append(command.combo_attribute2)
+        args.append(command.combo_attribute3)
+        args.append(command.combo_attribute4)
+        args.append(command.combo_attribute5)
+        args.append(command.combo_attribute6)
+        args.append(command.combo_attribute7)
+
+        print(args)
+
+    def runScript(self, args=None):
     #This method generates the executable liste and run it
-        self.analyzeCommand()
+        self.state = "PLAY"
 
-        for item in self.listeExecutable:    
-            item[0](item[1])    
-        
+        if self.analyzeCommand() != -1:
+            for item in self.listeExecutable:  
+                item[0](item[1])    
 
+            for item in self.listeCommand:
+                item.state = "FREE"
+                item.forstate = 0
+    
+        self.state = "STOP"
+        self.view.button_runScript.config(image=self.view.playImg)   #A CHANGER !!!! PAS DE VIEW DANS LE CONTROLLER

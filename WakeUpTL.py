@@ -53,6 +53,5 @@ class WakeUpTL():
             self.view.topLevel_wakeUp.withdraw()
             self.view.menu1_Open_callBack()
         else:
-            self.view.listViews.clear()
             self.view.addDeviceFrame(self.combo_instrument.get())
             self.view.topLevel_wakeUp.withdraw()
