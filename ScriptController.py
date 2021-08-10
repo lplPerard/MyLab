@@ -24,7 +24,6 @@ class ScriptController():
         self.view=None
         self.instrument = None
         self.root = None
-        self.state = "STOP"
 
     def updateView(self, view):
     #this method the view and root attributes
@@ -67,6 +66,7 @@ class ScriptController():
             duration = float(duration)
 
         def func(args=[duration]) :
+            print("I wait for : " + str(duration))
             time.sleep(duration)
 
         args=[duration]
@@ -153,53 +153,68 @@ class ScriptController():
         listeVariable = ["Temperature", "Voltage", "Current", "Frequency", "A", "B", "C", "D", "E", "F", "G"]
 
         try:
-            index = listeVariable.index(command.entry_attribute1)
-            args.append(globals()[listeVariable[index]])
+            listeVariable.index(command.entry_attribute1)
+            args.append(globals()[command.entry_attribute1])
         except:
             if command.entry_attribute1 != '':
                 args.append(float(command.entry_attribute1))
+            else:
+                args.append(command.entry_attribute1)
+                
 
         try:
-            index = listeVariable.index(command.entry_attribute2)
-            args.append(globals()[listeVariable[index]])
+            listeVariable.index(command.entry_attribute2)
+            args.append(globals()[command.entry_attribute2])
         except:
             if command.entry_attribute2 != '':
                 args.append(float(command.entry_attribute2))
+            else:
+                args.append(command.entry_attribute2)
 
         try:
-            index = listeVariable.index(command.entry_attribute3)
-            args.append(globals()[listeVariable[index]])
+            listeVariable.index(command.entry_attribute3)
+            args.append(globals()[command.entry_attribute3])
         except:
             if command.entry_attribute3 != '':
                 args.append(float(command.entry_attribute3))
+            else:
+                args.append(command.entry_attribute3)
 
         try:
-            index = listeVariable.index(command.entry_attribute4)
-            args.append(globals()[listeVariable[index]])
+            listeVariable.index(command.entry_attribute4)
+            args.append(globals()[command.entry_attribute4])
         except:
             if command.entry_attribute4 != '':
                 args.append(float(command.entry_attribute4))
+            else:
+                args.append(command.entry_attribute4)
 
         try:
-            index = listeVariable.index(command.entry_attribute5)
-            args.append(globals()[listeVariable[index]])
+            listeVariable.index(command.entry_attribute5)
+            args.append(globals()[command.entry_attribute5])
         except:
             if command.entry_attribute5 != '':
                 args.append(float(command.entry_attribute5))
+            else:
+                args.append(command.entry_attribute5)
 
         try:
-            index = listeVariable.index(command.entry_attribute6)
-            args.append(globals()[listeVariable[index]])
+            listeVariable.index(command.entry_attribute6)
+            args.append(globals()[command.entry_attribute6])
         except:
             if command.entry_attribute6 != '':
                 args.append(float(command.entry_attribute6))
+            else:
+                args.append(command.entry_attribute6)
 
         try:
-            index = listeVariable.index(command.entry_attribute7)
-            args.append(globals()[listeVariable[index]])
+            listeVariable.index(command.entry_attribute7)
+            args.append(globals()[command.entry_attribute7])
         except:
             if command.entry_attribute7 != '':
                 args.append(float(command.entry_attribute7))
+            else:
+                args.append(command.entry_attribute7)
 
         args.append(command.combo_attribute1)
         args.append(command.combo_attribute2)
@@ -209,19 +224,29 @@ class ScriptController():
         args.append(command.combo_attribute6)
         args.append(command.combo_attribute7)
 
-        print(args)
+        return(args)
 
     def runScript(self, args=None):
     #This method generates the executable liste and run it
-        self.state = "PLAY"
-
         if self.analyzeCommand() != -1:
+            self.view.scriptState = "RUN"
+
             for item in self.listeExecutable:  
-                item[0](item[1])    
+                while self.view.scriptState == "PAUSE":
+                    None
+
+                if self.view.scriptState == "NEXT":
+                    self.view.scriptState = "PAUSE"
+                    self.view.button_runScript.config(image=self.view.pauseImg)
+                    item[0](item[1])  
+                    self.view.button_runScript.config(image=self.view.playImg)
+                
+                else:
+                    item[0](item[1])    
 
             for item in self.listeCommand:
                 item.state = "FREE"
                 item.forstate = 0
     
-        self.state = "STOP"
-        self.view.button_runScript.config(image=self.view.playImg)   #A CHANGER !!!! PAS DE VIEW DANS LE CONTROLLER
+        self.view.scriptState = "STOP"
+        self.view.button_runScript.config(image=self.view.playImg)

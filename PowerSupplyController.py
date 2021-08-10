@@ -65,8 +65,6 @@ class PowerSupplyController():
 
     def setVoltageSource(self, args=[]):
     #This method modify the voltage source 
-        print(args[0])
-        print(args[7])
         if (self.instrument.state == "free") or (self.instrument.state == "unreachable"):
             try:
                 self.instrument.ressource = self.resourceManager.open_resource(self.instrument.address)
@@ -91,8 +89,7 @@ class PowerSupplyController():
         else:
             self.view.view.sendError('004')
 
-    def setCurrentSource(self, current, channel, calibre=0):
-    #This method modify the voltage source 
+    def setCurrentSource(self, args=[]):
         if (self.instrument.state == "free") or (self.instrument.state == "unreachable"):
             try:
                 self.instrument.ressource = self.resourceManager.open_resource(self.instrument.address)
@@ -105,8 +102,8 @@ class PowerSupplyController():
                 return(-1)
 
             try:
-                self.instrument.ressource.write('INST:NSEL ' + str(channel))
-                self.instrument.ressource.write('SOUR:CURR ' + str(current))
+                self.instrument.ressource.write('INST:NSEL ' + str(args[7]))
+                self.instrument.ressource.write('SOUR:CURR ' + str(args[0]))
             except:
                 self.view.view.sendError('002')
                 self.instrument.state = "unreachable"
@@ -117,7 +114,7 @@ class PowerSupplyController():
         else:
             self.view.view.sendError('004')
             
-    def setChannelState(self, channel):
+    def setChannelState(self, args=[]):
     #This method modify the output state 
         if (self.instrument.state == "free") or (self.instrument.state == "unreachable"):
             try:
@@ -132,14 +129,14 @@ class PowerSupplyController():
         
             if self.instrument.id == "0x05E6::0x2220":
                 try: 
-                    if self.instrument.channelState[channel-1] == 0:
-                        self.instrument.ressource.write('INST:SEL ' + str(channel))
+                    if self.instrument.channelState[int(args[7])-1] == 0:
+                        self.instrument.ressource.write('INST:SEL ' + str(args[7]))
                         self.instrument.ressource.write('CHAN:OUTP ON ')
-                        self.instrument.channelState[channel-1] = 1
+                        self.instrument.channelState[int(args[7])-1] = 1
                     else:
-                        self.instrument.ressource.write('INST:SEL ' + str(channel))
+                        self.instrument.ressource.write('INST:SEL ' + str(args[7]))
                         self.instrument.ressource.write('CHAN:OUTP OFF ')
-                        self.instrument.channelState[channel-1] = 0
+                        self.instrument.channelState[int(args[7])-1] = 0
                 except:
                     self.view.view.sendError('002')
                     self.instrument.state = "unreachable"
@@ -149,14 +146,14 @@ class PowerSupplyController():
 
             else:
                 try: 
-                    if self.instrument.channelState[channel-1] == 0:
-                        self.instrument.ressource.write('INST:NSEL ' + str(channel))
+                    if self.instrument.channelState[int(args[7])-1] == 0:
+                        self.instrument.ressource.write('INST:NSEL ' + str(args[7]))
                         self.instrument.ressource.write('OUTP:CHAN ON ')
-                        self.instrument.channelState[channel-1] = 1
+                        self.instrument.channelState[int(args[7])-1] = 1
                     else:
-                        self.instrument.ressource.write('INST:NSEL ' + str(channel))
+                        self.instrument.ressource.write('INST:NSEL ' + str(args[7]))
                         self.instrument.ressource.write('OUTP:CHAN OFF ')
-                        self.instrument.channelState[channel-1] = 0
+                        self.instrument.channelState[int(args[7])-1] = 0
                 except:
                     self.view.view.sendError('002')
                     self.instrument.state = "unreachable"
@@ -167,7 +164,7 @@ class PowerSupplyController():
         else:
             self.view.view.sendError('004')
             
-    def setMasterState(self):
+    def setMasterState(self, args=[]):
     #This method modify the output state 
         if (self.instrument.state == "free") or (self.instrument.state == "unreachable"):
             try:
@@ -208,13 +205,13 @@ class PowerSupplyController():
         else:
             self.view.view.sendError('004')
         
-    def Measure(self, channel=1):
+    def Measure(self, args=[]):
     #This method update the content of the view with content from device   
         if (self.instrument.state == "free") or (self.instrument.state == "unreachable") or (self.instrument.masterState == 0):
             try:
                 self.instrument.ressource = self.resourceManager.open_resource(self.instrument.address)
                 self.instrument.state == "connected"
-                self.instrument.ressource.write('INST:NSEL ' + str(channel))
+                self.instrument.ressource.write('INST:NSEL ' + str(args[7]))
             except:
                 if(self.instrument.state != "unreachable"):
                     self.view.view.sendError('001')

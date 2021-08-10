@@ -1,19 +1,15 @@
 {
-    "backgroundColor": "#EE7023",
-    "backgroundColorCommandLine": "#EE6023",
+    "backgroundColor": "#D5F7F7",
+    "viewColor": "#D5F7F7",
+    "backgroundColorInstrument": "#BDDFF7",
+    "backgroundColorCommandLine": "#BDDFF7",
+    "backgroundColorConfiguration": "#BDDFF7",
     "highlightBackgroundColor": "#EE6023",
-    "viewColor": "#EE7023",
     
-    "backgroundAlpha": "0.95",
-    "geometry": "500x805",
+    "backgroundAlpha": "0.97",
+    "geometry": "500x830",
 
-    "widthPowerSupply": 300,
-    "widthWaveformGenerator": 300,
-    "widthClimaticChamber": 300,
-    "widthOscilloscope": 300,
-    "widthMultimeter": 300,
-    "widthRLCmeter": 300,
-    "widthSourceMeter": 300,
+    "instrumentBorderwidth" : "2",
     "labelFont": "Helvetica",
     "geometryWakeUpTL": "300x120",
 

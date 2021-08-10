@@ -6,6 +6,7 @@ File description : Class container for ScriptView.
 
 """
 
+import threading
 from PIL import Image, ImageTk
 from CommandLine import CommandLine
 from Instrument import Instrument
@@ -34,6 +35,7 @@ class ScriptView():
         self.root=root
 
         self.listeCommand = []
+        self.scriptState = "STOP"
 
         self.dataFrame = LabelFrame(self.view)
         self.mainCanva= Canvas(self.view, scrollregion=(0,0,2500,2000), bd=0, highlightthickness=0, bg=self.model.parameters_dict['backgroundColor'])
@@ -41,8 +43,8 @@ class ScriptView():
         self.defilY_setup = Scrollbar(self.mainCanva, orient='vertical', command=self.mainCanva.yview, bg=self.model.parameters_dict['backgroundColor'])
         self.defilX_setup = Scrollbar(self.mainCanva, orient='horizontal', command=self.mainCanva.xview, bg=self.model.parameters_dict['backgroundColor'])
 
-        self.frameline_insert = Frame(self.dataFrame, bg=self.model.parameters_dict['backgroundColor'])
-        self.frameline_buttons = Frame(self.dataFrame, bg=self.model.parameters_dict['backgroundColor'])
+        self.frameline_insert = Frame(self.dataFrame, bg=self.model.parameters_dict['backgroundColorConfiguration'])
+        self.frameline_buttons = Frame(self.dataFrame, bg=self.model.parameters_dict['backgroundColorConfiguration'])
 
         self.intvar_insertPos = IntVar()
         self.intvar_insertPos.set(0)
@@ -64,14 +66,14 @@ class ScriptView():
         self.button_insertCommandLine = Button(self.frameline_insert, text="Insert at ", command=lambda:self.addCommandLine(pos=self.intvar_insertPos.get()))
         self.button_clearCommandLine = Button(self.dataFrame, text=" Clear Script  ", command=self.clearCommandLine)
         self.button_runScript = Button(self.frameline_buttons, image=self.playImg, command=self.button_runScript_callback)
-        self.button_runScript.bind_all('<Control-Key-r>', self.controller.runScript)
-        self.button_nextInScript = Button(self.frameline_buttons, image=self.nextImg)
+        self.button_runScript.bind_all('<Control-Key-r>', self.button_runScript_callback)
+        self.button_nextInScript = Button(self.frameline_buttons, image=self.nextImg, command=self.button_nextInScript_callback)
 
         self.entry_insertPos = Entry(self.frameline_insert, textvariable=self.intvar_insertPos, width=5)
         
     def initFrame(self, padx=10, pady=10):
     #This method generates the Frame's parameters for the sequence
-        self.dataFrame.configure(text="Configuration", font=(12), padx=padx, pady=pady, bg=self.model.parameters_dict['backgroundColor'])
+        self.dataFrame.configure(text="Configuration", font=(12), padx=padx, pady=pady, bg=self.model.parameters_dict['backgroundColorConfiguration'])
         self.dataFrame.pack(fill="y", expand="no", side="left", anchor='nw')
 
         self.mainFrame.pack(fill="both", expand="yes", side="left", anchor='nw', padx=5, pady=5)
@@ -83,7 +85,7 @@ class ScriptView():
         self.mainCanva.config(yscrollcommand= self.defilY_setup.set, xscrollcommand= self.defilX_setup.set,height=2000)
         self.mainCanva.pack(fill="both", expand="yes", side="left", anchor='nw')
         self.defilX_setup.pack(fill="x", side='bottom', padx='3', pady=3) 
-        self.defilY_setup.pack(fill="y", side='right', padx='3', pady=3) 
+        #self.defilY_setup.pack(fill="y", side='right', padx='3', pady=3) 
 
         self.button_addCommandLine.pack(pady=2, padx=3)
         self.frameline_insert.pack()
@@ -147,9 +149,25 @@ class ScriptView():
         self.mainCanva.yview_scroll(int(-1*(event.delta/120)), "units")
 
     def button_runScript_callback(self, args=None):
-    #This method is called when running te script
+    #This method is called when running the script
         self.button_runScript.config(image=self.pauseImg)
         self.button_runScript.update_idletasks()
-        self.controller.runScript()
 
+        if (self.scriptState != "RUN") and (self.scriptState != "PAUSE"):
+            run = threading.Thread(target=self.controller.runScript)
+            run.daemon = True
+            run.start()
 
+        elif self.scriptState == "RUN":
+            self.scriptState = "PAUSE"
+            self.button_runScript.config(image=self.playImg)
+
+        elif self.scriptState == "PAUSE":
+            self.scriptState = "RUN"
+            self.button_runScript.config(image=self.pauseImg)
+
+    def button_nextInScript_callback(self, args=None):
+    #This method is called when clicking on the Next button
+
+        if self.scriptState == "PAUSE":
+            self.scriptState = "NEXT"

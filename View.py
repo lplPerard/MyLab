@@ -53,6 +53,8 @@ class View(Tk):
         self.controller = controller
         self.protocol("WM_DELETE_WINDOW", self.closeView)
 
+        self.iconbitmap("icon.ico")
+
         self.initAttributes()
         self.__initWidgets()
 

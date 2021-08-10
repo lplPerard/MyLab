@@ -85,13 +85,13 @@ class CommandLine():
         self.stringVar_defaultText6 = StringVar()
         self.stringVar_defaultText7 = StringVar()
 
-        self.combo_attribute1 = Combobox(self.line, state="readonly", width=25, value=['Select'])
-        self.combo_attribute2 = Combobox(self.line, state="readonly", width=25, value=['Select'])
-        self.combo_attribute3 = Combobox(self.line, state="readonly", width=25, value=['Select'])
-        self.combo_attribute4 = Combobox(self.line, state="readonly", width=25, value=['Select'])
-        self.combo_attribute5 = Combobox(self.line, state="readonly", width=25, value=['Select'])
-        self.combo_attribute6 = Combobox(self.line, state="readonly", width=25, value=['Select'])
-        self.combo_attribute7 = Combobox(self.line, state="readonly", width=25, value=['Select'])
+        self.combo_attribute1 = Combobox(self.line, state="readonly", width=17, value=['Select'])
+        self.combo_attribute2 = Combobox(self.line, state="readonly", width=17, value=['Select'])
+        self.combo_attribute3 = Combobox(self.line, state="readonly", width=17, value=['Select'])
+        self.combo_attribute4 = Combobox(self.line, state="readonly", width=17, value=['Select'])
+        self.combo_attribute5 = Combobox(self.line, state="readonly", width=17, value=['Select'])
+        self.combo_attribute6 = Combobox(self.line, state="readonly", width=17, value=['Select'])
+        self.combo_attribute7 = Combobox(self.line, state="readonly", width=17, value=['Select'])
         
         self.entry_attribute1 = Entry(self.line, textvariable=self.stringVar_defaultText1, fg="gainsboro")
         self.entry_attribute1.bind('<KeyRelease>', self.entry_attribute1_onKey_callback)
@@ -225,15 +225,16 @@ class CommandLine():
             self.combo_choice1.set(self.command.combo_choice1)
             self.combo_choice1_callback(load=True)
 
+            self.combo_instrCommand.set(self.command.combo_instrCommand)
+            self.entry_attribute1.config(textvariable=self.stringVar_attribute1, fg='black')
+            self.entry_attribute2.config(textvariable=self.stringVar_attribute2, fg='black')
+            self.entry_attribute3.config(textvariable=self.stringVar_attribute3, fg='black')
+            self.entry_attribute4.config(textvariable=self.stringVar_attribute4, fg='black')
+            self.entry_attribute5.config(textvariable=self.stringVar_attribute5, fg='black')
+            self.entry_attribute6.config(textvariable=self.stringVar_attribute6, fg='black')
+            self.entry_attribute7.config(textvariable=self.stringVar_attribute7, fg='black')
+
             if self.command.combo_instrCommand != "":
-                self.combo_instrCommand.set(self.command.combo_instrCommand)
-                self.entry_attribute1.config(textvariable=self.stringVar_attribute1, fg='black')
-                self.entry_attribute2.config(textvariable=self.stringVar_attribute2, fg='black')
-                self.entry_attribute3.config(textvariable=self.stringVar_attribute3, fg='black')
-                self.entry_attribute4.config(textvariable=self.stringVar_attribute4, fg='black')
-                self.entry_attribute5.config(textvariable=self.stringVar_attribute5, fg='black')
-                self.entry_attribute6.config(textvariable=self.stringVar_attribute6, fg='black')
-                self.entry_attribute7.config(textvariable=self.stringVar_attribute7, fg='black')
                 self.combo_instrCommand_callback(load=True)
 
     def renumberLine(self, number):
@@ -356,8 +357,8 @@ class CommandLine():
         
     def generateWaitAttributes(self):
     #This method generates the attributes for END command
-        self.entry_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
         self.stringVar_defaultText1.set("delay (s)")
+        self.entry_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
         
     def generateClimaticChamberAttributes(self):
     #This method generates the attributes for Climatic Chamber commands
@@ -388,9 +389,7 @@ class CommandLine():
             self.combo_attribute1.current(0)
 
         if self.combo_instrCommand.get() == "setMasterState":
-            self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
-            self.combo_attribute1.config(value=["OFF","ON"])
-            self.combo_attribute1.current(0)
+            None
 
     def generateMultimeterAttributes(self):
     #This method generates the attributes for Power Supply commands
