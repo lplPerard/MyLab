@@ -66,7 +66,6 @@ class ScriptController():
             duration = float(duration)
 
         def func(args=[duration]) :
-            print("I wait for : " + str(duration))
             time.sleep(duration)
 
         args=[duration]

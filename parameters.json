@@ -6,7 +6,7 @@
     "backgroundColorConfiguration": "#BDDFF7",
     "highlightBackgroundColor": "#EE6023",
     
-    "backgroundAlpha": "0.97",
+    "backgroundAlpha": "1",
     "geometry": "500x830",
 
     "instrumentBorderwidth" : "2",
