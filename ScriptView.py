@@ -38,8 +38,8 @@ class ScriptView():
         self.scriptState = "STOP"
 
         self.dataFrame = LabelFrame(self.view)
-        self.mainCanva= Canvas(self.view, scrollregion=(0,0,2500,2000), bd=0, highlightthickness=0, bg=self.model.parameters_dict['backgroundColor'])
-        self.mainFrame= Frame(self.mainCanva, bg=self.model.parameters_dict['backgroundColor'])
+        self.mainCanva= Canvas(self.view, scrollregion=(0,0,2500,2000), bd=0, highlightthickness=0, bg=self.model.parameters_dict['backgroundColorScript'])
+        self.mainFrame= Frame(self.mainCanva, bg=self.model.parameters_dict['backgroundColorScript'])
         self.defilY_setup = Scrollbar(self.mainCanva, orient='vertical', command=self.mainCanva.yview, bg=self.model.parameters_dict['backgroundColor'])
         self.defilX_setup = Scrollbar(self.mainCanva, orient='horizontal', command=self.mainCanva.xview, bg=self.model.parameters_dict['backgroundColor'])
 

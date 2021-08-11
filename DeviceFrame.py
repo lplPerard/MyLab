@@ -37,7 +37,7 @@ class DeviceFrame():
                                                                                  bd=self.model.parameters_dict['instrumentBorderwidth'])
         self.frame.pack(fill="y", expand="no", side="left", anchor='nw', pady=5)
 
-        self.labelFrame_instrument = LabelFrame(self.frame, text="Instrument", bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.labelFrame_instrument = LabelFrame(self.frame, text="Instrument", bg=self.model.parameters_dict['backgroundColorInstrumentData'])
 
     def clearFrame(self):
     #This method delete the Sequence's frame from the grid

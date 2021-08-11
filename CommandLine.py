@@ -49,16 +49,27 @@ class CommandLine():
     def initAttributes(self):
     #this method list all the attributes
         self.commandType = ""
+        self.state = "FREE"
         self.variablesList = ["Temperature", "Voltage", "Current", "Frequency", "A", "B", "C", "D", "E", "F", "G"]
 
         self.line = Frame(self.frame, bg=self.model.parameters_dict['backgroundColorCommandLine'])
         self.line.pack(fill="x", expand="no", side="top", anchor='nw', pady=2)
 
         self.deleteImg = Image.open("delete.png")
-        self.deleteImg = self.deleteImg.resize((10, 10), Image.ANTIALIAS)
+        self.deleteImg = self.deleteImg.resize((10, 12), Image.ANTIALIAS)
         self.deleteImg = ImageTk.PhotoImage(self.deleteImg)
 
+        self.emptyImg = Image.open("empty.png")
+        self.emptyImg = self.emptyImg.resize((10, 10), Image.ANTIALIAS)
+        self.emptyImg = ImageTk.PhotoImage(self.emptyImg)
+
+        self.breakpointImg = Image.open("breakpoint.png")
+        self.breakpointImg = self.breakpointImg.resize((10, 10), Image.ANTIALIAS)
+        self.breakpointImg = ImageTk.PhotoImage(self.breakpointImg)
+
         self.label_number = Label(self.line, text=str(self.number), bg=self.model.parameters_dict['backgroundColorCommandLine'])
+        self.label_breakpoint = Label(self.line, image=self.emptyImg, bg=self.model.parameters_dict['backgroundColorCommandLine'])
+        self.label_breakpoint.bind('<Button-1>', self.label_breakpoint_onClick_callback)
 
         self.combo_choice1 = Combobox(self.line, state="readonly", width=25, value=['Select', 'WAIT', 'FOR', 'END'], postcommand=self.combo_choice1_update)
         self.combo_instrCommand = Combobox(self.line, state="readonly", width=25)
@@ -119,6 +130,7 @@ class CommandLine():
         self.label_attribute2 = Label(self.line)
 
         self.button_deleteLine = Button(self.line, image=self.deleteImg, command=self.button_deleteLine_callback)
+        self.label_breakpoint.pack(expand="no", side="left", anchor='w', padx=2)
         self.button_deleteLine.pack(expand="no", side="left", anchor='ne', padx=2)
 
     def initLabel(self):
@@ -218,6 +230,16 @@ class CommandLine():
         
     def entry_attribute7_onKey_callback(self, args=None):
         self.command.entry_attribute7 = self.stringVar_attribute7.get()
+
+    def label_breakpoint_onClick_callback(self, args=None):
+    #Ths method adds a breakpoint to the command line
+        if self.state == "FREE":
+            self.label_breakpoint.config(image=self.breakpointImg)            
+            self.state = "BREAKPOINT"
+
+        else :
+            self.label_breakpoint.config(image=self.emptyImg)            
+            self.state = "FREE"
 
     def updateLine(self, args=None):
     #this method is called to load saved data

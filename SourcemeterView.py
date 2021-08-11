@@ -110,7 +110,7 @@ class SourcemeterView (DeviceFrame):
         self.combo_measure_resistance = Combobox(self.frame_measure_resistance, state="readonly", width=8, values=["kΩ", "Ω", "MΩ"])
 
         self.img = None
-        self.panel = Label(self.frame, bg=self.model.parameters_dict['backgroundColor'])
+        self.panel = Label(self.frame, bg=self.model.parameters_dict['backgroundColorInstrument'])
         
         self.radio_source1 = Radiobutton(self.frame_source1, variable=self.intVar_radio_source, value=0)
         self.radio_source2 = Radiobutton(self.frame_source2, variable=self.intVar_radio_source, value=1)
@@ -136,7 +136,7 @@ class SourcemeterView (DeviceFrame):
                     self.img = Image.open(self.model.devices_dict[item][2])
                     self.img = self.img.resize((200, 100), Image.ANTIALIAS)
                     self.img = ImageTk.PhotoImage(self.img)
-                    self.panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColor'])
+                    self.panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColorInstrument'])
                     self.panel.pack(fill = "both", expand = "yes")
 
                 found=1
@@ -167,45 +167,45 @@ class SourcemeterView (DeviceFrame):
     #This method instanciates all the LabelFrame
         self.labelFrame_instrument.pack(padx=5, pady=5, fill="y")
 
-        self.labelFrame_source.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.labelFrame_source.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.labelFrame_source.pack(padx=5, pady=5, fill="y")
 
-        self.labelFrame_measure.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.labelFrame_measure.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.labelFrame_measure.pack(padx=5, pady=5, fill="y")
 
     def initFrameLine(self):
     #This method instanciates all the frames used as lines
-        self.frame_instrument_name.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_instrument_name.configure(bg=self.model.parameters_dict['backgroundColorInstrumentData'])
         self.frame_instrument_name.pack(fill="both", pady=3)
 
-        self.frame_instrument_address.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_instrument_address.configure(bg=self.model.parameters_dict['backgroundColorInstrumentData'])
         self.frame_instrument_address.pack(fill="both", pady=3)
 
-        self.frame_source1.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_source1.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_source1.pack(fill="both", pady=5)
 
-        self.frame_source2.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_source2.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_source2.pack(fill="both", pady=5)
 
-        self.frame_source_voltage.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_source_voltage.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_source_voltage.pack(fill="both", pady=5)
 
-        self.frame_source_currentCompliance.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_source_currentCompliance.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_source_currentCompliance.pack(fill="both", pady=5)
 
-        self.frame_source_current.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_source_current.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_source_current.pack(fill="both", pady=5)
 
-        self.frame_source_voltageCompliance.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_source_voltageCompliance.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_source_voltageCompliance.pack(fill="both", pady=5)        
 
-        self.frame_measure_voltage.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_measure_voltage.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_measure_voltage.pack(padx=5, pady=5, fill="y")
 
-        self.frame_measure_current.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_measure_current.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_measure_current.pack(padx=5, pady=5, fill="y")
 
-        self.frame_measure_resistance.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_measure_resistance.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_measure_resistance.pack(padx=5, pady=5, fill="y")
     
     def initVar(self):
@@ -223,31 +223,31 @@ class SourcemeterView (DeviceFrame):
         
     def initLabel(self):
     #This methods instanciates all the Label
-        self.label_instrumentName.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_instrumentName.configure(bg=self.model.parameters_dict['backgroundColorInstrumentData'])
         self.label_instrumentName.pack(side="left")
 
-        self.label_instrumentaddress.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_instrumentaddress.configure(bg=self.model.parameters_dict['backgroundColorInstrumentData'])
         self.label_instrumentaddress.pack(side="left")
 
-        self.label_source_voltage.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_source_voltage.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.label_source_voltage.pack(side="left", anchor='ne')
 
-        self.label_source_currentCompliance.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_source_currentCompliance.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.label_source_currentCompliance.pack(side="left", anchor='ne')
 
-        self.label_source_current.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_source_current.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.label_source_current.pack(side="left")
 
-        self.label_source_voltageCompliance.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_source_voltageCompliance.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.label_source_voltageCompliance.pack(side="left")
 
-        self.label_measure_voltage.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_measure_voltage.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.label_measure_voltage.pack(side="left")
 
-        self.label_measure_current.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_measure_current.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.label_measure_current.pack(side="left")
 
-        self.label_measure_resistance.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_measure_resistance.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.label_measure_resistance.pack(side="left")
 
     def initCombo(self):
@@ -255,31 +255,31 @@ class SourcemeterView (DeviceFrame):
         #self.combo_source_voltage.bind("<<ComboboxSelected>>", self.combo_temperatureSource_callback)
         self.combo_source_voltage.configure(background='white')
         self.combo_source_voltage.current(0)
-        self.combo_source_voltage.pack(side="right")
+        self.combo_source_voltage.pack(side="right", padx=5)
         
         self.combo_source_currentCompliance.configure(background='white')
         self.combo_source_currentCompliance.current(0)
-        self.combo_source_currentCompliance.pack(side="right")
+        self.combo_source_currentCompliance.pack(side="right", padx=5)
         
         self.combo_source_current.configure(background='white')
         self.combo_source_current.current(0)
-        self.combo_source_current.pack(side="right")
+        self.combo_source_current.pack(side="right", padx=5)
         
         self.combo_source_voltageCompliance.configure(background='white')
         self.combo_source_voltageCompliance.current(0)
-        self.combo_source_voltageCompliance.pack(side="right")
+        self.combo_source_voltageCompliance.pack(side="right", padx=5)
         
         self.combo_measure_voltage.configure(background='white')
         self.combo_measure_voltage.current(0)
-        self.combo_measure_voltage.pack(side="right")
+        self.combo_measure_voltage.pack(side="right", padx=5)
         
         self.combo_measure_current.configure(background='white')
         self.combo_measure_current.current(0)
-        self.combo_measure_current.pack(side="right")
+        self.combo_measure_current.pack(side="right", padx=5)
         
         self.combo_measure_resistance.configure(background='white')
         self.combo_measure_resistance.current(0)
-        self.combo_measure_resistance.pack(side="right")
+        self.combo_measure_resistance.pack(side="right", padx=5)
 
     def initEntries(self):
     #This method instanciates the entries    
@@ -306,17 +306,17 @@ class SourcemeterView (DeviceFrame):
     def initButton(self):
     #This method instanciates the buttons
         self.radio_source1.pack()
-        self.radio_source1.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.radio_source1.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
 
         self.radio_source2.pack()
-        self.radio_source2.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.radio_source2.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         
         self.master_activate.pack(side='left', expand="yes")
 
         self.radio_masterStateON.pack(side="top", expand="yes", fill="both")
-        self.radio_masterStateON.configure(bg=self.model.parameters_dict['backgroundColor'], state="disabled", disabledforeground="black")
+        self.radio_masterStateON.configure(bg=self.model.parameters_dict['backgroundColorInstrument'], state="disabled", disabledforeground="black")
         self.radio_masterStateOFF.pack(side="top", expand="yes", fill="both")
-        self.radio_masterStateOFF.configure(bg=self.model.parameters_dict['backgroundColor'], state="disabled", disabledforeground="black")
+        self.radio_masterStateOFF.configure(bg=self.model.parameters_dict['backgroundColorInstrument'], state="disabled", disabledforeground="black")
 
     def entry_instrumentName_callback(self, arg=None, newName=None):
     #This method calls the view to change instrument name

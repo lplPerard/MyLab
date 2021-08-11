@@ -86,7 +86,7 @@ class View(Tk):
         self.frameLine_instruments = Frame(self)
         self.frameLine_script = Frame(self)
 
-        self.mainCanva= Canvas(self.frameLine_instruments, scrollregion=(0,0,4000,0), bd=0, highlightthickness=0, bg=self.model.parameters_dict['backgroundColor'])
+        self.mainCanva= Canvas(self.frameLine_instruments, scrollregion=(0,0,4000,0), bd=0, highlightthickness=0, bg=self.model.parameters_dict['backgroundColorView'])
         self.defilX_setup = Scrollbar(self.frameLine_instruments, orient='horizontal', command=self.mainCanva.xview, bg=self.model.parameters_dict['backgroundColor'], troughcolor=self.model.parameters_dict['backgroundColor'])
         self.mainFrame= Frame(self.mainCanva)
 
@@ -103,17 +103,16 @@ class View(Tk):
         self.attributes('-alpha', self.model.parameters_dict['backgroundAlpha'])
         self.configure(bg=self.model.parameters_dict['viewColor'])
         
-        self.frameLine_instruments.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frameLine_instruments.configure(bg=self.model.parameters_dict['backgroundColorView'])
         self.frameLine_instruments.pack(padx=5, pady=5, fill="both")
         
-        self.frameLine_script.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frameLine_script.configure(bg=self.model.parameters_dict['backgroundColorScript'])
         self.frameLine_script.pack(padx=5, pady=5, fill="both", expand="yes")
         
-        self.mainFrame.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.mainFrame.configure(bg=self.model.parameters_dict['backgroundColorView'])
         self.mainFrame.pack(padx=5, pady=5, fill="both", expand="yes")
 
         self.mainCanva.create_window(0, 0, anchor='nw', window=self.mainFrame, height=600, width=1920)
-        self.mainFrame.configure(bg=self.model.parameters_dict['backgroundColor'])
 
         self.mainCanva.config(xscrollcommand= self.defilX_setup.set, height=605)
         self.mainCanva.pack(fill="both", expand="yes")

@@ -147,10 +147,10 @@ class ClimaticChamberView (DeviceFrame):
         self.button_measure.pack(padx=5, pady=5, fill="y")
 
     def initFrameLine(self):
-        self.frame_instrument_name.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frame_instrument_name.configure(bg=self.model.parameters_dict['backgroundColorInstrumentData'])
         self.frame_instrument_name.pack(fill="both", pady=3)
 
-        self.frame_instrument_address.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frame_instrument_address.configure(bg=self.model.parameters_dict['backgroundColorInstrumentData'])
         self.frame_instrument_address.pack(fill="both", pady=3)
 
         self.frame_source_temperature.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
@@ -183,10 +183,10 @@ class ClimaticChamberView (DeviceFrame):
         
     def initLabel(self):
     #This methods instanciates all the Label
-        self.label_instrumentName.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.label_instrumentName.configure(bg=self.model.parameters_dict['backgroundColorInstrumentData'])
         self.label_instrumentName.pack(side="left")
 
-        self.label_instrumentaddress.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.label_instrumentaddress.configure(bg=self.model.parameters_dict['backgroundColorInstrumentData'])
         self.label_instrumentaddress.pack(side="left")
 
         self.label_temperatureSource.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
@@ -200,12 +200,12 @@ class ClimaticChamberView (DeviceFrame):
         #self.combo_temperatureSource.bind("<<ComboboxSelected>>", self.combo_temperatureSource_callback)
         self.combo_temperatureSource.configure(background='white')
         self.combo_temperatureSource.current(0)
-        self.combo_temperatureSource.pack(side="right")
+        self.combo_temperatureSource.pack(side="right", padx=5)
     
         #self.combo_temperatureMeasure.bind("<<ComboboxSelected>>", self.combo_temperatureMeasure_callback)
         self.combo_temperatureMeasure.configure(background='white')
         self.combo_temperatureMeasure.current(0)
-        self.combo_temperatureMeasure.pack(side="right")
+        self.combo_temperatureMeasure.pack(side="right", padx=5)
 
     def initEntries(self):
     #This method instanciates the entries    

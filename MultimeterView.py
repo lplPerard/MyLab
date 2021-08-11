@@ -50,8 +50,8 @@ class MultimeterView (DeviceFrame):
     #This methods initiates all attributes in the class. It is usefull to prevent double usage     
         self.state="freeze"   
         self.labelFrame_setup = LabelFrame(self.frame, text="Setup")
-        self.canva_setup = Canvas(self.labelFrame_setup, scrollregion=(0,0,0,470), bd=0, highlightthickness=0, bg=self.model.parameters_dict['backgroundColor'])
-        self.defilY_setup = Scrollbar(self.labelFrame_setup, orient='vertical', command=self.canva_setup.yview, bg=self.model.parameters_dict['backgroundColor'])
+        self.canva_setup = Canvas(self.labelFrame_setup, scrollregion=(0,0,0,470), bd=0, highlightthickness=0, bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.defilY_setup = Scrollbar(self.labelFrame_setup, orient='vertical', command=self.canva_setup.yview, bg=self.model.parameters_dict['backgroundColorInstrument'])
 
         self.frame_instrument_name = Frame(self.labelFrame_instrument)
         self.frame_instrument_address = Frame(self.labelFrame_instrument)
@@ -138,7 +138,7 @@ class MultimeterView (DeviceFrame):
         self.continuityImg_grey = ImageTk.PhotoImage(self.continuityImg_grey)         
 
         self.img = None
-        self.panel = Label(self.frame, bg=self.model.parameters_dict['backgroundColor'])
+        self.panel = Label(self.frame, bg=self.model.parameters_dict['backgroundColorInstrument'])
         
         self.radio_DCV = Radiobutton(self.frame_DCV, text='DC V', variable=self.intVar_radioValueSetup, value=0, command=self.radio_setupState_callback)
         self.radio_ACV = Radiobutton(self.frame_ACV, text='AC V', variable=self.intVar_radioValueSetup, value=1, command=self.radio_setupState_callback)
@@ -181,7 +181,7 @@ class MultimeterView (DeviceFrame):
                     self.img = Image.open(self.model.devices_dict[item][2])
                     self.img = self.img.resize((200, 100), Image.ANTIALIAS)
                     self.img = ImageTk.PhotoImage(self.img)
-                    self.panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColor'])
+                    self.panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColorInstrument'])
                     self.panel.pack(fill = "both", expand = "yes")
 
                 found=1
@@ -212,80 +212,80 @@ class MultimeterView (DeviceFrame):
     #This method instanciates all the LabelFrame
         self.labelFrame_instrument.pack(padx=5, pady=5, fill="y")
 
-        self.labelFrame_setup.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.labelFrame_setup.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.labelFrame_setup.pack(padx=5, pady=5, fill="y")
 
     def initFrameLine(self):
     #This method instanciates all the frames used as lines
         self.canva_setup.create_window(0, 0, anchor='nw', window=self.scrollframe_setup)
-        self.scrollframe_setup.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.scrollframe_setup.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
 
         self.canva_setup.config(yscrollcommand= self.defilY_setup.set, height=260, width=220)
         self.canva_setup.pack(side="left", fill="both")
         self.defilY_setup.pack(fill="y", side='left', padx='5')   
 
-        self.frame_instrument_name.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_instrument_name.configure(bg=self.model.parameters_dict['backgroundColorInstrumentData'])
         self.frame_instrument_name.pack(fill="both", pady=3)
 
-        self.frame_instrument_address.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_instrument_address.configure(bg=self.model.parameters_dict['backgroundColorInstrumentData'])
         self.frame_instrument_address.pack(fill="both", pady=3)
 
-        self.frame_source_temperature.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_source_temperature.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_source_temperature.pack(fill="both", pady=5)
 
-        self.frame_DCV.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_DCV.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_DCV.pack(fill="both", pady=5)
 
-        self.frame_ACV.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_ACV.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_ACV.pack(fill="both", pady=5)
         
-        self.frame_DCI.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_DCI.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_DCI.pack(fill="both", pady=5)
         
-        self.frame_DCI_caliber.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_DCI_caliber.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_DCI_caliber.pack(fill="both", pady=5)
         
-        self.frame_ACI.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_ACI.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_ACI.pack(fill="both", pady=5)
         
-        self.frame_ACI_caliber.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_ACI_caliber.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_ACI_caliber.pack(fill="both", pady=5)
         
-        self.frame_2WR.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_2WR.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_2WR.pack(fill="both", pady=5)
         
-        self.frame_4WR.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_4WR.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_4WR.pack(fill="both", pady=5)
         
-        self.frame_diode.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_diode.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_diode.pack(fill="both", pady=5)
         
-        self.frame_diode_caliber.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_diode_caliber.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_diode_caliber.pack(fill="both", pady=5)
         
-        self.frame_continuity.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_continuity.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_continuity.pack(fill="both", pady=5)
         
-        self.frame_frequency.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_frequency.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_frequency.pack(fill="both", pady=5)
         
-        self.frame_period.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_period.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_period.pack(fill="both", pady=5)
         
 
-        self.frame_source_button.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_source_button.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_source_button.pack(side="left", fill="both", pady=5)
 
-        self.frame_source_radio.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_source_radio.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_source_radio.pack(side="right", fill="both", pady=5)
 
-        self.frame_measure.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_measure.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_measure.pack(padx=5, pady=5, fill="y")
 
-        self.frame_measure_button.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_measure_button.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_measure_button.pack(side="left", padx=5, pady=5, fill="y")
 
-        self.frame_measure_radio.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_measure_radio.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_measure_radio.pack(side="right", padx=5, pady=5, fill="y")
     
     def initVar(self):
@@ -304,25 +304,25 @@ class MultimeterView (DeviceFrame):
         
     def initLabel(self):
     #This methods instanciates all the Label
-        self.label_instrumentName.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_instrumentName.configure(bg=self.model.parameters_dict['backgroundColorInstrumentData'])
         self.label_instrumentName.pack(side="left")
 
-        self.label_instrumentaddress.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_instrumentaddress.configure(bg=self.model.parameters_dict['backgroundColorInstrumentData'])
         self.label_instrumentaddress.pack(side="left")
 
-        self.label_DCI_caliber.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_DCI_caliber.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.label_DCI_caliber.pack(side="right", anchor='ne')
 
-        self.label_ACI_caliber.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_ACI_caliber.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.label_ACI_caliber.pack(side="right", anchor='ne')
 
-        self.label_diode_unit.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_diode_unit.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.label_diode_unit.pack(side="right")
 
-        self.label_frequency_unit.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_frequency_unit.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.label_frequency_unit.pack(side="right")
 
-        self.label_period_unit.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_period_unit.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.label_period_unit.pack(side="right")
 
     def initCombo(self):
@@ -382,65 +382,65 @@ class MultimeterView (DeviceFrame):
     def initButton(self):
     #This method instanciates the buttons
         self.radio_DCV.pack(side="left", expand="yes", fill="both")
-        self.radio_DCV.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.radio_DCV.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
 
         self.radio_ACV.pack(side="left", expand="yes", fill="both")
-        self.radio_ACV.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.radio_ACV.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
 
         self.radio_DCI.pack(side="left", expand="yes", fill="both")
-        self.radio_DCI.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.radio_DCI.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
 
         self.radio_ACI.pack(side="left", expand="yes", fill="y", anchor='w')
-        self.radio_ACI.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.radio_ACI.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
 
         self.radio_2WR.pack(side="left", expand="yes", fill="y", anchor='w')
-        self.radio_2WR.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.radio_2WR.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
 
         self.radio_4WR.pack(side="left", expand="yes", fill="y", anchor='w')
-        self.radio_4WR.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.radio_4WR.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
 
         self.radio_diode.pack(side="left", expand="yes", fill="y", anchor='w')
-        self.radio_diode.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.radio_diode.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
 
         self.radio_continuity.pack(side="left", expand="yes", fill="y", anchor='w')
-        self.radio_continuity.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.radio_continuity.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
 
         self.radio_frequency.pack(side="left", expand="yes", fill="y", anchor='w')
-        self.radio_frequency.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.radio_frequency.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
 
         self.radio_period.pack(side="left", expand="yes", fill="y", anchor='w')
-        self.radio_period.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.radio_period.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
 
         self.radio_caliberACmA.pack(side="right", fill="both", anchor='ne')
-        self.radio_caliberACmA.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.radio_caliberACmA.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
 
         self.radio_caliberDCmA.pack(side="right", fill="both", anchor='ne')
-        self.radio_caliberDCmA.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.radio_caliberDCmA.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
 
         self.radio_caliberAC10A.pack(side="right", fill="both", anchor='ne')
-        self.radio_caliberAC10A.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.radio_caliberAC10A.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
 
         self.radio_caliberDC10A.pack(side="right", fill="both", anchor='ne')
-        self.radio_caliberDC10A.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.radio_caliberDC10A.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
 
         self.radio_caliberDiode5V.pack(side="right", fill="both", anchor='ne')
-        self.radio_caliberDiode5V.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.radio_caliberDiode5V.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
 
         self.radio_caliberDiode10V.pack(side="right", fill="both", anchor='ne')
-        self.radio_caliberDiode10V.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.radio_caliberDiode10V.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
 
         self.radio_caliberDiode01mA.pack(side="right", fill="both", anchor='ne')
-        self.radio_caliberDiode01mA.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.radio_caliberDiode01mA.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
 
         self.radio_caliberDiode1mA.pack(side="right", fill="both", anchor='ne')
-        self.radio_caliberDiode1mA.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.radio_caliberDiode1mA.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
 
         self.measure_activate.pack(expand="yes")
 
         self.radio_masterStateON.pack(side="top", expand="yes", fill="both")
-        self.radio_masterStateON.configure(bg=self.model.parameters_dict['backgroundColor'], state="disabled", disabledforeground="black")
+        self.radio_masterStateON.configure(bg=self.model.parameters_dict['backgroundColorInstrument'], state="disabled", disabledforeground="black")
         self.radio_masterStateOFF.pack(side="top", expand="yes", fill="both")
-        self.radio_masterStateOFF.configure(bg=self.model.parameters_dict['backgroundColor'], state="disabled", disabledforeground="black")
+        self.radio_masterStateOFF.configure(bg=self.model.parameters_dict['backgroundColorInstrument'], state="disabled", disabledforeground="black")
 
         self.intVar_radioValueSetup.set(0)
         self.intVar_radioValuemeasure.set(0)

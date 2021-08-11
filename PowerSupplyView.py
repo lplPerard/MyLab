@@ -204,13 +204,13 @@ class PowerSupplyView (DeviceFrame):
         self.labelFrame_measure.pack(padx=5, pady=5, fill="y")
 
     def initFrameLine(self):
-        self.frame_instrument_name.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frame_instrument_name.configure(bg=self.model.parameters_dict['backgroundColorInstrumentData'])
         self.frame_instrument_name.pack(fill="both", pady=3)
 
-        self.frame_instrument_address.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frame_instrument_address.configure(bg=self.model.parameters_dict['backgroundColorInstrumentData'])
         self.frame_instrument_address.pack(fill="both", pady=3)
 
-        self.frame_instrument_channel.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frame_instrument_channel.configure(bg=self.model.parameters_dict['backgroundColorInstrumentData'])
         self.frame_instrument_channel.pack(fill="both", pady=3)
 
         self.frame_source_voltage.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
@@ -255,13 +255,13 @@ class PowerSupplyView (DeviceFrame):
         
     def initLabel(self):
     #This methods instanciates all the Label
-        self.label_instrumentName.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.label_instrumentName.configure(bg=self.model.parameters_dict['backgroundColorInstrumentData'])
         self.label_instrumentName.pack(side="left")
 
-        self.label_instrumentaddress.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.label_instrumentaddress.configure(bg=self.model.parameters_dict['backgroundColorInstrumentData'])
         self.label_instrumentaddress.pack(side="left")
 
-        self.label_instrumentChannel.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.label_instrumentChannel.configure(bg=self.model.parameters_dict['backgroundColorInstrumentData'])
         self.label_instrumentChannel.pack(side="left")
 
         self.label_voltageSource.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
@@ -284,33 +284,33 @@ class PowerSupplyView (DeviceFrame):
         self.combo_instrumentChannel.bind("<<ComboboxSelected>>", self.combo_instrumentChannel_callback)
         self.combo_instrumentChannel.configure(background='white')
         self.combo_instrumentChannel.current(0)
-        self.combo_instrumentChannel.pack(side="right")
+        self.combo_instrumentChannel.pack(side="right", padx=3)
         self.combo_instrumentChannel_callback()
 
         self.combo_voltageSource.bind("<<ComboboxSelected>>", self.combo_voltageSource_callback)
         self.combo_voltageSource.configure(background='white')
         self.combo_voltageSource.current(0)
-        self.combo_voltageSource.pack(side="right")
+        self.combo_voltageSource.pack(side="right", padx=5)
     
         self.combo_currentSource.bind("<<ComboboxSelected>>", self.combo_currentSource_callback)
         self.combo_currentSource.configure(background='white')
         self.combo_currentSource.current(0)
-        self.combo_currentSource.pack(side="right")
+        self.combo_currentSource.pack(side="right", padx=5)
     
         #self.combo_voltageMeasure.bind("<<ComboboxSelected>>", self.combo_voltageMeasure_callback)
         self.combo_voltageMeasure.configure(background='white')
         self.combo_voltageMeasure.current(0)
-        self.combo_voltageMeasure.pack(side="right")
+        self.combo_voltageMeasure.pack(side="right", padx=5)
     
         #self.combo_currentMeasure.bind("<<ComboboxSelected>>", self.combo_currentMeasure_callback)
         self.combo_currentMeasure.configure(background='white')
         self.combo_currentMeasure.current(0)
-        self.combo_currentMeasure.pack(side="right")
+        self.combo_currentMeasure.pack(side="right", padx=5)
     
         #self.combo_currentMeasure.bind("<<ComboboxSelected>>", self.combo_currentMeasure_callback)
         self.combo_powerMeasure.configure(background='white')
         self.combo_powerMeasure.current(0)
-        self.combo_powerMeasure.pack(side="right")
+        self.combo_powerMeasure.pack(side="right", padx=5)
 
     def initEntries(self):
     #This method instanciates the entries    

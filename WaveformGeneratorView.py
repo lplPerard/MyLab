@@ -48,7 +48,6 @@ class WaveformGeneratorView (DeviceFrame):
     def initAttributes(self):
     #This methods initiates all attributes in the class. It is usefull to prevent double usage     
         self.state="freeze"   
-        self.labelFrame_instrument = LabelFrame(self.frame, text="Instrument")
         self.labelFrame_signal = LabelFrame(self.frame, text="Signal")
         self.labelFrame_function = LabelFrame(self.frame, text="Functions")
         self.labelFrame_output = LabelFrame(self.frame, text="Output")
@@ -94,7 +93,6 @@ class WaveformGeneratorView (DeviceFrame):
         self.frame_output_state = Frame(self.labelFrame_output)
         self.frame_master_button = Frame(self.labelFrame_output)
         self.frame_master_radio = Frame(self.labelFrame_output)
-
 
         self.stringvar_instrumentName = StringVar()    
         self.stringvar_instrumentaddress = StringVar()
@@ -276,7 +274,6 @@ class WaveformGeneratorView (DeviceFrame):
         
     def initLabelFrame(self):
     #This method instanciates all the LabelFrame
-        self.labelFrame_instrument.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.labelFrame_instrument.pack(padx=5, pady=3)
 
         self.labelFrame_signal.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
@@ -290,10 +287,10 @@ class WaveformGeneratorView (DeviceFrame):
 
     def initFrameLine(self):
     #This method instanciates all the frame lines
-        self.frame_instrument_name.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frame_instrument_name.configure(bg=self.model.parameters_dict['backgroundColorInstrumentData'])
         self.frame_instrument_name.pack(fill="both", pady=3)
 
-        self.frame_instrument_address.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frame_instrument_address.configure(bg=self.model.parameters_dict['backgroundColorInstrumentData'])
         self.frame_instrument_address.pack(fill="both", pady=3)
 
         self.canva_signal.create_window(0, 0, anchor='nw', window=self.scrollframe_signal)
@@ -414,10 +411,10 @@ class WaveformGeneratorView (DeviceFrame):
         
     def initLabel(self):
     #This methods instanciates all the Label
-        self.label_instrumentName.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.label_instrumentName.configure(bg=self.model.parameters_dict['backgroundColorInstrumentData'])
         self.label_instrumentName.pack(side="left")
 
-        self.label_instrumentaddress.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.label_instrumentaddress.configure(bg=self.model.parameters_dict['backgroundColorInstrumentData'])
         self.label_instrumentaddress.pack(side="left")
 
         self.label_signal_waveform.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
