@@ -555,6 +555,4 @@ class CommandLine():
             self.combo_attribute1.current(0)
 
         if self.combo_instrCommand.get() == "setMasterState":
-            self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
-            self.combo_attribute1.config(value=["OFF", "ON"])
-            self.combo_attribute1.current(0)
+            None

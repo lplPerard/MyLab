@@ -59,7 +59,6 @@ class WaveformGeneratorController():
 
     def applySinus(self, args=[]):
     #this method set the parameters for a sinus waveform    
-        print(args)
         if (self.instrument.state == "free") or (self.instrument.state == "unreachable"):
             try:
                 self.instrument.ressource = self.resourceManager.open_resource(self.instrument.address)
@@ -69,10 +68,11 @@ class WaveformGeneratorController():
                 self.instrument.state = "unreachable"
                 self.instrument.ressource.close()
                 self.instrument.ressource = None
-                return(-1)
+                return("ERROR")
 
             try:
-                self.instrument.ressource.write('APPL:SIN ' + str(args[0]) + ' ' + str(args[8]) + ', ' + str(args[1]) + ' ' + str(args[9]) + ', ' + str(args[2]))
+                cmd='APPL:SIN ' + str(args[0]) + ' ' + str(args[7]) + ', ' + str(args[1]) + ' ' + str(args[8]) + ', ' + str(args[2])
+                self.instrument.ressource.write(cmd)
                 self.instrument.ressource.write('PHAS ' + str(args[3]))
                 self.instrument.ressource.write('OUTP OFF')
             except:
@@ -80,12 +80,12 @@ class WaveformGeneratorController():
                 self.instrument.state = "unreachable"
                 self.instrument.ressource.close()
                 self.instrument.ressource = None
-                return(-1)
+                return("ERROR")
 
         else:
             self.view.view.sendError('004')
 
-    def applySquare(self, amplitude=None, amplitudeType=None, frequency=None, frequencyUnit=None, offset=None, offsetUnit=1, phase=0, dutyCycle=50):
+    def applySquare(self, args=[]):
     #this method set the parameters for a sinus waveform    
         if (self.instrument.state == "free") or (self.instrument.state == "unreachable"):
             try:
@@ -96,24 +96,25 @@ class WaveformGeneratorController():
                 self.instrument.state = "unreachable"
                 self.instrument.ressource.close()
                 self.instrument.ressource = None
-                return(-1)
+                return("ERROR")
 
             try:
-                self.instrument.ressource.write('APPL:SQU ' + str(frequency) + ' ' + str(frequencyUnit) + ', ' + str(amplitude) + ' ' + str(amplitudeType) + ', ' + str(offset*offsetUnit))
-                self.instrument.ressource.write('PHAS ' + str(phase))
-                self.instrument.ressource.write('FUNC:SQU:DCYC ' + str(dutyCycle))
+                cmd='APPL:SQU ' + str(args[0]) + ' ' + str(args[7]) + ', ' + str(args[1]) + ' ' + str(args[8]) + ', ' + str(args[2])
+                self.instrument.ressource.write(cmd)
+                self.instrument.ressource.write('PHAS ' + str(args[3]))
+                self.instrument.ressource.write('FUNC:SQU:DCYC ' + str(args[4]))
                 self.instrument.ressource.write('OUTP OFF')
             except:
                 self.view.view.sendError('002')
                 self.instrument.state = "unreachable"
                 self.instrument.ressource.close()
                 self.instrument.ressource = None
-                return(-1)
+                return("ERROR")
 
         else:
             self.view.view.sendError('004')
 
-    def applyRamp(self, amplitude=None, amplitudeType=None, frequency=None, frequencyUnit=None, offset=None, offsetUnit=1, symetry=0, phase=0):
+    def applyRamp(self, args=[]):
     #this method set the parameters for a sinus waveform    
         if (self.instrument.state == "free") or (self.instrument.state == "unreachable"):
             try:
@@ -124,24 +125,25 @@ class WaveformGeneratorController():
                 self.instrument.state = "unreachable"
                 self.instrument.ressource.close()
                 self.instrument.ressource = None
-                return(-1)
+                return("ERROR")
 
             try:
-                self.instrument.ressource.write('APPL:RAMP ' + str(frequency) + ' ' + str(frequencyUnit) + ', ' + str(amplitude) + ' ' + str(amplitudeType) + ', ' + str(offset*offsetUnit))
-                self.instrument.ressource.write('FUNC:RAMP:SYMM ' +str(symetry))
-                self.instrument.ressource.write('PHAS ' +str(phase))
+                cmd='APPL:RAMP ' + str(args[0]) + ' ' + str(args[7]) + ', ' + str(args[1]) + ' ' + str(args[8]) + ', ' + str(args[2])
+                self.instrument.ressource.write(cmd)
+                self.instrument.ressource.write('PHAS ' + str(args[3]))
+                self.instrument.ressource.write('FUNC:RAMP:SYMM ' + str(args[4]))
                 self.instrument.ressource.write('OUTP OFF')
             except:
                 self.view.view.sendError('002')
                 self.instrument.state = "unreachable"
                 self.instrument.ressource.close()
                 self.instrument.ressource = None
-                return(-1)
+                return("ERROR")
 
         else:
             self.view.view.sendError('004')
 
-    def applyPulse(self, amplitude=None, amplitudeType=None, frequency=None, frequencyUnit=None, offset=None, offsetUnit=1, phase=0, lead=0, leadUnit="ns", trail=0, trailUnit="ns", pulseWidth=1, pulseWidthUnit='ms'):
+    def applyPulse(self, args=[]):
     #this method set the parameters for a sinus waveform    
         if (self.instrument.state == "free") or (self.instrument.state == "unreachable"):
             try:
@@ -152,26 +154,29 @@ class WaveformGeneratorController():
                 self.instrument.state = "unreachable"
                 self.instrument.ressource.close()
                 self.instrument.ressource = None
-                return(-1)
+                return("ERROR")
 
             try:
-                self.instrument.ressource.write('APPL:PULS ' + str(frequency) + ' ' + str(frequencyUnit) + ', ' + str(amplitude) + ' ' + str(amplitudeType) + ', ' + str(offset*offsetUnit))
-                self.instrument.ressource.write('PHAS ' + str(phase))
-                self.instrument.ressource.write('FUNC:PULS:TRAN:LEAD ' + str(lead) + ' ' + str(leadUnit))
-                self.instrument.ressource.write('FUNC:PULS:TRAN:TRA ' + str(trail) + ' ' + str(trailUnit))
-                self.instrument.ressource.write('FUNC:PULS:WIDT ' + str(pulseWidth) + ' ' + str(pulseWidthUnit))
+                cmd='APPL:PULS ' + str(args[0]) + ' ' + str(args[7]) + ', ' + str(args[1]) + ' ' + str(args[8]) + ', ' + str(args[2])
+                self.instrument.ressource.write(cmd)
+                self.instrument.ressource.write('PHAS ' + str(args[3]))
+                self.instrument.ressource.write('FUNC:PULS:WIDT ' + str(args[4]) + ' ' + str(args[9]))
+                print('FUNC:PULS:TRAN:LEAD ' + str(args[5]) + ' ' + str(args[10]))
+                print('FUNC:PULS:TRAN:TRA ' + str(args[6]) + ' ' + str(args[11]))
+                self.instrument.ressource.write('FUNC:PULS:TRAN:LEAD ' + str(args[5]) + ' ' + str(args[10]))
+                self.instrument.ressource.write('FUNC:PULS:TRAN:TRA ' + str(args[6]) + ' ' + str(args[11]))
                 self.instrument.ressource.write('OUTP OFF')
             except:
                 self.view.view.sendError('002')
                 self.instrument.state = "unreachable"
                 self.instrument.ressource.close()
                 self.instrument.ressource = None
-                return(-1)
+                return("ERROR")
 
         else:
             self.view.view.sendError('004')
 
-    def applyNoise(self, amplitude=None, amplitudeType=None, bandwidth=1e5, bandwidthUnit=1, offset=None, offsetUnit=1):
+    def applyNoise(self, args=[]):
     #this method set the parameters for a sinus waveform    
         if (self.instrument.state == "free") or (self.instrument.state == "unreachable"):
             try:
@@ -182,23 +187,23 @@ class WaveformGeneratorController():
                 self.instrument.state = "unreachable"
                 self.instrument.ressource.close()
                 self.instrument.ressource = None
-                return(-1)
+                return("ERROR")
 
             try:
-                self.instrument.ressource.write('APPL:NOIS 1 KHZ, ' + str(amplitude) + ' ' + str(amplitudeType) + ', ' + str(offset*offsetUnit))
-                self.instrument.ressource.write('FUNC:NOIS:BWID ' + str(bandwidth*bandwidthUnit))
+                self.instrument.ressource.write('APPL:NOIS 1 KHZ, ' + str(args[0]) + ' ' + str(args[7]) + ', ' + str(args[1]))
+                self.instrument.ressource.write('FUNC:NOIS:BWID ' + str(args[2]) + ' ' + str(args[8]))
                 self.instrument.ressource.write('OUTP OFF')
             except:
                 self.view.view.sendError('002')
                 self.instrument.state = "unreachable"
                 self.instrument.ressource.close()
                 self.instrument.ressource = None
-                return(-1)
+                return("ERROR")
 
         else:
             self.view.view.sendError('004')
 
-    def setOutputState(self, state=0):
+    def setOutputState(self, args=[]):
     #This method set the output state at 50ohm or High Z
         if (self.instrument.state == "free") or (self.instrument.state == "unreachable"):
             try:
@@ -212,7 +217,7 @@ class WaveformGeneratorController():
                 return(-1)
         
             try:            
-                if state == 0:
+                if (args[7] == '50') or (args[7] == '50Ω'):
                     self.instrument.ressource.write('OUTP:LOAD 50')
                     self.instrument.masterState = 1
                 else:
@@ -228,7 +233,7 @@ class WaveformGeneratorController():
         else:
             self.view.view.sendError('004')
 
-    def setMasterState(self):
+    def setMasterState(self, args=[]):
     #This method modify the output state 
         if (self.instrument.state == "free") or (self.instrument.state == "unreachable"):
             try:

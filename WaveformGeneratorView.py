@@ -1114,9 +1114,9 @@ class WaveformGeneratorView (DeviceFrame):
         self.updateWaveform()
         if self.intVar_radioValueState.get() == 0:   
             self.radio_outputStateLoad.select()  
-            self.controller.setOutputState(state=0)  
+            self.controller.setOutputState(self.generateArguments(args8="50"))  
         else:          
-            self.controller.setOutputState(state=1)  
+            self.controller.setOutputState(self.generateArguments(args8="INF"))  
             self.radio_outputStateHigh.select()
     
     def radio_modulateState_callback(self, args=None):
@@ -1246,7 +1246,7 @@ class WaveformGeneratorView (DeviceFrame):
     def master_activate_callback(self):
     #This method call the controller to change output state
         self.updateWaveform() 
-        if self.controller.setMasterState() != -1:
+        if self.controller.setMasterState() != "ERROR":
             if (self.intVar_radioValueMaster.get() == 0) and (self.controller.instrument.address != ""):
                 self.intVar_radioValueMaster.set(1) 
                 self.radio_masterStateON.select() 
@@ -1263,6 +1263,7 @@ class WaveformGeneratorView (DeviceFrame):
         offset = self.doubleVar_signal_offset.get()
         phase = self.doubleVar_signal_phase.get()
         bandwidth = self.doubleVar_signal_bandwidth.get()
+        bandwidthUnit = self.combo_signal_bandwidth.get()
         dutyCycle = self.doubleVar_signal_dutyCycle.get()
         pulseWidth = self.doubleVar_signal_pulseWidth.get()
         pulseWidthUnit = self.combo_signal_pulseWidth.get()
@@ -1275,8 +1276,7 @@ class WaveformGeneratorView (DeviceFrame):
         args=[]
 
         if self.combo_signal_waveform.get() == "Sinus":     
-            args = self.generateArguments(args1=frequency, args2=amplitude, args3=offset, args4=phase, args8=frequencyUnit, args9=amplitudeType)       
-            print(args)
+            args = self.generateArguments(args1=frequency, args2=amplitude, args3=offset, args4=phase, args8=frequencyUnit, args9=amplitudeType)   
             self.controller.applySinus(args)    
 
         if self.combo_signal_waveform.get() == "Square":
@@ -1292,10 +1292,11 @@ class WaveformGeneratorView (DeviceFrame):
             self.controller.applyPulse(args)   
       
         if self.combo_signal_waveform.get() == "Noise":
-            args = self.generateArguments(args1=amplitude, args2=offset, args3=bandwidth, args8=amplitudeType) 
+            args = self.generateArguments(args1=amplitude, args2=offset, args3=bandwidth, args8=amplitudeType, args9=bandwidthUnit) 
             self.controller.applyNoise(args)   
       
     def generateArguments(self, args1="", args2="", args3="", args4="", args5="", args6="", args7="", args8="", args9="", args10="", args11="", args12="", args13="", args14=""):
+    #This method generates a list of argument
         liste = [""]*14
 
         liste[0] = args1

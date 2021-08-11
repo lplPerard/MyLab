@@ -36,14 +36,21 @@ class ClimaticChamberController():
 
     def setTemperature(self, args=[]):
 	# sets the temperature as temp 
-        nominal_temp_string = "$00E " + str(args[0]) + "\r\n"
-        self.resource.write(nominal_temp_string.encode()) 
+        try:
+            nominal_temp_string = "$00E " + str(args[0]) + "\r\n"
+            self.resource.write(nominal_temp_string.encode()) 
+        except:
+            return("ERROR")
         
 
     def getTemperature(self):
-        tmp = "$00I\r\n"
-        self.resource.write(tmp.encode())
-        line = self.resource.readline()
-        line = line.decode('utf-8')
-        line = line.split(' ')
-        return(float(line[1]))
+        try:
+            tmp = "$00I\r\n"
+            self.resource.write(tmp.encode())
+            line = self.resource.readline()
+            line = line.decode('utf-8')
+            line = line.split(' ')
+            return(float(line[1]))
+
+        except:
+            return("ERROR")

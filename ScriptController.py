@@ -159,8 +159,7 @@ class ScriptController():
             if command.entry_attribute1 != '':
                 args.append(float(command.entry_attribute1))
             else:
-                args.append(command.entry_attribute1)
-                
+                args.append(command.entry_attribute1)                
 
         try:
             listeVariable.index(command.entry_attribute2)
