@@ -8,7 +8,9 @@ File description : Class container for Climatic Chamber Controller.
 
 
 from ClimaticChamber import ClimaticChamber
-import pyvisa
+import serial
+import time
+import string
 
 class ClimaticChamberController():
     """Class containing the PowerSupplyController for MyLab.
@@ -24,8 +26,24 @@ class ClimaticChamberController():
         self.instrument = ClimaticChamber()
         if instrument != None:
             self.instrument = instrument
-        #self.resourceManager = pyvisa.ResourceManager()
     
     def updateView(self, view):
     #Setter method for view attribute
         self.view = view
+
+    def connectToDevice(self, adress):
+        self.resource = serial.Serial(adress, 9600, timeout=1)
+
+    def setTemperature(self, args=[]):
+	# sets the temperature as temp 
+        nominal_temp_string = "$00E " + str(args[0]) + "\r\n"
+        self.resource.write(nominal_temp_string.encode()) 
+        
+
+    def getTemperature(self):
+        tmp = "$00I\r\n"
+        self.resource.write(tmp.encode())
+        line = self.resource.readline()
+        line = line.decode('utf-8')
+        line = line.split(' ')
+        return(float(line[1]))

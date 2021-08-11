@@ -382,6 +382,9 @@ class CommandLine():
         if self.combo_instrCommand.get() == "setCurrentSource":
             self.entry_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
             self.stringVar_defaultText1.set("Current")
+            self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.combo_attribute1.config(value=["1","2"])
+            self.combo_attribute1.current(0)
 
         if self.combo_instrCommand.get() == "setChannelState":
             self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
@@ -445,9 +448,6 @@ class CommandLine():
 
             self.stringVar_defaultText3.set("Offset")
             self.entry_attribute3.pack(expand="no", side="left", anchor='nw', padx=2)
-            self.combo_attribute3.pack(expand="no", side="left", anchor='nw', padx=2)
-            self.combo_attribute3.config(value=["V", "mV"])
-            self.combo_attribute3.current(0)
 
             self.stringVar_defaultText4.set("Phase (deg)")
             self.entry_attribute4.pack(expand="no", side="left", anchor='nw', padx=2)
@@ -467,9 +467,6 @@ class CommandLine():
 
             self.stringVar_defaultText3.set("Offset")
             self.entry_attribute3.pack(expand="no", side="left", anchor='nw', padx=2)
-            self.combo_attribute3.pack(expand="no", side="left", anchor='nw', padx=2)
-            self.combo_attribute3.config(value=["V", "mV"])
-            self.combo_attribute3.current(0)
 
             self.stringVar_defaultText4.set("Phase (deg)")
             self.entry_attribute4.pack(expand="no", side="left", anchor='nw', padx=2)
@@ -492,9 +489,6 @@ class CommandLine():
 
             self.stringVar_defaultText3.set("Offset")
             self.entry_attribute3.pack(expand="no", side="left", anchor='nw', padx=2)
-            self.combo_attribute3.pack(expand="no", side="left", anchor='nw', padx=2)
-            self.combo_attribute3.config(value=["V", "mV"])
-            self.combo_attribute3.current(0)
 
             self.stringVar_defaultText4.set("Phase (deg)")
             self.entry_attribute4.pack(expand="no", side="left", anchor='nw', padx=2)
@@ -517,9 +511,6 @@ class CommandLine():
 
             self.stringVar_defaultText3.set("Offset")
             self.entry_attribute3.pack(expand="no", side="left", anchor='nw', padx=2)
-            self.combo_attribute3.pack(expand="no", side="left", anchor='nw', padx=2)
-            self.combo_attribute3.config(value=["V", "mV"])
-            self.combo_attribute3.current(0)
 
             self.stringVar_defaultText4.set("Phase")
             self.entry_attribute4.pack(expand="no", side="left", anchor='nw', padx=2)
@@ -551,9 +542,6 @@ class CommandLine():
 
             self.stringVar_defaultText2.set("Offset")
             self.entry_attribute2.pack(expand="no", side="left", anchor='nw', padx=2)
-            self.combo_attribute2.pack(expand="no", side="left", anchor='nw', padx=2)
-            self.combo_attribute2.config(value=["V", "mV"])
-            self.combo_attribute2.current(0)
 
             self.stringVar_defaultText3.set("Bandwidth")
             self.entry_attribute3.pack(expand="no", side="left", anchor='nw', padx=2)

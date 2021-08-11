@@ -66,6 +66,7 @@ class ScriptController():
             duration = float(duration)
 
         def func(args=[duration]) :
+            print(duration)
             time.sleep(duration)
 
         args=[duration]
@@ -227,6 +228,8 @@ class ScriptController():
 
     def runScript(self, args=None):
     #This method generates the executable liste and run it
+        result = ""
+
         if self.analyzeCommand() != -1:
             self.view.scriptState = "RUN"
 
@@ -237,11 +240,17 @@ class ScriptController():
                 if self.view.scriptState == "NEXT":
                     self.view.scriptState = "PAUSE"
                     self.view.button_runScript.config(image=self.view.pauseImg)
-                    item[0](item[1])  
+                    result = item[0](item[1])  
                     self.view.button_runScript.config(image=self.view.playImg)
+
+                elif self.view.scriptState == "STOP":
+                    break
                 
                 else:
-                    item[0](item[1])    
+                    result = item[0](item[1])    
+
+                if result == "ERROR":
+                    break
 
             for item in self.listeCommand:
                 item.state = "FREE"

@@ -39,7 +39,6 @@ class ClimaticChamberView (DeviceFrame):
                 
         self.initLabelFrame()
         self.initFrameLine()
-        self.initButton()
         self.initLabel()
         self.initCombo()
         self.initVar()
@@ -61,7 +60,7 @@ class ClimaticChamberView (DeviceFrame):
                     self.img = Image.open(self.model.devices_dict[item][2])
                     self.img = self.img.resize((200, 300), Image.ANTIALIAS)
                     self.img = ImageTk.PhotoImage(self.img)
-                    self.panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColor'])
+                    self.panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColorInstrument'])
                     self.panel.pack(fill = "both", expand = "yes")
 
                 found=1
@@ -76,9 +75,10 @@ class ClimaticChamberView (DeviceFrame):
         if (found == 0) and (self.controller.instrument.address != ""):                
             self.term_text.insert(END, "\nUnknown device connected")
                        
-        if self.controller.instrument.address != "":
-            self.view.sendError('404')
-            #self.controller.connectToDevice()
+        if self.controller.instrument.address != "":  
+            #adress = self.stringvar_instrumentaddress.get()   
+            adress = self.controller.instrument.address.split(" ")[0]
+            self.controller.connectToDevice(adress)
     
     def initAttributes(self):
     #This methods initiates all attributes in the class. It is usefull to prevent double usage     
@@ -101,14 +101,12 @@ class ClimaticChamberView (DeviceFrame):
         self.stringvar_instrumentaddress = StringVar()
         self.doubleVar_temperatureSource = DoubleVar()
         self.doubleVar_temperatureMeasure = DoubleVar()
-        self.intVar_radioValueMaster = IntVar()
 
         self.label_instrumentName = Label(self.frame_instrument_name, text="Name :")
         self.label_instrumentaddress = Label(self.frame_instrument_address, text="Address :")
 
         self.label_temperatureSource = Label(self.frame_source_temperature, text="Temperature :")
         self.label_temperatureMeasure = Label(self.frame_measure_temperature, text="Temperature :")
-        #self.label_powerMeasure.after(1000, self.updateMonitoring)
 
         self.combo_temperatureSource = Combobox(self.frame_source_temperature, state="readonly", width=5, values=["°C", "°F"])
         self.combo_temperatureMeasure = Combobox(self.frame_measure_temperature, state="readonly", width=5, values=["°C", "°F"])
@@ -119,13 +117,11 @@ class ClimaticChamberView (DeviceFrame):
         self.entry_temperatureSource = Entry(self.frame_source_temperature, textvariable=self.doubleVar_temperatureSource, width=6)
         self.entry_temperatureMeasure = Entry(self.frame_measure_temperature, textvariable=self.doubleVar_temperatureMeasure, width=6, state="readonly")
 
-        self.master_activate = Button(self.frame_master_button, text='Master ON/OFF', command=self.master_activate_callback)
-
-        self.radio_masterStateOFF = Radiobutton(self.frame_master_radio, text='OFF', variable=self.intVar_radioValueMaster, value=1)
-        self.radio_masterStateON = Radiobutton(self.frame_master_radio, text='ON', variable=self.intVar_radioValueMaster, value=2)
+        self.button_set = Button(self.frame, text='Set Temperature', command=self.button_set_callback)
+        self.button_measure = Button(self.frame, text='Measure Temperature', command=self.button_measure_callback)
         
         self.img = None
-        self.panel = Label(self.frame, bg=self.model.parameters_dict['backgroundColor'])
+        self.panel = Label(self.frame, bg=self.model.parameters_dict['backgroundColorInstrument'])
 
     def renameInstrument(self):
         i = 0
@@ -140,38 +136,42 @@ class ClimaticChamberView (DeviceFrame):
     #This method instanciates all the LabelFrame
         self.labelFrame_instrument.pack(padx=5, pady=5, fill="y")
 
-        self.labelFrame_source.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.labelFrame_source.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.labelFrame_source.pack(padx=5, pady=5, fill="y")
+        
+        self.button_set.pack(padx=5, pady=5, fill="y")
 
-        self.labelFrame_measure.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.labelFrame_measure.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.labelFrame_measure.pack(padx=5, pady=5, fill="y")
 
+        self.button_measure.pack(padx=5, pady=5, fill="y")
+
     def initFrameLine(self):
-        self.frame_instrument_name.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_instrument_name.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_instrument_name.pack(fill="both", pady=3)
 
-        self.frame_instrument_address.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_instrument_address.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_instrument_address.pack(fill="both", pady=3)
 
-        self.frame_source_temperature.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_source_temperature.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_source_temperature.pack(fill="both", pady=5)
 
-        self.frame_source_button.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_source_button.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_source_button.pack(side="left", fill="both", pady=5)
 
-        self.frame_source_radio.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_source_radio.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_source_radio.pack(side="right", fill="both", pady=5)
 
-        self.frame_measure_temperature.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_measure_temperature.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_measure_temperature.pack(fill="both", pady=5)
 
-        self.frame_master.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_master.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_master.pack(padx=5, pady=5, fill="y")
 
-        self.frame_master_button.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_master_button.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_master_button.pack(side="left", padx=5, pady=5, fill="y")
 
-        self.frame_master_radio.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_master_radio.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_master_radio.pack(side="right", padx=5, pady=5, fill="y")
     
     def initVar(self):
@@ -183,16 +183,16 @@ class ClimaticChamberView (DeviceFrame):
         
     def initLabel(self):
     #This methods instanciates all the Label
-        self.label_instrumentName.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_instrumentName.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.label_instrumentName.pack(side="left")
 
-        self.label_instrumentaddress.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_instrumentaddress.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.label_instrumentaddress.pack(side="left")
 
-        self.label_temperatureSource.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_temperatureSource.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.label_temperatureSource.pack(side="left")
 
-        self.label_temperatureMeasure.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_temperatureMeasure.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.label_temperatureMeasure.pack(side="left")
 
     def initCombo(self):
@@ -220,16 +220,6 @@ class ClimaticChamberView (DeviceFrame):
 
         self.entry_temperatureMeasure.pack(side='right', padx=5)
 
-    def initButton(self):
-    #This method instanciates the buttons
-        self.master_activate.pack(expand="yes")
-
-        self.radio_masterStateON.pack(side="top", expand="yes", fill="both")
-        self.radio_masterStateON.configure(bg=self.model.parameters_dict['backgroundColor'], state="disabled", disabledforeground="black")
-        self.radio_masterStateOFF.pack(side="top", expand="yes", fill="both")
-        self.radio_masterStateOFF.configure(bg=self.model.parameters_dict['backgroundColor'], state="disabled", disabledforeground="black")
-
-        self.intVar_radioValueMaster.set(1)
 
     def entry_instrumentName_callback(self, arg=None, newName=None):
     #This method calls the view to change instrument name
@@ -243,7 +233,20 @@ class ClimaticChamberView (DeviceFrame):
         indexMenu = self.view.menu5.index(oldname)
         self.view.menu5.entryconfigure(indexMenu, label=name)
  
-    def master_activate_callback(self):
-    #This method call the controller to change output state        
-        self.view.sendError("404")
+    def button_set_callback(self):
+    #This method call the controller to change output state     
+        temperature = self.doubleVar_temperatureSource.get()
+        self.controller.setTemperature(self.generateArguments(args0=temperature))
+ 
+    def button_measure_callback(self):
+    #This method call the controller to change output state     
+        temperature = self.controller.getTemperature()
+        self.doubleVar_temperatureMeasure.set(temperature)
+
+    def generateArguments(self, args0=""):
+        liste=[""]*14
+
+        liste[0] = args0
+
+        return(liste)
         

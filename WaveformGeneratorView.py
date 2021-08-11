@@ -53,11 +53,11 @@ class WaveformGeneratorView (DeviceFrame):
         self.labelFrame_function = LabelFrame(self.frame, text="Functions")
         self.labelFrame_output = LabelFrame(self.frame, text="Output")
 
-        self.canva_signal = Canvas(self.labelFrame_signal, scrollregion=(0,0,0,405), bd=0, highlightthickness=0, bg=self.model.parameters_dict['backgroundColor'])
-        self.defilY_signal = Scrollbar(self.labelFrame_signal, orient='vertical', command=self.canva_signal.yview, bg=self.model.parameters_dict['backgroundColor'])
+        self.canva_signal = Canvas(self.labelFrame_signal, scrollregion=(0,0,0,405), bd=0, highlightthickness=0, bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.defilY_signal = Scrollbar(self.labelFrame_signal, orient='vertical', command=self.canva_signal.yview, bg=self.model.parameters_dict['backgroundColorInstrument'])
         
-        self.canva_function = Canvas(self.labelFrame_function, scrollregion=(0,0,0,355), bd=0, highlightthickness=0, bg=self.model.parameters_dict['backgroundColor'])
-        self.defilY_function = Scrollbar(self.labelFrame_function, orient='vertical', command=self.canva_function.yview, bg=self.model.parameters_dict['backgroundColor'])
+        self.canva_function = Canvas(self.labelFrame_function, scrollregion=(0,0,0,355), bd=0, highlightthickness=0, bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.defilY_function = Scrollbar(self.labelFrame_function, orient='vertical', command=self.canva_function.yview, bg=self.model.parameters_dict['backgroundColorInstrument'])
         
         self.frame_instrument_name = Frame(self.labelFrame_instrument)
         self.frame_instrument_address = Frame(self.labelFrame_instrument)
@@ -206,7 +206,7 @@ class WaveformGeneratorView (DeviceFrame):
         self.radio_masterStateON = Radiobutton(self.frame_master_radio, text='ON', variable=self.intVar_radioValueMaster, value=1)
         
         self.img = None
-        self.panel = Label(self.frame, bg=self.model.parameters_dict['backgroundColor'])
+        self.panel = Label(self.frame, bg=self.model.parameters_dict['backgroundColorInstrument'])
         
     def clearInstrument(self):
     #This method is used to clear every trace of this instrument before being deleted
@@ -238,21 +238,21 @@ class WaveformGeneratorView (DeviceFrame):
                     self.img = Image.open(self.model.devices_dict[item][2])
                     self.img = self.img.resize((200, 120), Image.ANTIALIAS)
                     self.img = ImageTk.PhotoImage(self.img)
-                    self.panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColor'])
+                    self.panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColorInstrument'])
                     self.panel.pack(fill = "both", expand = "yes")
 
                 if self.model.devices_dict[item][0] == "33600A":   
                     self.img = Image.open(self.model.devices_dict[item][2])
                     self.img = self.img.resize((180, 100), Image.ANTIALIAS)
                     self.img = ImageTk.PhotoImage(self.img)
-                    self.panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColor'])
+                    self.panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColorInstrument'])
                     self.panel.pack(fill = "both", expand = "yes")
 
                 if self.model.devices_dict[item][0] == "33210A":   
                     self.img = Image.open(self.model.devices_dict[item][2])
                     self.img = self.img.resize((200, 120), Image.ANTIALIAS)
                     self.img = ImageTk.PhotoImage(self.img)
-                    self.panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColor'])
+                    self.panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColorInstrument'])
                     self.panel.pack(fill = "both", expand = "yes")
 
 
@@ -276,119 +276,119 @@ class WaveformGeneratorView (DeviceFrame):
         
     def initLabelFrame(self):
     #This method instanciates all the LabelFrame
-        self.labelFrame_instrument.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.labelFrame_instrument.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.labelFrame_instrument.pack(padx=5, pady=3)
 
-        self.labelFrame_signal.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.labelFrame_signal.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.labelFrame_signal.pack(padx=5, pady=3)
         
-        self.labelFrame_function.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.labelFrame_function.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.labelFrame_function.pack(padx=5, pady=3)
 
-        self.labelFrame_output.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.labelFrame_output.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.labelFrame_output.pack(padx=5, pady=3)
 
     def initFrameLine(self):
     #This method instanciates all the frame lines
-        self.frame_instrument_name.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_instrument_name.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_instrument_name.pack(fill="both", pady=3)
 
-        self.frame_instrument_address.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_instrument_address.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_instrument_address.pack(fill="both", pady=3)
 
         self.canva_signal.create_window(0, 0, anchor='nw', window=self.scrollframe_signal)
-        self.scrollframe_signal.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.scrollframe_signal.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
 
         self.canva_signal.config(yscrollcommand= self.defilY_signal.set, height=125, width=220)
         self.canva_signal.pack(side="left", fill="both")
         self.defilY_signal.pack(fill="y", side='left', padx='5')        
 
         self.canva_function.create_window(0, 0, anchor='nw', window=self.scrollframe_function)
-        self.scrollframe_function.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.scrollframe_function.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
 
         self.canva_function.config(yscrollcommand= self.defilY_function.set, height=95, width=220)
         self.canva_function.pack(side="left", fill="both")
         self.defilY_function.pack(fill="y", side='left', padx='5')
 
-        self.frame_signal_waveform.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_signal_waveform.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_signal_waveform.pack(fill="x", pady=5)
 
-        self.frame_signal_frequency.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_signal_frequency.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_signal_frequency.pack(fill="x", pady=5)
 
-        self.frame_signal_amplitude.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_signal_amplitude.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_signal_amplitude.pack(fill="x", pady=5)
 
-        self.frame_signal_offset.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_signal_offset.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_signal_offset.pack(fill="x", pady=5)
 
-        self.frame_signal_phase.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_signal_phase.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_signal_phase.pack(fill="x", pady=5)
 
-        self.frame_signal_dutyCycle.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_signal_dutyCycle.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_signal_dutyCycle.pack(fill="x",pady=5)
 
-        self.frame_signal_pulseWidth.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_signal_pulseWidth.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_signal_pulseWidth.pack(fill="x",pady=5)
 
-        self.frame_signal_riseTime.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_signal_riseTime.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_signal_riseTime.pack(fill="x",pady=5)
 
-        self.frame_signal_fallTime.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_signal_fallTime.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_signal_fallTime.pack(fill="x",pady=5)
 
-        self.frame_signal_symetry.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_signal_symetry.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_signal_symetry.pack(fill="x",pady=5)
 
-        self.frame_signal_bandwidth.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_signal_bandwidth.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_signal_bandwidth.pack(fill="x",pady=5)
 
-        self.frame_signal_modulate.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_signal_modulate.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_signal_modulate.pack(fill="x",pady=5)
 
-        self.frame_signal_sweep.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_signal_sweep.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_signal_sweep.pack(fill="x",pady=5)
 
-        self.frame_function_modulation.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_function_modulation.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_function_modulation.pack(fill="both",pady=5)
 
-        self.frame_modulate_type.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_modulate_type.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_modulate_type.pack(fill="both",pady=5)
 
-        self.frame_modulate_source.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_modulate_source.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_modulate_source.pack(fill="both",pady=5)
 
-        self.frame_modulate_shape.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_modulate_shape.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_modulate_shape.pack(fill="both",pady=5)
 
-        self.frame_function_sweep.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_function_sweep.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_function_sweep.pack(fill="both",pady=5)
 
-        self.frame_sweep_type.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_sweep_type.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_sweep_type.pack(fill="both",pady=5)
 
-        self.frame_sweep_time.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_sweep_time.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_sweep_time.pack(fill="both",pady=5)
 
-        self.frame_sweep_startFrequency.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_sweep_startFrequency.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_sweep_startFrequency.pack(fill="both",pady=5)
 
-        self.frame_sweep_stopFrequency.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_sweep_stopFrequency.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_sweep_stopFrequency.pack(fill="both",pady=5)
 
-        self.frame_sweep_holdTime.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_sweep_holdTime.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_sweep_holdTime.pack(fill="both",pady=5)
 
-        self.frame_sweep_returnTime.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_sweep_returnTime.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_sweep_returnTime.pack(fill="both",pady=5)
 
-        self.frame_output_state.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_output_state.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_output_state.pack(fill="both",pady=5)
 
-        self.frame_master_button.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_master_button.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_master_button.pack(side="left", padx=5, pady=5, fill="y")
 
-        self.frame_master_radio.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.frame_master_radio.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_master_radio.pack(side="left", padx=5, pady=5, fill="y")
     
     def initVar(self):
@@ -414,85 +414,85 @@ class WaveformGeneratorView (DeviceFrame):
         
     def initLabel(self):
     #This methods instanciates all the Label
-        self.label_instrumentName.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_instrumentName.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.label_instrumentName.pack(side="left")
 
-        self.label_instrumentaddress.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_instrumentaddress.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.label_instrumentaddress.pack(side="left")
 
-        self.label_signal_waveform.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_signal_waveform.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.label_signal_waveform.pack(side="left")
 
-        self.label_signal_frequency.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_signal_frequency.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.label_signal_frequency.pack(side="left")
 
-        self.label_signal_amplitude.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_signal_amplitude.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.label_signal_amplitude.pack(side="left")
 
-        self.label_signal_offset.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_signal_offset.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.label_signal_offset.pack(side="left")
 
-        self.label_signal_phase.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_signal_phase.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.label_signal_phase.pack(side="left")
 
-        self.label_signal_dutyCycle.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_signal_dutyCycle.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.label_signal_dutyCycle.pack(side="left")
 
-        self.label_signal_pulseWidth.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_signal_pulseWidth.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.label_signal_pulseWidth.pack(side="left")
 
-        self.label_signal_riseTime.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_signal_riseTime.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.label_signal_riseTime.pack(side="left")
 
-        self.label_signal_fallTime.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_signal_fallTime.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.label_signal_fallTime.pack(side="left")
 
-        self.label_signal_symetry.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_signal_symetry.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.label_signal_symetry.pack(side="left")
 
-        self.label_signal_bandwidth.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_signal_bandwidth.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.label_signal_bandwidth.pack(side="left")
 
-        self.label_signal_modulate.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_signal_modulate.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.label_signal_modulate.pack(side="left")
 
-        self.label_signal_sweep.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_signal_sweep.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.label_signal_sweep.pack(side="left")
 
-        self.label_function_modulation.configure(bg=self.model.parameters_dict['backgroundColor'], state="disabled")
+        self.label_function_modulation.configure(bg=self.model.parameters_dict['backgroundColorInstrument'], state="disabled")
         self.label_function_modulation.pack(side="left")
 
-        self.label_modulate_type.configure(bg=self.model.parameters_dict['backgroundColor'], state="disabled")
+        self.label_modulate_type.configure(bg=self.model.parameters_dict['backgroundColorInstrument'], state="disabled")
         self.label_modulate_type.pack(side="left")
 
-        self.label_modulate_source.configure(bg=self.model.parameters_dict['backgroundColor'], state="disabled")
+        self.label_modulate_source.configure(bg=self.model.parameters_dict['backgroundColorInstrument'], state="disabled")
         self.label_modulate_source.pack(side="left")
 
-        self.label_modulate_shape.configure(bg=self.model.parameters_dict['backgroundColor'], state="disabled")
+        self.label_modulate_shape.configure(bg=self.model.parameters_dict['backgroundColorInstrument'], state="disabled")
         self.label_modulate_shape.pack(side="left")
 
-        self.label_function_sweep.configure(bg=self.model.parameters_dict['backgroundColor'], state="disabled")
+        self.label_function_sweep.configure(bg=self.model.parameters_dict['backgroundColorInstrument'], state="disabled")
         self.label_function_sweep.pack(side="left")
 
-        self.label_sweep_type.configure(bg=self.model.parameters_dict['backgroundColor'], state="disabled")
+        self.label_sweep_type.configure(bg=self.model.parameters_dict['backgroundColorInstrument'], state="disabled")
         self.label_sweep_type.pack(side="left")
 
-        self.label_sweep_time.configure(bg=self.model.parameters_dict['backgroundColor'], state="disabled")
+        self.label_sweep_time.configure(bg=self.model.parameters_dict['backgroundColorInstrument'], state="disabled")
         self.label_sweep_time.pack(side="left")
 
-        self.label_sweep_startFrequency.configure(bg=self.model.parameters_dict['backgroundColor'], state="disabled")
+        self.label_sweep_startFrequency.configure(bg=self.model.parameters_dict['backgroundColorInstrument'], state="disabled")
         self.label_sweep_startFrequency.pack(side="left")
 
-        self.label_sweep_stopFrequency.configure(bg=self.model.parameters_dict['backgroundColor'], state="disabled")
+        self.label_sweep_stopFrequency.configure(bg=self.model.parameters_dict['backgroundColorInstrument'], state="disabled")
         self.label_sweep_stopFrequency.pack(side="left")
 
-        self.label_sweep_holdTime.configure(bg=self.model.parameters_dict['backgroundColor'], state="disabled")
+        self.label_sweep_holdTime.configure(bg=self.model.parameters_dict['backgroundColorInstrument'], state="disabled")
         self.label_sweep_holdTime.pack(side="left")
 
-        self.label_sweep_returnTime.configure(bg=self.model.parameters_dict['backgroundColor'], state="disabled")
+        self.label_sweep_returnTime.configure(bg=self.model.parameters_dict['backgroundColorInstrument'], state="disabled")
         self.label_sweep_returnTime.pack(side="left")
 
-        self.label_output_state.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.label_output_state.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.label_output_state.pack(side="left")
 
     def initCombo(self):
@@ -656,27 +656,27 @@ class WaveformGeneratorView (DeviceFrame):
         self.master_activate.pack(expand="yes")
 
         self.radio_sweepStateON.pack(side="right", expand="yes", fill="both")
-        self.radio_sweepStateON.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.radio_sweepStateON.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.radio_sweepStateOFF.pack(side="right", expand="yes", fill="both")
-        self.radio_sweepStateOFF.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.radio_sweepStateOFF.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.intVar_radioValueSweep.set(0)
 
         self.radio_modulateStateON.pack(side="right", expand="yes", fill="both")
-        self.radio_modulateStateON.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.radio_modulateStateON.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.radio_modulateStateOFF.pack(side="right", expand="yes", fill="both")
-        self.radio_modulateStateOFF.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.radio_modulateStateOFF.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.intVar_radioValueModulate.set(0)
 
         self.radio_outputStateHigh.pack(side="right", expand="yes", fill="both")
-        self.radio_outputStateHigh.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.radio_outputStateHigh.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.radio_outputStateLoad.pack(side="right", expand="yes", fill="both")
-        self.radio_outputStateLoad.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.radio_outputStateLoad.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.intVar_radioValueState.set(0)
 
         self.radio_masterStateON.pack(side="top", expand="yes", fill="both")
-        self.radio_masterStateON.configure(bg=self.model.parameters_dict['backgroundColor'], state="disabled", disabledforeground="black")
+        self.radio_masterStateON.configure(bg=self.model.parameters_dict['backgroundColorInstrument'], state="disabled", disabledforeground="black")
         self.radio_masterStateOFF.pack(side="top", expand="yes", fill="both")
-        self.radio_masterStateOFF.configure(bg=self.model.parameters_dict['backgroundColor'], state="disabled", disabledforeground="black")
+        self.radio_masterStateOFF.configure(bg=self.model.parameters_dict['backgroundColorInstrument'], state="disabled", disabledforeground="black")
         self.intVar_radioValueMaster.set(0)
 
     def openConfiguration(self):
@@ -1272,18 +1272,45 @@ class WaveformGeneratorView (DeviceFrame):
         trail = self.doubleVar_signal_fallTime.get()
         trailUnit = self.combo_signal_fallTime.get()
 
-        if self.combo_signal_waveform.get() == "Sinus":            
-            self.controller.applySinus(amplitude=amplitude, amplitudeType=amplitudeType, frequency=frequency, frequencyUnit=frequencyUnit, offset=offset, phase=phase)    
+        args=[]
+
+        if self.combo_signal_waveform.get() == "Sinus":     
+            args = self.generateArguments(args1=frequency, args2=amplitude, args3=offset, args4=phase, args8=frequencyUnit, args9=amplitudeType)       
+            print(args)
+            self.controller.applySinus(args)    
 
         if self.combo_signal_waveform.get() == "Square":
-            self.controller.applySquare(amplitude=amplitude, amplitudeType=amplitudeType, frequency=frequency, frequencyUnit=frequencyUnit, offset=offset, phase=phase, dutyCycle=dutyCycle)      
+            args = self.generateArguments(args1=frequency, args2=amplitude, args3=offset, args4=phase, args5=dutyCycle, args8=frequencyUnit, args9=amplitudeType) 
+            self.controller.applySquare(args)      
 
         if self.combo_signal_waveform.get() == "Ramp":
-            self.controller.applyRamp(amplitude=amplitude, amplitudeType=amplitudeType, frequency=frequency, frequencyUnit=frequencyUnit, offset=offset, symetry=symetry, phase=phase)    
+            args = self.generateArguments(args1=frequency, args2=amplitude, args3=offset, args4=phase, args5=symetry, args8=frequencyUnit, args9=amplitudeType) 
+            self.controller.applyRamp(args)    
 
         if self.combo_signal_waveform.get() == "Pulse":
-            self.controller.applyPulse(amplitude=amplitude, amplitudeType=amplitudeType, frequency=frequency, frequencyUnit=frequencyUnit, offset=offset, phase=phase, lead=lead, leadUnit=leadUnit, trail=trail, trailUnit=trailUnit, pulseWidth=pulseWidth, pulseWidthUnit=pulseWidthUnit)   
+            args = self.generateArguments(args1=frequency, args2=amplitude, args3=offset, args4=phase, args5=pulseWidth, args6=lead, args7=trail, args8=frequencyUnit, args9=amplitudeType, args10=pulseWidthUnit, args11=leadUnit, args12=trailUnit) 
+            self.controller.applyPulse(args)   
       
         if self.combo_signal_waveform.get() == "Noise":
-            self.controller.applyNoise(amplitude=amplitude, amplitudeType=amplitudeType, bandwidth=bandwidth, offset=offset)   
+            args = self.generateArguments(args1=amplitude, args2=offset, args3=bandwidth, args8=amplitudeType) 
+            self.controller.applyNoise(args)   
       
+    def generateArguments(self, args1="", args2="", args3="", args4="", args5="", args6="", args7="", args8="", args9="", args10="", args11="", args12="", args13="", args14=""):
+        liste = [""]*14
+
+        liste[0] = args1
+        liste[1] = args2
+        liste[2] = args3
+        liste[3] = args4
+        liste[4] = args5
+        liste[5] = args6
+        liste[6] = args7
+        liste[7] = args8
+        liste[8] = args9
+        liste[9] = args10
+        liste[10] = args11
+        liste[11] = args12
+        liste[12] = args13
+        liste[13] = args14
+
+        return(liste)

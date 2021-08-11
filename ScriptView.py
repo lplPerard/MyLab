@@ -61,10 +61,15 @@ class ScriptView():
         self.nextImg = self.nextImg.resize((15, 15), Image.ANTIALIAS)
         self.nextImg = ImageTk.PhotoImage(self.nextImg)
 
+        self.stopImg = Image.open("stop.png")
+        self.stopImg = self.stopImg.resize((15, 15), Image.ANTIALIAS)
+        self.stopImg = ImageTk.PhotoImage(self.stopImg)
+
         self.button_addCommandLine = Button(self.dataFrame, text=" Add Command Line  ", command=self.addCommandLine)
         self.button_addCommandLine.bind_all('<Control-Key-n>', self.addCommandLine)
         self.button_insertCommandLine = Button(self.frameline_insert, text="Insert at ", command=lambda:self.addCommandLine(pos=self.intvar_insertPos.get()))
         self.button_clearCommandLine = Button(self.dataFrame, text=" Clear Script  ", command=self.clearCommandLine)
+        self.button_stopScript = Button(self.frameline_buttons, image=self.stopImg, command=self.button_stopScript_callback)
         self.button_runScript = Button(self.frameline_buttons, image=self.playImg, command=self.button_runScript_callback)
         self.button_runScript.bind_all('<Control-Key-r>', self.button_runScript_callback)
         self.button_nextInScript = Button(self.frameline_buttons, image=self.nextImg, command=self.button_nextInScript_callback)
@@ -93,6 +98,7 @@ class ScriptView():
         self.entry_insertPos.pack(side='left', padx=3)
         self.button_clearCommandLine.pack(pady=2, padx=6)
         self.frameline_buttons.pack()
+        self.button_stopScript.pack(side='left', ipadx=5, pady=2, padx=6)
         self.button_runScript.pack(side='left', ipadx=5, pady=2, padx=6)
         self.button_nextInScript.pack(side='left', ipadx=5, pady=2, padx=6)
 
@@ -147,6 +153,10 @@ class ScriptView():
     def _on_mousewheel(self, event):
     #This method is called when playing with MousWheel on the script view
         self.mainCanva.yview_scroll(int(-1*(event.delta/120)), "units")
+
+    def button_stopScript_callback(self, args=None):
+    #This method is called when running the script
+        self.scriptState = "STOP"
 
     def button_runScript_callback(self, args=None):
     #This method is called when running the script

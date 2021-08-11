@@ -57,8 +57,9 @@ class WaveformGeneratorController():
         else:
             self.view.view.sendError('004')
 
-    def applySinus(self, amplitude=None, amplitudeType=None, frequency=None, frequencyUnit=None, offset=None, offsetUnit=1, phase=0):
+    def applySinus(self, args=[]):
     #this method set the parameters for a sinus waveform    
+        print(args)
         if (self.instrument.state == "free") or (self.instrument.state == "unreachable"):
             try:
                 self.instrument.ressource = self.resourceManager.open_resource(self.instrument.address)
@@ -71,8 +72,8 @@ class WaveformGeneratorController():
                 return(-1)
 
             try:
-                self.instrument.ressource.write('APPL:SIN ' + str(frequency) + ' ' + str(frequencyUnit) + ', ' + str(amplitude) + ' ' + str(amplitudeType) + ', ' + str(offset*offsetUnit))
-                self.instrument.ressource.write('PHAS ' +str(phase))
+                self.instrument.ressource.write('APPL:SIN ' + str(args[0]) + ' ' + str(args[8]) + ', ' + str(args[1]) + ' ' + str(args[9]) + ', ' + str(args[2]))
+                self.instrument.ressource.write('PHAS ' + str(args[3]))
                 self.instrument.ressource.write('OUTP OFF')
             except:
                 self.view.view.sendError('002')

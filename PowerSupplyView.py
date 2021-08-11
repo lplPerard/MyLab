@@ -422,7 +422,7 @@ class PowerSupplyView (DeviceFrame):
     def channel_activate_callback(self):
     #This method call the controller to change output state 
         channel = self.combo_instrumentChannel.current() + 1 
-        if self.controller.setChannelState(self.generateArguments(arg7=channel)) != -1:
+        if self.controller.setChannelState(self.generateArguments(arg7=channel)) != "ERROR":
             if (self.intVar_radioValueChannel.get() == 1) and (self.controller.instrument.address != ""):
                 self.entry_currentSource_callback()
                 self.entry_voltageSource_callback()
@@ -436,7 +436,7 @@ class PowerSupplyView (DeviceFrame):
 
     def master_activate_callback(self):
     #This method call the controller to change output state 
-        if self.controller.setMasterState([]) != -1:
+        if self.controller.setMasterState([]) != "ERROR":
             if (self.intVar_radioValueMaster.get() == 1) and (self.controller.instrument.address != ""):
                 self.entry_currentSource_callback()
                 self.entry_voltageSource_callback()
@@ -444,7 +444,7 @@ class PowerSupplyView (DeviceFrame):
                 self.intVar_radioValueMaster.set(2) 
                 self.radio_masterStateON.select()  
                 channel = self.combo_instrumentChannel.current() + 1  
-                thread = Thread(target=self.controller.Measure, args=(channel,)) 
+                thread = Thread(target=self.controller.continuousMeasure, args=(self.generateArguments(arg7=channel),)) 
                 thread.start()
                 self.updateMonitoring()
             else:
