@@ -25,7 +25,9 @@ class PowerSupply(Instrument):
                           "setCurrentSource",
                           "setChannelState",
                           "setMasterState",
-                          "Measure"]
+                          "MeasureVoltage",
+                          "MeasureCurrent",
+                          "MeasurePower"]
  
         self.channelNumber = ["1", "2"]
         self.channelState = [0, 0]         # 0 => OFF state 1 => ON state

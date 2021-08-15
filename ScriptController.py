@@ -25,6 +25,8 @@ class ScriptController():
         self.instrument = None
         self.root = None
 
+        self.progress = 0
+
     def updateView(self, view):
     #this method the view and root attributes
         self.view=view
@@ -40,7 +42,17 @@ class ScriptController():
         for item in self.listeCommand:
             command=None
             if (item.combo_choice1 == "WAIT") and (item.state != "RUN"):
-                tmp = self.generateWaitCommand(item.entry_attribute1)                
+                tmp = self.generateWaitCommand(item)                
+                self.listeExecutable.append(tmp)
+                item.state = "RUN"
+
+            if (item.combo_choice1 == "STORE") and (item.state != "RUN"):
+                tmp = self.generateStoreCommand(item)                
+                self.listeExecutable.append(tmp)
+                item.state = "RUN"
+
+            if (item.combo_choice1 == "IF") and (item.state != "RUN"):
+                error = self.generateForCommand(self.listeCommand.index(item))            
                 self.listeExecutable.append(tmp)
                 item.state = "RUN"
 
@@ -55,21 +67,36 @@ class ScriptController():
                 
         return(error)
 
-    def generateWaitCommand(self, duration):
+    def generateWaitCommand(self, command):
     #This method generates a for fucntion    
         listeVariable = ["Temperature", "Voltage", "Current", "Frequency", "A", "B", "C", "D", "E", "F", "G"]
+        duration = command.entry_attribute1
 
-        try :
+        try:
             index = listeVariable.index(duration)
             duration = globals()[listeVariable[index]]
         except:
             duration = float(duration)
 
         def func(args=[duration]) :
-            print(duration)
+            print("I wait for : " + str(duration))
             time.sleep(duration)
 
-        args=[duration]
+        if command.breakpoint == 0:
+            args=[duration]
+        else :
+            args=[duration, "BREAKPOINT"]
+
+        return([func, args])
+
+    def generateStoreCommand(self, command):
+    #This method generates a store function  
+        self.getInstrument(command.combo_instrCommand)
+
+        def func(args=[]):
+            globals()[args[0]] = self.instrument.instrument.result
+
+        args=[command.combo_attribute1]
         return([func, args])
 
     def generateForCommand(self, index=None, forstate=0):
@@ -111,7 +138,7 @@ class ScriptController():
             for globals()[self.listeCommand[index].combo_instrCommand] in togothrough:
                 for item in subListeCommand :
                     if (item.combo_choice1 == "WAIT") and (item.forstate == forstate):
-                        tmp=self.generateWaitCommand(item.entry_attribute1)
+                        tmp=self.generateWaitCommand(item)
                         subListExe.append(tmp)
                         
                     elif (item.combo_choice1 == "FOR") and (item.forstate == forstate):
@@ -223,6 +250,9 @@ class ScriptController():
         args.append(command.combo_attribute6)
         args.append(command.combo_attribute7)
 
+        if command.breakpoint == 1:
+            args.append("BREAKPOINT")
+
         return(args)
 
     def runScript(self, args=None):
@@ -232,28 +262,46 @@ class ScriptController():
         if self.analyzeCommand() != -1:
             self.view.scriptState = "RUN"
 
+            progressLength = len(self.listeExecutable)
+            currentProgress = 0
+
             for item in self.listeExecutable:  
+                if item[1][-1] == "BREAKPOINT":
+                    self.view.scriptState = "PAUSE"
+                    self.view.button_runScript.config(image=self.view.playImg)
+
                 while self.view.scriptState == "PAUSE":
                     None
 
                 if self.view.scriptState == "NEXT":
                     self.view.scriptState = "PAUSE"
                     self.view.button_runScript.config(image=self.view.pauseImg)
-                    result = item[0](item[1])  
+                    try:
+                        result = item[0](item[1])   
+                    except:
+                        break
                     self.view.button_runScript.config(image=self.view.playImg)
 
                 elif self.view.scriptState == "STOP":
                     break
                 
                 else:
-                    result = item[0](item[1])    
+                    try:
+                        result = item[0](item[1])   
+                    except:
+                        break
 
                 if result == "ERROR":
                     break
 
+                currentProgress = currentProgress + 1
+                self.progress = (currentProgress/progressLength)*100
+
             for item in self.listeCommand:
                 item.state = "FREE"
                 item.forstate = 0
+
+            self.progress = 0
     
         self.view.scriptState = "STOP"
         self.view.button_runScript.config(image=self.view.playImg)

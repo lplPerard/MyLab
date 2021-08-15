@@ -10,7 +10,7 @@ from tkinter.constants import END
 from OscilloscopeController import OscilloscopeController
 from DeviceFrame import DeviceFrame
 
-from tkinter import Button, Frame, IntVar, Label
+from tkinter import Button, Canvas, Frame, IntVar, Label, Scrollbar
 from tkinter import LabelFrame
 from tkinter import StringVar
 from tkinter import DoubleVar
@@ -46,70 +46,133 @@ class OscilloscopeView (DeviceFrame):
         self.initEntries()
 
     def initAttributes(self):
-    #This methods initiates all attributes in the class. It is usefull to prevent double usage   
-        self.labelFrame_source = LabelFrame(self.frame, text="Source")
-        self.labelFrame_measure = LabelFrame(self.frame, text="Measure")
-
+    #This methods initiates all attributes in the class. It is usefull to prevent double usage  
         self.frame_instrument_name = Frame(self.labelFrame_instrument)
-        self.frame_instrument_address = Frame(self.labelFrame_instrument)
-        self.frame_instrument_channel =  Frame(self.labelFrame_instrument)
-        self.frame_master = Frame(self.frame)
+        self.frame_instrument_address = Frame(self.labelFrame_instrument) 
 
-        self.frame_source_voltage = Frame(self.labelFrame_source)
-        self.frame_source_current = Frame(self.labelFrame_source)
-        self.frame_source_button = Frame(self.labelFrame_source)
-        self.frame_source_radio = Frame(self.labelFrame_source)
-        self.frame_measure_voltage = Frame(self.labelFrame_measure)
-        self.frame_measure_current = Frame(self.labelFrame_measure)
-        self.frame_measure_power = Frame(self.labelFrame_measure)
-        self.frame_master_button = Frame(self.frame_master)
-        self.frame_master_radio = Frame(self.frame_master)
+        self.frameline_channel = Frame(self.frame)
+        self.frameline_configuration = Frame(self.frame)
+
+        self.labelFrame_channel1 = LabelFrame(self.frameline_channel)
+        self.canva_channel1 = Canvas(self.labelFrame_channel1, scrollregion=(0,0,0,190), bd=0, highlightthickness=0, bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.defilY_channel1 = Scrollbar(self.labelFrame_channel1, orient='vertical', command=self.canva_channel1.yview, bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.scrollframe_channel1 = Frame(self.canva_channel1)
+
+        self.labelFrame_channel2 = LabelFrame(self.frameline_channel)
+        self.canva_channel2 = Canvas(self.labelFrame_channel2, scrollregion=(0,0,0,190), bd=0, highlightthickness=0, bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.defilY_channel2 = Scrollbar(self.labelFrame_channel2, orient='vertical', command=self.canva_channel2.yview, bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.scrollframe_channel2 = Frame(self.canva_channel2)
+
+        self.labelFrame_horizontal = LabelFrame(self.frameline_configuration, text="Horizontal")
+        self.canva_horizontal = Canvas(self.labelFrame_horizontal, scrollregion=(0,0,0,190), bd=0, highlightthickness=0, bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.defilY_horizontal = Scrollbar(self.labelFrame_horizontal, orient='vertical', command=self.canva_horizontal.yview, bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.scrollframe_horizontal = Frame(self.canva_horizontal)
+
+        self.labelFrame_trigger = LabelFrame(self.frameline_configuration, text="Trigger")
+        self.canva_trigger = Canvas(self.labelFrame_trigger, scrollregion=(0,0,0,190), bd=0, highlightthickness=0, bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.defilY_trigger = Scrollbar(self.labelFrame_trigger, orient='vertical', command=self.canva_trigger.yview, bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.scrollframe_trigger = Frame(self.canva_trigger)
+
+        self.frameline_channel1_caliber = Frame(self.scrollframe_channel1)
+        self.frameline_channel1_coupling = Frame(self.scrollframe_channel1)
+        self.frameline_channel1_bandwidth = Frame(self.scrollframe_channel1)
+        self.frameline_channel1_offset = Frame(self.scrollframe_channel1)
+        self.frameline_channel1_probe = Frame(self.scrollframe_channel1)
+        self.frameline_channel1_activate = Frame(self.scrollframe_channel1)
+
+        self.frameline_channel2_caliber = Frame(self.scrollframe_channel2)
+        self.frameline_channel2_coupling = Frame(self.scrollframe_channel2)
+        self.frameline_channel2_bandwidth = Frame(self.scrollframe_channel2)
+        self.frameline_channel2_offset = Frame(self.scrollframe_channel2)
+        self.frameline_channel2_probe = Frame(self.scrollframe_channel2)
+        self.frameline_channel2_activate = Frame(self.scrollframe_channel2)
+
+        self.frameline_horizontal_caliber = Frame(self.scrollframe_horizontal)
+        self.frameline_horizontal_position = Frame(self.scrollframe_horizontal)
+        self.frameline_horizontal_size = Frame(self.scrollframe_horizontal)
+        self.frameline_horizontal_rate = Frame(self.scrollframe_horizontal)
+
+        self.frameline_trigger_source = Frame(self.scrollframe_trigger)
+        self.frameline_trigger_type = Frame(self.scrollframe_trigger)
+        self.frameline_trigger_level = Frame(self.scrollframe_trigger)
 
         self.stringvar_instrumentName = StringVar()    
         self.stringvar_instrumentaddress = StringVar()
-        self.doubleVar_voltageSource = DoubleVar()
-        self.doubleVar_currentSource = DoubleVar()
-        self.doubleVar_voltageMeasure = DoubleVar()
-        self.doubleVar_currentMeasure = DoubleVar()
-        self.doubleVar_powerMeasure = DoubleVar()
-        self.intVar_radioValueChannel = IntVar()
-        self.intVar_radioValueMaster = IntVar()
+        self.doublevar_channel1_caliber = DoubleVar()
+        self.doublevar_channel1_offset = DoubleVar()
+        self.doublevar_channel2_caliber = DoubleVar()
+        self.doublevar_channel2_offset = DoubleVar()
+        self.doublevar_horizontal_caliber = DoubleVar()
+        self.doublevar_horizontal_position = DoubleVar()
+        self.doublevar_horizontal_size = DoubleVar()
+        self.doublevar_trigger_level = DoubleVar()
+        self.intVar_radioValue_channel1 = IntVar()
+        self.intVar_radioValue_channel2 = IntVar()
 
         self.label_instrumentName = Label(self.frame_instrument_name, text="Name :")
         self.label_instrumentaddress = Label(self.frame_instrument_address, text="Address :")
-        self.label_instrumentChannel = Label(self.frame_instrument_channel, text="Channel :")
 
-        self.label_voltageSource = Label(self.frame_source_voltage, text="Voltage :")
-        self.label_currentSource = Label(self.frame_source_current, text="Current :")
-        self.label_voltageMeasure = Label(self.frame_measure_voltage, text="Voltage :")
-        self.label_currentMeasure = Label(self.frame_measure_current, text="Current :")
-        self.label_powerMeasure = Label(self.frame_measure_power, text="Power :")
-        self.label_powerMeasure.after(1000, self.updateMonitoring)
+        self.label_channel1_caliber = Label(self.frameline_channel1_caliber, text="Caliber :     ")
+        self.label_channel1_coupling = Label(self.frameline_channel1_coupling, text="Coupling :     ")
+        self.label_channel1_bandwidth = Label(self.frameline_channel1_bandwidth, text="Bandwidth :  ")
+        self.label_channel1_offset = Label(self.frameline_channel1_offset, text="Offset :      ")
+        self.label_channel1_probe = Label(self.frameline_channel1_probe, text="Probe :          ")
 
-        self.combo_instrumentChannel = Combobox(self.frame_instrument_channel, state="readonly", width=5, values=["1", "2"])
+        self.label_channel2_caliber = Label(self.frameline_channel2_caliber, text="Caliber :     ")
+        self.label_channel2_coupling = Label(self.frameline_channel2_coupling, text="Coupling :     ")
+        self.label_channel2_bandwidth = Label(self.frameline_channel2_bandwidth, text="Bandwidth :  ")
+        self.label_channel2_offset = Label(self.frameline_channel2_offset, text="Offset :      ")
+        self.label_channel2_probe = Label(self.frameline_channel2_probe, text="Probe :          ")
 
-        self.combo_voltageSource = Combobox(self.frame_source_voltage, state="readonly", width=5, values=["V", "mV"])
-        self.combo_currentSource = Combobox(self.frame_source_current, state="readonly", width=5, values=["A", "mA"])
-        self.combo_voltageMeasure = Combobox(self.frame_measure_voltage, state="readonly", width=5, values=["V", "mV"])
-        self.combo_currentMeasure = Combobox(self.frame_measure_current, state="readonly", width=5, values=["A", "mA"])
-        self.combo_powerMeasure = Combobox(self.frame_measure_power, state="readonly", width=5, values=["W", "mW"])
+        self.label_trigger_type = Label(self.frameline_trigger_type, text="Type   :   ")
+        self.label_trigger_source = Label(self.frameline_trigger_source, text="Source : ")
+        self.label_trigger_level = Label(self.frameline_trigger_level, text="Level :     ")
+
+        self.label_horizontal_caliber = Label(self.frameline_horizontal_caliber, text="Caliber :       ")
+        self.label_horizontal_position = Label(self.frameline_horizontal_position, text="Position  :    ")
+        self.label_horizontal_size = Label(self.frameline_horizontal_size, text="Sample size : ")
+        self.label_horizontal_rate = Label(self.frameline_horizontal_rate, text="Sample rate  : ")
+
+        self.combo_channel1 = Combobox(self.frameline_channel, width=10, values=["Channel 1", "Channel 2", "Channel 3", "Channel 4"], background=self.model.parameters_dict['backgroundColorInstrument'])
+        self.combo_channel2 = Combobox(self.frameline_channel, width=10, values=["Channel 1", "Channel 2", "Channel 3", "Channel 4"], background=self.model.parameters_dict['backgroundColorInstrument'])
+
+        self.combo_channel1_coupling = Combobox(self.frameline_channel1_coupling, width=15, values=["DC", "AC", "GROUND"], background=self.model.parameters_dict['backgroundColorInstrument'])
+        self.combo_channel1_bandwidth = Combobox(self.frameline_channel1_bandwidth, width=15, values=["FULL", "200MHZ", "20MHZ"], background=self.model.parameters_dict['backgroundColorInstrument'])
+        self.combo_channel1_probe = Combobox(self.frameline_channel1_probe, width=15, values=["1:1", "10:1", "100:1"], background=self.model.parameters_dict['backgroundColorInstrument'])
+
+        self.combo_channel2_coupling = Combobox(self.frameline_channel2_coupling, width=15, values=["DC", "AC", "GROUND"], background=self.model.parameters_dict['backgroundColorInstrument'])
+        self.combo_channel2_bandwidth = Combobox(self.frameline_channel2_bandwidth, width=15, values=["FULL", "200MHZ", "20MHZ"], background=self.model.parameters_dict['backgroundColorInstrument'])
+        self.combo_channel2_probe = Combobox(self.frameline_channel2_probe, width=15, values=["1:1", "10:1", "100:1"], background=self.model.parameters_dict['backgroundColorInstrument'])
+
+        self.combo_horizontal_rate = Combobox(self.frameline_horizontal_rate, width=15, values=["2.5Gsa/s", "125Msa/s"], background=self.model.parameters_dict['backgroundColorInstrument'])
+
+        self.combo_trigger_source = Combobox(self.frameline_trigger_source, width=15, values=["Channel 1", "Channel 2", "Channel 3", "Channel 4", "External"], background=self.model.parameters_dict['backgroundColorInstrument'])
+        self.combo_trigger_type = Combobox(self.frameline_trigger_type, width=15, values=["Rising Edge", "Falling Edge", "Both Edge", "Width"], background=self.model.parameters_dict['backgroundColorInstrument'])
 
         self.entry_instrumentName = Entry(self.frame_instrument_name, textvariable=self.stringvar_instrumentName)
         self.entry_instrumentaddress = Entry(self.frame_instrument_address, textvariable=self.stringvar_instrumentaddress, state="readonly")
 
-        self.entry_voltageSource = Entry(self.frame_source_voltage, textvariable=self.doubleVar_voltageSource, width=6)
-        self.entry_currentSource = Entry(self.frame_source_current, textvariable=self.doubleVar_currentSource, width=6)
-        self.entry_voltageMeasure = Entry(self.frame_measure_voltage, textvariable=self.doubleVar_voltageMeasure, state="readonly")
-        self.entry_currentMeasure = Entry(self.frame_measure_current, textvariable=self.doubleVar_currentMeasure, state="readonly")
-        self.entry_powerMeasure = Entry(self.frame_measure_power, textvariable=self.doubleVar_powerMeasure, state="readonly")
+        self.entry_channel1_caliber = Entry(self.frameline_channel1_caliber, textvariable=self.doublevar_channel1_caliber)
+        self.entry_channel1_offset = Entry(self.frameline_channel1_offset, textvariable=self.doublevar_channel1_offset)
 
-        self.channel_activate = Button(self.frame_source_button, text='Channel ON/OFF', command=self.channel_activate_callback)
-        self.master_activate = Button(self.frame_master_button, text='Master ON/OFF', command=self.master_activate_callback)
+        self.entry_channel2_caliber = Entry(self.frameline_channel2_caliber, textvariable=self.doublevar_channel2_caliber)
+        self.entry_channel2_offset = Entry(self.frameline_channel2_offset, textvariable=self.doublevar_channel2_offset)
 
-        self.radio_channelStateOFF = Radiobutton(self.frame_source_radio, text='OFF', variable=self.intVar_radioValueChannel, value=1)
-        self.radio_channelStateON = Radiobutton(self.frame_source_radio, text='ON', variable=self.intVar_radioValueChannel, value=2)
-        self.radio_masterStateOFF = Radiobutton(self.frame_master_radio, text='OFF', variable=self.intVar_radioValueMaster, value=1)
-        self.radio_masterStateON = Radiobutton(self.frame_master_radio, text='ON', variable=self.intVar_radioValueMaster, value=2)
+        self.entry_trigger_level = Entry(self.frameline_trigger_level, textvariable=self.doublevar_trigger_level)
+
+        self.entry_horizontal_caliber = Entry(self.frameline_horizontal_caliber, textvariable=self.doublevar_horizontal_caliber)
+        self.entry_horizontal_position = Entry(self.frameline_horizontal_position, textvariable=self.doublevar_horizontal_position)
+        self.entry_horizontal_size = Entry(self.frameline_horizontal_size, textvariable=self.doublevar_horizontal_size)
+
+        self.button_channel1_activate = Button(self.frameline_channel1_activate, text='Channel ON/OFF')
+        self.radio_channel1_StateON = Radiobutton(self.frameline_channel1_activate, text='ON', variable=self.intVar_radioValue_channel1, value=0)
+        self.radio_channel1_StateOFF = Radiobutton(self.frameline_channel1_activate, text='OFF', variable=self.intVar_radioValue_channel1, value=1)
+
+        self.button_channel2_activate = Button(self.frameline_channel2_activate, text='Channel ON/OFF')
+        self.radio_channel2_StateON = Radiobutton(self.frameline_channel2_activate, text='ON', variable=self.intVar_radioValue_channel2, value=0)
+        self.radio_channel2_StateOFF = Radiobutton(self.frameline_channel2_activate, text='OFF', variable=self.intVar_radioValue_channel2, value=1)
+
+        self.button_captureWaveform = Button(self.frame, text='Capture Waveform')
         
         self.img = None
         self.panel = Label(self.frame, bg=self.model.parameters_dict['backgroundColorInstrument'])
@@ -136,26 +199,48 @@ class OscilloscopeView (DeviceFrame):
 
         for item in self.model.devices_dict:
             if (item in self.controller.instrument.address):
-                if self.model.devices_dict[item][1] == "Power Supply":
+                if self.model.devices_dict[item][1] == "Oscilloscope":
                     self.controller.instrument.id = item
                     self.controller.instrument.channelNumber = self.model.devices_dict[item][2]
-                    self.combo_instrumentChannel.configure(values=self.controller.instrument.channelNumber)
+                    self.combo_channel1.configure(values=self.controller.instrument.channelNumber)
+                    self.combo_channel2.configure(values=self.controller.instrument.channelNumber)
                     self.controller.instrument.channelState = self.model.devices_dict[item][3]
                     self.controller.instrument.channelUsed = self.model.devices_dict[item][4]
 
                     newName = self.model.devices_dict[item][0] + " (0)"
                     self.entry_instrumentName_callback(newName=newName)
 
-                    if self.model.devices_dict[item][0] == "HMC8042":   
+                    if self.model.devices_dict[item][0] == "HMO3004":   
                         self.img = Image.open(self.model.devices_dict[item][5])
-                        self.img = self.img.resize((200, 100), Image.ANTIALIAS)
+                        self.img = self.img.resize((270, 140), Image.ANTIALIAS)
                         self.img = ImageTk.PhotoImage(self.img)
                         self.panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColorInstrument'])
                         self.panel.pack(fill = "both", expand = "yes")
 
-                    if self.model.devices_dict[item][0] == "2220-30-1":   
+                    elif self.model.devices_dict[item][0] == "RTM1054":   
                         self.img = Image.open(self.model.devices_dict[item][5])
-                        self.img = self.img.resize((200, 200), Image.ANTIALIAS)
+                        self.img = self.img.resize((270, 135), Image.ANTIALIAS)
+                        self.img = ImageTk.PhotoImage(self.img)
+                        self.panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColorInstrument'])
+                        self.panel.pack(fill = "both", expand = "yes")
+
+                    elif self.model.devices_dict[item][0] == "RTM3004":   
+                        self.img = Image.open(self.model.devices_dict[item][5])
+                        self.img = self.img.resize((290, 150), Image.ANTIALIAS)
+                        self.img = ImageTk.PhotoImage(self.img)
+                        self.panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColorInstrument'])
+                        self.panel.pack(fill = "both", expand = "yes")
+
+                    elif self.model.devices_dict[item][0] == "MSO2014":   
+                        self.img = Image.open(self.model.devices_dict[item][5])
+                        self.img = self.img.resize((300, 150), Image.ANTIALIAS)
+                        self.img = ImageTk.PhotoImage(self.img)
+                        self.panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColorInstrument'])
+                        self.panel.pack(fill = "both", expand = "yes")
+
+                    elif self.model.devices_dict[item][0] == "DL9040":   
+                        self.img = Image.open(self.model.devices_dict[item][5])
+                        self.img = self.img.resize((270, 150), Image.ANTIALIAS)
                         self.img = ImageTk.PhotoImage(self.img)
                         self.panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColorInstrument'])
                         self.panel.pack(fill = "both", expand = "yes")
@@ -164,7 +249,7 @@ class OscilloscopeView (DeviceFrame):
 
                 found=1
 
-        if (found==1) and (self.model.devices_dict[item][1] != "Power Supply"):
+        if (found==1) and (self.model.devices_dict[item][1] != "Oscilloscope"):
             self.view.menu5_callback(self)
             self.view.sendError('005')
 
@@ -184,74 +269,114 @@ class OscilloscopeView (DeviceFrame):
                 self.controller.instrument.channelUsed = ["", ""]
 
         if configuration == True:
-            self.doubleVar_voltageSource.set(self.controller.instrument.source_voltage)
-            self.combo_voltageSource.set(self.controller.instrument.source_voltage_caliber)
-            self.doubleVar_currentSource.set(self.controller.instrument.source_current)
-            self.combo_currentSource.set(self.controller.instrument.source_current_caliber)
+            None #add open configuration here
             
         if self.controller.instrument.address != "":
             self.controller.connectToDevice()
-            self.combo_instrumentChannel_callback()
+            #self.combo_instrumentChannel_callback()
         
     def initLabelFrame(self):
     #This method instanciates all the LabelFrame
-        self.labelFrame_instrument.pack(padx=5, pady=5, fill="y")
+        self.labelFrame_instrument.pack(padx=5, pady=2, fill="y")
 
-        self.labelFrame_source.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
-        self.labelFrame_source.pack(padx=5, pady=5, fill="y")
+        self.labelFrame_channel1.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.labelFrame_channel1.configure(labelwidget=self.combo_channel1)
+        self.labelFrame_channel1.pack(padx=5, pady=2, fill="y", side='left')
 
-        self.labelFrame_measure.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
-        self.labelFrame_measure.pack(padx=5, pady=5, fill="y")
+        self.labelFrame_channel2.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.labelFrame_channel2.configure(labelwidget=self.combo_channel2)
+        self.labelFrame_channel2.pack(padx=5, pady=2, fill="y", side='left')
+
+        self.labelFrame_horizontal.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.labelFrame_horizontal.pack(padx=5, pady=2, fill="y", side='left')
+
+        self.labelFrame_trigger.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.labelFrame_trigger.pack(padx=5, pady=2, fill="y", side='left')
 
     def initFrameLine(self):
+    #This method instanciates all the frameline
         self.frame_instrument_name.configure(bg=self.model.parameters_dict['backgroundColorInstrumentData'])
         self.frame_instrument_name.pack(fill="both", pady=3)
 
         self.frame_instrument_address.configure(bg=self.model.parameters_dict['backgroundColorInstrumentData'])
         self.frame_instrument_address.pack(fill="both", pady=3)
+        
+        self.canva_channel1.create_window(0, 0, anchor='nw', window=self.scrollframe_channel1)
+        self.scrollframe_channel1.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.canva_channel1.config(yscrollcommand= self.defilY_channel1.set, height=125, width=200)
+        self.canva_channel1.pack(side="left", fill="both")
+        self.defilY_channel1.pack(fill="y", side='left', padx='5')   
+        
+        self.canva_channel2.create_window(0, 0, anchor='nw', window=self.scrollframe_channel2)
+        self.scrollframe_channel2.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.canva_channel2.config(yscrollcommand= self.defilY_channel2.set, height=125, width=200)
+        self.canva_channel2.pack(side="left", fill="both")
+        self.defilY_channel2.pack(fill="y", side='left', padx='5')   
+        
+        self.canva_horizontal.create_window(0, 0, anchor='nw', window=self.scrollframe_horizontal)
+        self.scrollframe_horizontal.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.canva_horizontal.config(yscrollcommand= self.defilY_horizontal.set, height=95, width=200)
+        self.canva_horizontal.pack(side="left", fill="both")
+        self.defilY_horizontal.pack(fill="y", side='left', padx='5')     
+        
+        self.canva_trigger.create_window(0, 0, anchor='nw', window=self.scrollframe_trigger)
+        self.scrollframe_trigger.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.canva_trigger.config(yscrollcommand= self.defilY_trigger.set, height=95, width=200)
+        self.canva_trigger.pack(side="left", fill="both")
+        self.defilY_trigger.pack(fill="y", side='left', padx='5')  
 
-        self.frame_instrument_channel.configure(bg=self.model.parameters_dict['backgroundColorInstrumentData'])
-        self.frame_instrument_channel.pack(fill="both", pady=3)
+        self.frameline_channel.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frameline_channel.pack(fill="both", pady=5)   
 
-        self.frame_source_voltage.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
-        self.frame_source_voltage.pack(fill="both", pady=5)
+        self.frameline_configuration.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frameline_configuration.pack(fill="both", pady=5)        
 
-        self.frame_source_current.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
-        self.frame_source_current.pack(fill="both", pady=5)
+        self.frameline_channel1_caliber.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frameline_channel1_caliber.pack(fill="both", pady=5)
+        self.frameline_channel1_coupling.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frameline_channel1_coupling.pack(fill="both", pady=5)
+        self.frameline_channel1_bandwidth.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frameline_channel1_bandwidth.pack(fill="both", pady=5)
+        self.frameline_channel1_offset.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frameline_channel1_offset.pack(fill="both", pady=5)
+        self.frameline_channel1_probe.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frameline_channel1_probe.pack(fill="both", pady=5)
+        self.frameline_channel1_activate.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frameline_channel1_activate.pack(fill="both", pady=5)
 
-        self.frame_source_button.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
-        self.frame_source_button.pack(side="left", fill="both", pady=5)
+        self.frameline_channel2_caliber.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frameline_channel2_caliber.pack(fill="both", pady=5)
+        self.frameline_channel2_coupling.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frameline_channel2_coupling.pack(fill="both", pady=5)
+        self.frameline_channel2_bandwidth.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frameline_channel2_bandwidth.pack(fill="both", pady=5)
+        self.frameline_channel2_offset.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frameline_channel2_offset.pack(fill="both", pady=5)
+        self.frameline_channel2_probe.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frameline_channel2_probe.pack(fill="both", pady=5)
+        self.frameline_channel2_activate.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frameline_channel2_activate.pack(fill="both", pady=5)
 
-        self.frame_source_radio.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
-        self.frame_source_radio.pack(side="right", fill="both", pady=5)
-
-        self.frame_measure_voltage.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
-        self.frame_measure_voltage.pack(fill="both", pady=5)
-
-        self.frame_measure_current.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
-        self.frame_measure_current.pack(fill="both",pady=5)
-
-        self.frame_measure_power.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
-        self.frame_measure_power.pack(fill="both",pady=5)
-
-        self.frame_master.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
-        self.frame_master.pack(padx=5, pady=5, fill="y")
-
-        self.frame_master_button.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
-        self.frame_master_button.pack(side="left", padx=5, pady=5, fill="y")
-
-        self.frame_master_radio.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
-        self.frame_master_radio.pack(side="right", padx=5, pady=5, fill="y")
+        self.frameline_horizontal_caliber.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frameline_horizontal_caliber.pack(fill="both", pady=5)
+        self.frameline_horizontal_position.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frameline_horizontal_position.pack(fill="both", pady=5)
+        self.frameline_horizontal_size.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frameline_horizontal_size.pack(fill="both", pady=5)
+        self.frameline_horizontal_rate.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frameline_horizontal_rate.pack(fill="both", pady=5)
+        
+        self.frameline_trigger_source.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frameline_trigger_source.pack(fill="both", pady=5)
+        self.frameline_trigger_type.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frameline_trigger_type.pack(fill="both", pady=5)
+        self.frameline_trigger_level.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frameline_trigger_level.pack(fill="both", pady=5)
     
     def initVar(self):
     #This methods instanciates all the Var
         self.stringvar_instrumentName.set(self.controller.instrument.name)    
         self.stringvar_instrumentaddress.set(self.controller.instrument.address)
-        self.doubleVar_voltageSource.set(0)
-        self.doubleVar_currentSource.set(0)
-        self.doubleVar_voltageMeasure.set(0)
-        self.doubleVar_currentMeasure.set(0)
-        self.doubleVar_powerMeasure.set(0)
         
     def initLabel(self):
     #This methods instanciates all the Label
@@ -261,56 +386,70 @@ class OscilloscopeView (DeviceFrame):
         self.label_instrumentaddress.configure(bg=self.model.parameters_dict['backgroundColorInstrumentData'])
         self.label_instrumentaddress.pack(side="left")
 
-        self.label_instrumentChannel.configure(bg=self.model.parameters_dict['backgroundColorInstrumentData'])
-        self.label_instrumentChannel.pack(side="left")
+        self.label_channel1_caliber.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.label_channel1_caliber.pack(side="left")
+        self.label_channel1_coupling.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.label_channel1_coupling.pack(side="left")
+        self.label_channel1_bandwidth.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.label_channel1_bandwidth.pack(side="left")
+        self.label_channel1_offset.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.label_channel1_offset.pack(side="left")
+        self.label_channel1_probe.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.label_channel1_probe.pack(side="left")
 
-        self.label_voltageSource.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
-        self.label_voltageSource.pack(side="left")
+        self.label_channel2_caliber.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.label_channel2_caliber.pack(side="left")
+        self.label_channel2_coupling.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.label_channel2_coupling.pack(side="left")
+        self.label_channel2_bandwidth.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.label_channel2_bandwidth.pack(side="left")
+        self.label_channel2_offset.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.label_channel2_offset.pack(side="left")
+        self.label_channel2_probe.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.label_channel2_probe.pack(side="left")
 
-        self.label_currentSource.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
-        self.label_currentSource.pack(side="left")
+        self.label_horizontal_caliber.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.label_horizontal_caliber.pack(side="left")
+        self.label_horizontal_position.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.label_horizontal_position.pack(side="left")
+        self.label_horizontal_size.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.label_horizontal_size.pack(side="left")
+        self.label_horizontal_rate.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.label_horizontal_rate.pack(side="left")
 
-        self.label_voltageMeasure.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
-        self.label_voltageMeasure.pack(side="left")
-
-        self.label_currentMeasure.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
-        self.label_currentMeasure.pack(side="left")
-
-        self.label_powerMeasure.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
-        self.label_powerMeasure.pack(side="left")
+        self.label_trigger_source.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.label_trigger_source.pack(side="left")
+        self.label_trigger_type.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.label_trigger_type.pack(side="left")
+        self.label_trigger_level.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.label_trigger_level.pack(side="left")
 
     def initCombo(self):
     #This methods instanciates all the combobox
-        self.combo_instrumentChannel.bind("<<ComboboxSelected>>", self.combo_instrumentChannel_callback)
-        self.combo_instrumentChannel.configure(background='white')
-        self.combo_instrumentChannel.current(0)
-        self.combo_instrumentChannel.pack(side="right", padx=5)
-        self.combo_instrumentChannel_callback()
+        self.combo_channel1.current(0)
+        self.combo_channel2.current(1)
 
-        self.combo_voltageSource.bind("<<ComboboxSelected>>", self.combo_voltageSource_callback)
-        self.combo_voltageSource.configure(background='white')
-        self.combo_voltageSource.current(0)
-        self.combo_voltageSource.pack(side="right", padx=5)
-    
-        self.combo_currentSource.bind("<<ComboboxSelected>>", self.combo_currentSource_callback)
-        self.combo_currentSource.configure(background='white')
-        self.combo_currentSource.current(0)
-        self.combo_currentSource.pack(side="right", padx=5)
-    
-        #self.combo_voltageMeasure.bind("<<ComboboxSelected>>", self.combo_voltageMeasure_callback)
-        self.combo_voltageMeasure.configure(background='white')
-        self.combo_voltageMeasure.current(0)
-        self.combo_voltageMeasure.pack(side="right", padx=5)
-    
-        #self.combo_currentMeasure.bind("<<ComboboxSelected>>", self.combo_currentMeasure_callback)
-        self.combo_currentMeasure.configure(background='white')
-        self.combo_currentMeasure.current(0)
-        self.combo_currentMeasure.pack(side="right", padx=5)
-    
-        #self.combo_currentMeasure.bind("<<ComboboxSelected>>", self.combo_currentMeasure_callback)
-        self.combo_powerMeasure.configure(background='white')
-        self.combo_powerMeasure.current(0)
-        self.combo_powerMeasure.pack(side="right", padx=5)
+        self.combo_channel1_coupling.pack(side='left', padx=5)
+        self.combo_channel1_coupling.current(0)
+        self.combo_channel1_bandwidth.pack(side='left', padx=5)
+        self.combo_channel1_bandwidth.current(0)
+        self.combo_channel1_probe.pack(side='left', padx=5)
+        self.combo_channel1_probe.current(0)
+
+        self.combo_channel2_coupling.pack(side='left', padx=5)
+        self.combo_channel2_coupling.current(0)
+        self.combo_channel2_bandwidth.pack(side='left', padx=5)
+        self.combo_channel2_bandwidth.current(0)
+        self.combo_channel2_probe.pack(side='left', padx=5)
+        self.combo_channel2_probe.current(0)
+        
+        self.combo_horizontal_rate.pack(side='left', padx=5)
+        self.combo_horizontal_rate.current(0)
+        
+        self.combo_trigger_source.pack(side='left', padx=5)
+        self.combo_trigger_source.current(0)
+        self.combo_trigger_type.pack(side='left', padx=5)
+        self.combo_trigger_type.current(0)
 
     def initEntries(self):
     #This method instanciates the entries    
@@ -320,78 +459,39 @@ class OscilloscopeView (DeviceFrame):
         self.entry_instrumentaddress.bind('<Double-Button-1>', self.view.menu2_Connections_callBack)
         self.entry_instrumentaddress.pack(side='right', padx=5)
 
-        self.entry_voltageSource.bind("<Return>", self.entry_voltageSource_callback)
-        self.entry_voltageSource.pack(side='right', padx=5)
+        self.entry_channel1_caliber.pack(side='left', padx=5)
+        self.entry_channel1_offset.pack(side='left', padx=5)
 
-        self.entry_currentSource.bind("<Return>", self.entry_currentSource_callback)
-        self.entry_currentSource.pack(side='right', padx=5)
+        self.entry_channel2_caliber.pack(side='left', padx=5)
+        self.entry_channel2_offset.pack(side='left', padx=5)
 
-        self.entry_voltageMeasure.pack(side='right', padx=5)
+        self.entry_horizontal_caliber.pack(side='left', padx=5)
+        self.entry_horizontal_position.pack(side='left', padx=5)
+        self.entry_horizontal_size.pack(side='left', padx=5)
 
-        self.entry_currentMeasure.pack(side='right', padx=5)
-
-        self.entry_powerMeasure.pack(side='right', padx=5)
+        self.entry_trigger_level.pack(side='left', padx=5)
 
     def initButton(self):
     #This method instanciates the buttons
-        self.channel_activate.pack(expand="yes")
-        self.master_activate.pack(expand="yes")
+        self.button_channel1_activate.pack(side="left", expand="yes")
 
-        self.radio_channelStateON.pack(side="top", expand="yes", fill="both")
-        self.radio_channelStateON.configure(bg=self.model.parameters_dict['backgroundColorInstrument'], state="disabled", disabledforeground="black")
-        self.radio_channelStateOFF.pack(side="top", expand="yes", fill="both")
-        self.radio_channelStateOFF.configure(bg=self.model.parameters_dict['backgroundColorInstrument'], state="disabled", disabledforeground="black")
-        self.radio_masterStateON.pack(side="top", expand="yes", fill="both")
-        self.radio_masterStateON.configure(bg=self.model.parameters_dict['backgroundColorInstrument'], state="disabled", disabledforeground="black")
-        self.radio_masterStateOFF.pack(side="top", expand="yes", fill="both")
-        self.radio_masterStateOFF.configure(bg=self.model.parameters_dict['backgroundColorInstrument'], state="disabled", disabledforeground="black")
+        self.radio_channel1_StateON.pack(side="left", expand="yes", fill="both")
+        self.radio_channel1_StateON.configure(bg=self.model.parameters_dict['backgroundColorInstrument'], state="disabled", disabledforeground="black")
+        self.radio_channel1_StateOFF.pack(side="left", expand="yes", fill="both")
+        self.radio_channel1_StateOFF.configure(bg=self.model.parameters_dict['backgroundColorInstrument'], state="disabled", disabledforeground="black")
 
-        self.intVar_radioValueChannel.set(1)
-        self.intVar_radioValueMaster.set(1)
+        self.intVar_radioValue_channel1.set(0)
 
-    def combo_instrumentChannel_callback(self, arg=None):
-    #This method sets the channel to avoid conflict
-        for i in range(len(self.controller.instrument.channelUsed)):
-            if self.controller.instrument.channelUsed[i] == self.controller.instrument:
-                self.controller.instrument.channelUsed[i]=""
-        
-        i=0
-        found=0
-        liste = self.controller.instrument.channelUsed
-        for item in liste:
-            if ((item == "") or (item == self.controller.instrument)) and (self.combo_instrumentChannel.current() == i):
-                self.combo_instrumentChannel.current(i)
-                self.controller.instrument.channelUsed[i]=self.controller.instrument
-                found=1
-                break         
+        self.button_channel2_activate.pack(side="left", expand="yes")
 
-            i=i+1
+        self.radio_channel2_StateON.pack(side="left", expand="yes", fill="both")
+        self.radio_channel2_StateON.configure(bg=self.model.parameters_dict['backgroundColorInstrument'], state="disabled", disabledforeground="black")
+        self.radio_channel2_StateOFF.pack(side="left", expand="yes", fill="both")
+        self.radio_channel2_StateOFF.configure(bg=self.model.parameters_dict['backgroundColorInstrument'], state="disabled", disabledforeground="black")
 
-        if found == 0:
-            i=0
-            liste = self.controller.instrument.channelUsed
-            for item in liste:
-                if (item == ""):
-                    self.combo_instrumentChannel.current(i)
-                    self.controller.instrument.channelUsed[i]=self.controller.instrument
-                    found=2
-                    break            
+        self.intVar_radioValue_channel2.set(0)
 
-                i=i+1
-
-        if found == 2:
-            self.view.sendWarning('003')
-        if found == 0:
-            self.view.menu5_callback(self)
-            self.view.sendError('006')    
-
-    def combo_voltageSource_callback(self, args=None):
-    #This method is called when clicking on combobox
-        self.controller.instrument.source_voltage_caliber = self.combo_voltageSource.get()
-
-    def combo_currentSource_callback(self, args=None):
-    #This method is called when clicking on combobox
-        self.controller.instrument.source_current_caliber = self.combo_currentSource.get()
+        self.button_captureWaveform.pack(pady=7)
 
     def entry_instrumentName_callback(self, arg=None, newName=None):
     #This method calls the view to change instrument name
@@ -404,59 +504,3 @@ class OscilloscopeView (DeviceFrame):
         self.controller.instrument.name = name
         indexMenu = self.view.menu5.index(oldname)
         self.view.menu5.entryconfigure(indexMenu, label=name)
-
-    def entry_voltageSource_callback(self, arg=None):
-    #This method calls the controller to change the voltage
-        voltage = self.doubleVar_voltageSource.get()  
-        channel = self.combo_instrumentChannel.current() + 1    
-        self.controller.instrument.source_voltage = voltage   
-        self.controller.setVoltageSource(voltage, channel)
-
-    def entry_currentSource_callback(self, arg=None):
-    #This method calls the controller to change the voltage
-        current = self.doubleVar_currentSource.get()    
-        channel = self.combo_instrumentChannel.current() + 1     
-        self.controller.instrument.source_current = current                 
-        self.controller.setCurrentSource(current, channel)
-
-    def channel_activate_callback(self):
-    #This method call the controller to change output state 
-        channel = self.combo_instrumentChannel.current() + 1 
-        if self.controller.setChannelState(channel) != -1:
-            if (self.intVar_radioValueChannel.get() == 1) and (self.controller.instrument.address != ""):
-                self.entry_currentSource_callback()
-                self.entry_voltageSource_callback()
-
-                self.intVar_radioValueChannel.set(2) 
-                self.radio_channelStateON.select() 
-                self.updateMonitoring()
-            else:
-                self.intVar_radioValueChannel.set(1)
-                self.radio_channelStateOFF.select() 
-
-    def master_activate_callback(self):
-    #This method call the controller to change output state 
-        if self.controller.setMasterState() != -1:
-            if (self.intVar_radioValueMaster.get() == 1) and (self.controller.instrument.address != ""):
-                self.entry_currentSource_callback()
-                self.entry_voltageSource_callback()
-
-                self.intVar_radioValueMaster.set(2) 
-                self.radio_masterStateON.select()  
-                channel = self.combo_instrumentChannel.current() + 1  
-                thread = Thread(target=self.controller.Measure, args=(channel,)) 
-                thread.start()
-                self.updateMonitoring()
-            else:
-                self.intVar_radioValueMaster.set(1)
-                self.radio_masterStateOFF.select() 
-
-    def updateMonitoring(self):
-    #This method  updates the measurement content
-        if (self.intVar_radioValueChannel.get() == 2) and (self.intVar_radioValueMaster.get() == 2): 
-
-            self.doubleVar_currentMeasure.set(self.controller.instrument.measure_current)
-            self.doubleVar_voltageMeasure.set(self.controller.instrument.measure_voltage)
-            self.doubleVar_powerMeasure.set(self.controller.instrument.measure_power)
-
-            self.label_powerMeasure.after(500, self.updateMonitoring)

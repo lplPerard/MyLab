@@ -35,4 +35,5 @@ class Command():
         self.combo_attribute7 = ""
 
         self.state = "FREE"
+        self.breakpoint = 0
         self.forstate = 0

@@ -27,4 +27,6 @@ class Instrument():
         self.ressource = None
         self.commandList = ["To be updated"]
 
+        self.result = 2.5
+
         

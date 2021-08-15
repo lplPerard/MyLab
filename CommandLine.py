@@ -49,11 +49,11 @@ class CommandLine():
     def initAttributes(self):
     #this method list all the attributes
         self.commandType = ""
-        self.state = "FREE"
         self.variablesList = ["Temperature", "Voltage", "Current", "Frequency", "A", "B", "C", "D", "E", "F", "G"]
+        self.operatorsList = ["==", "!=", ">", ">=", "<=", "<"]
 
         self.line = Frame(self.frame, bg=self.model.parameters_dict['backgroundColorCommandLine'])
-        self.line.pack(fill="x", expand="no", side="top", anchor='nw', pady=2)
+        self.line.pack(fill="x", expand="yes", side="top", anchor='nw', pady=2)
 
         self.deleteImg = Image.open("delete.png")
         self.deleteImg = self.deleteImg.resize((10, 12), Image.ANTIALIAS)
@@ -71,7 +71,7 @@ class CommandLine():
         self.label_breakpoint = Label(self.line, image=self.emptyImg, bg=self.model.parameters_dict['backgroundColorCommandLine'])
         self.label_breakpoint.bind('<Button-1>', self.label_breakpoint_onClick_callback)
 
-        self.combo_choice1 = Combobox(self.line, state="readonly", width=25, value=['Select', 'WAIT', 'FOR', 'END'], postcommand=self.combo_choice1_update)
+        self.combo_choice1 = Combobox(self.line, state="readonly", width=25, value=['Select', 'WAIT', 'FOR', 'END', 'STORE', 'IF', 'ENDIF'], postcommand=self.combo_choice1_update)
         self.combo_instrCommand = Combobox(self.line, state="readonly", width=25)
 
         self.stringVar_attribute1 = StringVar()
@@ -130,11 +130,11 @@ class CommandLine():
         self.label_attribute2 = Label(self.line)
 
         self.button_deleteLine = Button(self.line, image=self.deleteImg, command=self.button_deleteLine_callback)
-        self.label_breakpoint.pack(expand="no", side="left", anchor='w', padx=2)
         self.button_deleteLine.pack(expand="no", side="left", anchor='ne', padx=2)
 
     def initLabel(self):
     #This method instanciates all labels
+        self.label_breakpoint.pack(expand="no", side="left", anchor='w', padx=2)
         self.label_number.pack(expand="no", side="left", anchor='nw', padx=2)
 
     def initCombo(self):
@@ -169,77 +169,105 @@ class CommandLine():
         self.combo_attribute7.configure(background='white')
    
     def combo_attribute1_callback(self, args=None):
+    #Callback function for combo attribute 1
         self.command.combo_attribute1 = self.combo_attribute1.get()    
 
     def combo_attribute2_callback(self, args=None):
+    #Callback function for combo attribute 2
         self.command.combo_attribute2 = self.combo_attribute2.get()  
 
     def combo_attribute3_callback(self, args=None):
+    #Callback function for combo attribute 3
         self.command.combo_attribute3 = self.combo_attribute3.get()  
 
     def combo_attribute4_callback(self, args=None):
+    #Callback function for combo attribute 4
         self.command.combo_attribute4 = self.combo_attribute4.get()  
 
     def combo_attribute5_callback(self, args=None):
+    #Callback function for combo attribute 5
         self.command.combo_attribute5 = self.combo_attribute5.get()  
 
     def combo_attribute6_callback(self, args=None):
+    #Callback function for combo attribute 6
         self.command.combo_attribute6 = self.combo_attribute6.get()  
 
     def combo_attribute7_callback(self, args=None):
+    #Callback function for combo attribute 7
         self.command.combo_attribute7 = self.combo_attribute7.get()  
 
     def entry_attribute1_onClick_callback(self, args=None):
-        self.entry_attribute1.config(textvariable=self.stringVar_attribute1, fg="black")
+        if self.stringVar_attribute1.get() ==  "":
+            self.entry_attribute1.config(textvariable=self.stringVar_defaultText1, fg="gainsboro")
+        else:
+            self.entry_attribute1.config(textvariable=self.stringVar_attribute1, fg="black")
 
     def entry_attribute1_onKey_callback(self, args=None):
         self.command.entry_attribute1 = self.stringVar_attribute1.get()
 
     def entry_attribute2_onClick_callback(self, args=None):
-        self.entry_attribute2.config(textvariable=self.stringVar_attribute2, fg="black")
+        if self.stringVar_attribute2.get() ==  "":
+            self.entry_attribute2.config(textvariable=self.stringVar_defaultText2, fg="gainsboro")
+        else:
+            self.entry_attribute2.config(textvariable=self.stringVar_attribute2, fg="black")
 
     def entry_attribute2_onKey_callback(self, args=None):
         self.command.entry_attribute2 = self.stringVar_attribute2.get()
 
     def entry_attribute3_onClick_callback(self, args=None):
-        self.entry_attribute3.config(textvariable=self.stringVar_attribute3, fg="black")
+        if self.stringVar_attribute3.get() ==  "":
+            self.entry_attribute3.config(textvariable=self.stringVar_defaultText3, fg="gainsboro")
+        else:
+            self.entry_attribute3.config(textvariable=self.stringVar_attribute3, fg="black")
         
     def entry_attribute3_onKey_callback(self, args=None):
         self.command.entry_attribute3 = self.stringVar_attribute3.get()
 
     def entry_attribute4_onClick_callback(self, args=None):
-        self.entry_attribute4.config(textvariable=self.stringVar_attribute4, fg="black")
+        if self.stringVar_attribute4.get() ==  "":
+            self.entry_attribute4.config(textvariable=self.stringVar_defaultText4, fg="gainsboro")
+        else:
+            self.entry_attribute4.config(textvariable=self.stringVar_attribute4, fg="black")
         
     def entry_attribute4_onKey_callback(self, args=None):
         self.command.entry_attribute4 = self.stringVar_attribute4.get()
 
     def entry_attribute5_onClick_callback(self, args=None):
-        self.entry_attribute5.config(textvariable=self.stringVar_attribute5, fg="black")
+        if self.stringVar_attribute5.get() ==  "":
+            self.entry_attribute5.config(textvariable=self.stringVar_defaultText5, fg="gainsboro")
+        else:
+            self.entry_attribute5.config(textvariable=self.stringVar_attribute5, fg="black")
         
     def entry_attribute5_onKey_callback(self, args=None):
         self.command.entry_attribute5 = self.stringVar_attribute5.get()
 
     def entry_attribute6_onClick_callback(self, args=None):
-        self.entry_attribute6.config(textvariable=self.stringVar_attribute6, fg="black")
+        if self.stringVar_attribute6.get() ==  "":
+            self.entry_attribute6.config(textvariable=self.stringVar_defaultText6, fg="gainsboro")
+        else:
+            self.entry_attribute6.config(textvariable=self.stringVar_attribute1, fg="black")
         
     def entry_attribute6_onKey_callback(self, args=None):
         self.command.entry_attribute3 = self.stringVar_attribute3.get()
 
     def entry_attribute7_onClick_callback(self, args=None):
-        self.entry_attribute7.config(textvariable=self.stringVar_attribute7, fg="black")
+        if self.stringVar_attribute7.get() ==  "":
+            self.entry_attribute7.config(textvariable=self.stringVar_defaultText7, fg="gainsboro")
+        else:
+            self.entry_attribute7.config(textvariable=self.stringVar_attribute7, fg="black")
         
     def entry_attribute7_onKey_callback(self, args=None):
         self.command.entry_attribute7 = self.stringVar_attribute7.get()
 
     def label_breakpoint_onClick_callback(self, args=None):
     #Ths method adds a breakpoint to the command line
-        if self.state == "FREE":
-            self.label_breakpoint.config(image=self.breakpointImg)            
-            self.state = "BREAKPOINT"
+        if (self.command.breakpoint == 0) and (self.combo_choice1.get() not in ['FOR', 'END', 'ENDIF']):
+            self.label_breakpoint.config(image=self.breakpointImg)    
+            self.command.breakpoint = 1     
 
         else :
-            self.label_breakpoint.config(image=self.emptyImg)            
-            self.state = "FREE"
+            self.label_breakpoint.config(image=self.emptyImg) 
+            self.command.breakpoint = 0   
 
     def updateLine(self, args=None):
     #this method is called to load saved data
@@ -270,7 +298,7 @@ class CommandLine():
 
     def combo_choice1_update(self):
     #This method update the line view according to the selected option
-        liste = ['WAIT', 'FOR', 'END']
+        liste = ['WAIT', 'FOR', 'END', 'STORE', 'IF', 'ENDIF']
         for item in self.root.getInstrList():
             liste.insert(0, item.name)
 
@@ -295,6 +323,23 @@ class CommandLine():
 
         elif self.combo_choice1.get() == 'END':
             self.commandType = "END"
+
+        elif self.combo_choice1.get() == 'STORE':
+            self.commandType = "STORE"      
+
+            liste=[]
+            for item in self.root.getInstrList():
+                liste.insert(0, item.name)
+
+            self.combo_instrCommand.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.combo_instrCommand.config(value=liste)
+
+        elif self.combo_choice1.get() == 'IF':
+            self.commandType = "IF"
+            self.combo_instrCommand_callback(load=load)
+
+        elif self.combo_choice1.get() == 'ENDIF':
+            self.commandType = "ENDIF"
         
         else:
             self.combo_instrCommand.pack(expand="no", side="left", anchor='nw', padx=2)
@@ -314,6 +359,12 @@ class CommandLine():
             
         elif self.commandType == "FOR":         
             self.generateForAttributes()   
+
+        elif self.commandType == "STORE":         
+            self.generateStoreAttributes()  
+            
+        elif self.commandType == "IF":         
+            self.generateIfAttributes()  
 
         elif self.commandType == "Power Supply":
             self.generatePowerSupplyAttributes()
@@ -371,11 +422,29 @@ class CommandLine():
         self.command.combo_instrCommand = self.combo_instrCommand.get()
 
         self.entry_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
-        self.stringVar_defaultText1.set("from (int)")
+        self.stringVar_defaultText1.set("initial value")
         self.entry_attribute2.pack(expand="no", side="left", anchor='nw', padx=2)
-        self.stringVar_defaultText2.set("to (int)")
+        self.stringVar_defaultText2.set("step")
         self.entry_attribute3.pack(expand="no", side="left", anchor='nw', padx=2)
-        self.stringVar_defaultText3.set("step")
+        self.stringVar_defaultText3.set("step number")
+
+    def generateStoreAttributes(self):
+    #This method generates the attributes for STORE command
+        self.command.combo_instrCommand = self.combo_instrCommand.get()
+
+        self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
+        self.combo_attribute1.config(value=self.variablesList)
+
+    def generateIfAttributes(self):
+    #This method generates the attributes for IF command
+        self.entry_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
+        self.stringVar_defaultText1.set("Variable 1")
+
+        self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
+        self.combo_attribute1.config(value=self.operatorsList)
+
+        self.entry_attribute2.pack(expand="no", side="left", anchor='nw', padx=2)
+        self.stringVar_defaultText2.set("Variable 2")
         
     def generateWaitAttributes(self):
     #This method generates the attributes for END command

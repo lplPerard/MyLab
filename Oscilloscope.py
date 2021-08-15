@@ -21,24 +21,8 @@ class Oscilloscope(Instrument):
 
         self.type = "Oscilloscope"
 
-        self.commandList=["setVoltageSource",
-                          "setCurrentSource",
-                          "setChannelState",
-                          "setMasterState",
-                          "Measure"]
+        self.commandList=["activateChannel"]
  
-        self.channelNumber = ["1", "2"]
-        self.channelState = [0, 0]         # 0 => OFF state 1 => ON state
-        self.channelUsed = ["", ""]        # "" => free state 
-
-        self.source_voltage = 0
-        self.source_voltage_caliber = "V"
-        self.source_current = 0
-        self.source_current_caliber = "A"
-
-        self.measure_voltage = 0
-        self.measure_voltage_caliber = "V"
-        self.measure_current = 0
-        self.measure_current_caliber = "A"
-        self.measure_power = 0
-        self.measure_power_caliber = "W"
+        self.channelNumber = ["Channel 1", "Channel 2", "Channel 3", "Channel 4"]
+        self.channelState = [0, 0, 0, 0]         # 0 => OFF state 1 => ON state
+        self.channelUsed = ["", "", "", ""]        # "" => free state 

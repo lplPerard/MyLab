@@ -44,7 +44,6 @@ class PowerSupplyController():
                 if(self.instrument.state != "unreachable"):
                     self.view.view.sendError('001')
                     self.instrument.state = "unreachable"
-                self.instrument.ressource.close()
                 self.instrument.ressource = None
                 return("ERROR")
 
@@ -281,4 +280,96 @@ class PowerSupplyController():
 
         else:
             self.view.view.sendError('004')
+        
+    def MeasureVoltage(self, args=[]):
+    #This method update the content of the view with content from device   
+        if (self.instrument.state == "free") or (self.instrument.state == "unreachable") or (self.instrument.masterState == 0):
+            try:
+                self.instrument.ressource = self.resourceManager.open_resource(self.instrument.address)
+                self.instrument.state == "connected"
+                self.instrument.ressource.write('INST:NSEL ' + str(args[7]))
+            except:
+                if(self.instrument.state != "unreachable"):
+                    self.view.view.sendError('001')
+                    self.instrument.state = "unreachable"
+                return("ERROR")
+
+            
+            try:                
+                self.instrument.ressource.write('MEAS:VOLT?')         
+                voltage = float(self.instrument.ressource.read())
+                self.instrument.measure_voltage = voltage
+                self.instrument.result = voltage
+
+            except:
+                if(self.instrument.state != "unreachable"):
+                    self.view.view.sendError('001')
+                    self.instrument.state = "unreachable"
+                    self.instrument.ressource.close()
+                return("ERROR")
+
+        else:
+            self.view.view.sendError('004')
+        
+    def MeasureCurrent(self, args=[]):
+    #This method update the content of the view with content from device   
+        if (self.instrument.state == "free") or (self.instrument.state == "unreachable") or (self.instrument.masterState == 0):
+            try:
+                self.instrument.ressource = self.resourceManager.open_resource(self.instrument.address)
+                self.instrument.state == "connected"
+                self.instrument.ressource.write('INST:NSEL ' + str(args[7]))
+            except:
+                if(self.instrument.state != "unreachable"):
+                    self.view.view.sendError('001')
+                    self.instrument.state = "unreachable"
+                return("ERROR")
+
+            
+            try:                
+                self.instrument.ressource.write('MEAS:CURR?')         
+                current = float(self.instrument.ressource.read())
+                self.instrument.measure_current = current
+                self.instrument.result = current
+
+            except:
+                if(self.instrument.state != "unreachable"):
+                    self.view.view.sendError('001')
+                    self.instrument.state = "unreachable"
+                    self.instrument.ressource.close()
+                return("ERROR")
+
+        else:
+            self.view.view.sendError('004')
+        
+    def MeasurePower(self, args=[]):
+    #This method update the content of the view with content from device   
+        if (self.instrument.state == "free") or (self.instrument.state == "unreachable") or (self.instrument.masterState == 0):
+            try:
+                self.instrument.ressource = self.resourceManager.open_resource(self.instrument.address)
+                self.instrument.state == "connected"
+                self.instrument.ressource.write('INST:NSEL ' + str(args[7]))
+            except:
+                if(self.instrument.state != "unreachable"):
+                    self.view.view.sendError('001')
+                    self.instrument.state = "unreachable"
+                return("ERROR")
+
+            
+            try:                
+                self.instrument.ressource.write('MEAS:POW?')         
+                power = float(self.instrument.ressource.read())
+                self.instrument.measure_power = power
+                self.instrument.result = power
+
+            except:
+                if(self.instrument.state != "unreachable"):
+                    self.view.view.sendError('001')
+                    self.instrument.state = "unreachable"
+                    self.instrument.ressource.close()
+                return("ERROR")
+
+        else:
+            self.view.view.sendError('004')
+
+
 

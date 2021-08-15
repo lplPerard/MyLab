@@ -7,6 +7,7 @@ File description : Class container for ScriptView.
 """
 
 import threading
+from tkinter.ttk import Progressbar
 from PIL import Image, ImageTk
 from CommandLine import CommandLine
 from Instrument import Instrument
@@ -74,6 +75,8 @@ class ScriptView():
         self.button_runScript.bind_all('<Control-Key-r>', self.button_runScript_callback)
         self.button_nextInScript = Button(self.frameline_buttons, image=self.nextImg, command=self.button_nextInScript_callback)
 
+        self.progressbar = Progressbar(self.dataFrame, orient='horizontal', length = 100, mode = 'determinate')
+
         self.entry_insertPos = Entry(self.frameline_insert, textvariable=self.intvar_insertPos, width=5)
         
     def initFrame(self, padx=10, pady=10):
@@ -87,7 +90,7 @@ class ScriptView():
         self.mainCanva.bind_all("<MouseWheel>", self._on_mousewheel)
         self.mainFrame.configure(bg=self.model.parameters_dict['backgroundColor'])
 
-        self.mainCanva.config(yscrollcommand= self.defilY_setup.set, xscrollcommand= self.defilX_setup.set,height=2000)
+        self.mainCanva.config(yscrollcommand= self.defilY_setup.set, xscrollcommand=self.defilX_setup.set, height=2000)
         self.mainCanva.pack(fill="both", expand="yes", side="left", anchor='nw')
         self.defilX_setup.pack(fill="x", side='bottom', padx='3', pady=3) 
         #self.defilY_setup.pack(fill="y", side='right', padx='3', pady=3) 
@@ -101,6 +104,7 @@ class ScriptView():
         self.button_stopScript.pack(side='left', ipadx=5, pady=2, padx=6)
         self.button_runScript.pack(side='left', ipadx=5, pady=2, padx=6)
         self.button_nextInScript.pack(side='left', ipadx=5, pady=2, padx=6)
+        self.progressbar.pack(padx=5, fill='x', pady=4)
 
     def addCommandLine(self, args=None, pos=None, command=None):
     #This method adds a new command line to be displayed by ScriptView
@@ -165,8 +169,10 @@ class ScriptView():
 
         if (self.scriptState != "RUN") and (self.scriptState != "PAUSE"):
             run = threading.Thread(target=self.controller.runScript)
+            self.updateProgressBar()
             run.daemon = True
             run.start()
+            self.progressbar.after(50, self.updateProgressBar)
 
         elif self.scriptState == "RUN":
             self.scriptState = "PAUSE"
@@ -181,3 +187,10 @@ class ScriptView():
 
         if self.scriptState == "PAUSE":
             self.scriptState = "NEXT"
+
+    def updateProgressBar(self, args=None):
+    #This methods updates the progressbar
+        self.progressbar['value'] = self.controller.progress
+
+        if self.scriptState != "STOP":
+            self.progressbar.after(50, self.updateProgressBar)
