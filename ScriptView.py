@@ -161,6 +161,8 @@ class ScriptView():
     def button_stopScript_callback(self, args=None):
     #This method is called when running the script
         self.scriptState = "STOP"
+        self.button_runScript.config(image=self.playImg)
+        self.progressbar['value'] = 0
 
     def button_runScript_callback(self, args=None):
     #This method is called when running the script

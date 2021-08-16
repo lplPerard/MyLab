@@ -197,64 +197,43 @@ class CommandLine():
         self.command.combo_attribute7 = self.combo_attribute7.get()  
 
     def entry_attribute1_onClick_callback(self, args=None):
-        if self.stringVar_attribute1.get() ==  "":
-            self.entry_attribute1.config(textvariable=self.stringVar_defaultText1, fg="gainsboro")
-        else:
-            self.entry_attribute1.config(textvariable=self.stringVar_attribute1, fg="black")
+        self.entry_attribute1.config(textvariable=self.stringVar_attribute1, fg="black")
 
     def entry_attribute1_onKey_callback(self, args=None):
         self.command.entry_attribute1 = self.stringVar_attribute1.get()
 
     def entry_attribute2_onClick_callback(self, args=None):
-        if self.stringVar_attribute2.get() ==  "":
-            self.entry_attribute2.config(textvariable=self.stringVar_defaultText2, fg="gainsboro")
-        else:
-            self.entry_attribute2.config(textvariable=self.stringVar_attribute2, fg="black")
+        self.entry_attribute2.config(textvariable=self.stringVar_attribute2, fg="black")
 
     def entry_attribute2_onKey_callback(self, args=None):
         self.command.entry_attribute2 = self.stringVar_attribute2.get()
 
     def entry_attribute3_onClick_callback(self, args=None):
-        if self.stringVar_attribute3.get() ==  "":
-            self.entry_attribute3.config(textvariable=self.stringVar_defaultText3, fg="gainsboro")
-        else:
-            self.entry_attribute3.config(textvariable=self.stringVar_attribute3, fg="black")
+        self.entry_attribute3.config(textvariable=self.stringVar_attribute3, fg="black")
         
     def entry_attribute3_onKey_callback(self, args=None):
         self.command.entry_attribute3 = self.stringVar_attribute3.get()
 
     def entry_attribute4_onClick_callback(self, args=None):
-        if self.stringVar_attribute4.get() ==  "":
-            self.entry_attribute4.config(textvariable=self.stringVar_defaultText4, fg="gainsboro")
-        else:
-            self.entry_attribute4.config(textvariable=self.stringVar_attribute4, fg="black")
+        self.entry_attribute4.config(textvariable=self.stringVar_attribute4, fg="black")
         
     def entry_attribute4_onKey_callback(self, args=None):
         self.command.entry_attribute4 = self.stringVar_attribute4.get()
 
     def entry_attribute5_onClick_callback(self, args=None):
-        if self.stringVar_attribute5.get() ==  "":
-            self.entry_attribute5.config(textvariable=self.stringVar_defaultText5, fg="gainsboro")
-        else:
-            self.entry_attribute5.config(textvariable=self.stringVar_attribute5, fg="black")
+        self.entry_attribute5.config(textvariable=self.stringVar_attribute5, fg="black")
         
     def entry_attribute5_onKey_callback(self, args=None):
         self.command.entry_attribute5 = self.stringVar_attribute5.get()
 
     def entry_attribute6_onClick_callback(self, args=None):
-        if self.stringVar_attribute6.get() ==  "":
-            self.entry_attribute6.config(textvariable=self.stringVar_defaultText6, fg="gainsboro")
-        else:
-            self.entry_attribute6.config(textvariable=self.stringVar_attribute1, fg="black")
+        self.entry_attribute6.config(textvariable=self.stringVar_attribute1, fg="black")
         
     def entry_attribute6_onKey_callback(self, args=None):
         self.command.entry_attribute3 = self.stringVar_attribute3.get()
 
     def entry_attribute7_onClick_callback(self, args=None):
-        if self.stringVar_attribute7.get() ==  "":
-            self.entry_attribute7.config(textvariable=self.stringVar_defaultText7, fg="gainsboro")
-        else:
-            self.entry_attribute7.config(textvariable=self.stringVar_attribute7, fg="black")
+        self.entry_attribute7.config(textvariable=self.stringVar_attribute7, fg="black")
         
     def entry_attribute7_onKey_callback(self, args=None):
         self.command.entry_attribute7 = self.stringVar_attribute7.get()
@@ -478,6 +457,11 @@ class CommandLine():
             self.combo_attribute1.current(0)
 
         if self.combo_instrCommand.get() == "setChannelState":
+            self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.combo_attribute1.config(value=["1","2"])
+            self.combo_attribute1.current(0)
+
+        if self.combo_instrCommand.get() == "MeasureVoltage":
             self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute1.config(value=["1","2"])
             self.combo_attribute1.current(0)

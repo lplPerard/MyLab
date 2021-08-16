@@ -20,7 +20,7 @@ from ClimaticChamberView import ClimaticChamberView
 from ClimaticChamberController import ClimaticChamberController
 from PowerSupplyController import PowerSupplyController
 from PowerSupplyView import PowerSupplyView
-from tkinter import Canvas, Frame, Scrollbar, Tk   
+from tkinter import Canvas, Frame, Scrollbar, Tk, ttk   
 from tkinter import Label
 from tkinter import Menu 
 from tkinter import Toplevel

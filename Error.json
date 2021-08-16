@@ -17,6 +17,7 @@
 
     "100": "Unknown instrument in script.\nPlease check instrument name : ",
     "101": " SYNTAX ERROR\nEND missing in script !",
+    "102": " SYNTAX ERROR\nENDIF missing in script !",
 
     "404": "This functionnality is not implemented yet !\nContact the developper for further information",
 

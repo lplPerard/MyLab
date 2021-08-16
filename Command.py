@@ -37,3 +37,4 @@ class Command():
         self.state = "FREE"
         self.breakpoint = 0
         self.forstate = 0
+        self.ifstate = 0

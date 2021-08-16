@@ -52,7 +52,7 @@ class ScriptController():
                 item.state = "RUN"
 
             if (item.combo_choice1 == "IF") and (item.state != "RUN"):
-                error = self.generateForCommand(self.listeCommand.index(item))            
+                error = self.generateIfCommand(self.listeCommand.index(item))            
                 self.listeExecutable.append(tmp)
                 item.state = "RUN"
 
@@ -69,23 +69,19 @@ class ScriptController():
 
     def generateWaitCommand(self, command):
     #This method generates a for fucntion    
-        listeVariable = ["Temperature", "Voltage", "Current", "Frequency", "A", "B", "C", "D", "E", "F", "G"]
-        duration = command.entry_attribute1
+        def func(args=[]) :
+            try:
+                duration = globals()[args[0]]
+            except:
+                duration = float(args[0])
 
-        try:
-            index = listeVariable.index(duration)
-            duration = globals()[listeVariable[index]]
-        except:
-            duration = float(duration)
-
-        def func(args=[duration]) :
             print("I wait for : " + str(duration))
             time.sleep(duration)
 
         if command.breakpoint == 0:
-            args=[duration]
+            args=[command.entry_attribute1]
         else :
-            args=[duration, "BREAKPOINT"]
+            args=[command.entry_attribute1, "BREAKPOINT"]
 
         return([func, args])
 
@@ -94,9 +90,15 @@ class ScriptController():
         self.getInstrument(command.combo_instrCommand)
 
         def func(args=[]):
+            print("result from instr : " + str(self.instrument.instrument.result))            
             globals()[args[0]] = self.instrument.instrument.result
+            print("I stored : " + str(globals()[args[0]]))
 
-        args=[command.combo_attribute1]
+        if command.breakpoint == 0:
+            args=[command.combo_attribute1]
+        else :
+            args=[command.combo_attribute1, "BREAKPOINT"]
+
         return([func, args])
 
     def generateForCommand(self, index=None, forstate=0):
@@ -135,7 +137,9 @@ class ScriptController():
                 if item.forstate < forstate:
                     item.forstate=forstate
 
-            for globals()[self.listeCommand[index].combo_instrCommand] in togothrough:
+            subListExe.append([self.initVariable, [self.listeCommand[index].combo_instrCommand, start]])    
+
+            for A in togothrough:
                 for item in subListeCommand :
                     if (item.combo_choice1 == "WAIT") and (item.forstate == forstate):
                         tmp=self.generateWaitCommand(item)
@@ -147,6 +151,8 @@ class ScriptController():
                     elif (item.state != "RUN") and (item.forstate == forstate):
                         self.getInstrument(name = item.combo_choice1)
                         subListExe.append([getattr(self.instrument, item.combo_instrCommand), self.getArgs(command=item)])
+                        
+                    subListExe.append([self.incVariable, [self.listeCommand[index].combo_instrCommand, step]])   
                 
             for item in subListeCommand :
                 item.state = "RUN"
@@ -161,6 +167,12 @@ class ScriptController():
         else :
             self.root.sendError("101")
             return(-1)
+
+    def initVariable(tmp, args=[]):
+        globals()[args[0]] = args[1]
+
+    def incVariable(tmp, args=[]):
+        globals()[args[0]] = globals()[args[0]] + args[1]
 
     def getInstrument(self, name=None):
     #This method return the instrument controller corresponding to name
@@ -257,6 +269,11 @@ class ScriptController():
 
     def runScript(self, args=None):
     #This method generates the executable liste and run it
+        listeVariable = ["Temperature", "Voltage", "Current", "Frequency", "A", "B", "C", "D", "E", "F", "G"]
+
+        for variable in listeVariable:
+            globals()[variable] = 0
+
         result = ""
 
         if self.analyzeCommand() != -1:
@@ -277,7 +294,7 @@ class ScriptController():
                     self.view.scriptState = "PAUSE"
                     self.view.button_runScript.config(image=self.view.pauseImg)
                     try:
-                        result = item[0](item[1])   
+                        result = item[0](item[1])  
                     except:
                         break
                     self.view.button_runScript.config(image=self.view.playImg)
@@ -287,8 +304,9 @@ class ScriptController():
                 
                 else:
                     try:
-                        result = item[0](item[1])   
+                        result = item[0](item[1]) 
                     except:
+                        print("Problem during execution")
                         break
 
                 if result == "ERROR":
