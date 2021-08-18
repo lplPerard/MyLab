@@ -49,7 +49,7 @@ class CommandLine():
     def initAttributes(self):
     #this method list all the attributes
         self.commandType = ""
-        self.variablesList = ["Temperature", "Voltage", "Current", "Frequency", "A", "B", "C", "D", "E", "F", "G"]
+        self.variablesList = ["Temperature", "Voltage", "Current", "Frequency", "Power", "Period", "Time", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "Easter_Egg"]
         self.operatorsList = ["==", "!=", ">", ">=", "<=", "<"]
 
         self.line = Frame(self.frame, bg=self.model.parameters_dict['backgroundColorCommandLine'])
@@ -466,6 +466,16 @@ class CommandLine():
             self.combo_attribute1.config(value=["1","2"])
             self.combo_attribute1.current(0)
 
+        if self.combo_instrCommand.get() == "MeasureCurrent":
+            self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.combo_attribute1.config(value=["1","2"])
+            self.combo_attribute1.current(0)
+
+        if self.combo_instrCommand.get() == "MeasurePower":
+            self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.combo_attribute1.config(value=["1","2"])
+            self.combo_attribute1.current(0)
+
         if self.combo_instrCommand.get() == "setMasterState":
             None
 
@@ -503,6 +513,13 @@ class CommandLine():
             self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute1.config(value=["Auto Range", "1kΩ", "100Ω", "10kΩ", "100kΩ", "1MΩ", "10MΩ", "100MΩ"])
             self.combo_attribute1.current(0)
+        if self.combo_instrCommand.get() == "setDiode":
+            self.combo_attribute3.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.combo_attribute3.config(value=["5V", "10V"])
+            self.combo_attribute3.current(0)
+            self.combo_attribute4.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.combo_attribute4.config(value=["1mA", "0.1mA"])
+            self.combo_attribute4.current(0)
 
     def generateWaveformGeneratorAttributes(self):
     #This method generates the attributes for Waveform Generator commands

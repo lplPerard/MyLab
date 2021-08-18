@@ -524,7 +524,10 @@ class MultimeterView (DeviceFrame):
                 child.configure(state="normal")
             self.radio_DCI.configure(fg="black")
             if self.stringvar_instrumentaddress.get() != "":
-                self.controller.setDCI(caliber=self.intVar_radioValueCaliberA.get())
+                if self.intVar_radioValueCaliberA.get() == 0:
+                    self.controller.setDCI(self.generateArguments(args9="mA"))
+                else:
+                    self.controller.setDCI(self.generateArguments(args9="10A"))
 
         if self.intVar_radioValueSetup.get() == 3:      
             for child in self.frame_ACI.winfo_children():
@@ -533,7 +536,11 @@ class MultimeterView (DeviceFrame):
                 child.configure(state="normal")
             self.radio_ACI.configure(fg="black")
             if self.stringvar_instrumentaddress.get() != "":
-                self.controller.setACI(caliber=self.intVar_radioValueCaliberA.get())
+                if self.intVar_radioValueCaliberA.get() == 0:
+                    self.controller.setACI(self.generateArguments(args9="mA"))
+                else:
+                    self.controller.setACI(self.generateArguments(args9="10A"))
+
 
         if self.intVar_radioValueSetup.get() == 4 :     
             for child in self.frame_2WR.winfo_children():
@@ -678,3 +685,25 @@ class MultimeterView (DeviceFrame):
             self.doubleVar_ACI.set(self.controller.instrument.measure_ACI)
 
             self.label_instrumentName.after(500, self.updateMonitoring)
+      
+    def generateArguments(self, args1="", args2="", args3="", args4="", args5="", args6="", args7="", args8="", args9="", args10="", args11="", args12="", args13="", args14=""):
+    #This method generates a list of argument
+        liste = [""]*14
+
+        liste[0] = args1
+        liste[1] = args2
+        liste[2] = args3
+        liste[3] = args4
+        liste[4] = args5
+        liste[5] = args6
+        liste[6] = args7
+        liste[7] = args8
+        liste[8] = args9
+        liste[9] = args10
+        liste[10] = args11
+        liste[11] = args12
+        liste[12] = args13
+        liste[13] = args14
+
+        return(liste)
+

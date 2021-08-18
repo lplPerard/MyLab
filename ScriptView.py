@@ -174,6 +174,7 @@ class ScriptView():
             self.updateProgressBar()
             run.daemon = True
             run.start()
+            self.term_text.insert(END, "New script started\n")
             self.progressbar.after(50, self.updateProgressBar)
 
         elif self.scriptState == "RUN":

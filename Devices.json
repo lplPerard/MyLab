@@ -13,6 +13,7 @@
     "osc5":       ["DL9040", "Oscilloscope", ["1", "2", "3", "4"], [0, 0, 0, 0], ["", "", "", ""], "DL9040.png"],
 
     "192.168.0.5::3490":   ["8845A", "Multimeter", "8845A.png"],
+    "169.254.1.1::3490":   ["8845A", "Multimeter", "8845A.png"],
 
     
     "COM6":   ["VT4002 EMC", "Climatic Chamber", "VT4002_EMC.png"]
