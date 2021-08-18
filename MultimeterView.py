@@ -563,7 +563,20 @@ class MultimeterView (DeviceFrame):
                 child.configure(state="normal")
             self.radio_diode.configure(fg="black", image=self.diodeImg)
             if self.stringvar_instrumentaddress.get() != "":
-                self.controller.setDiode(current=self.intVar_radioValueCaliberDiodeA.get(), voltage=self.intVar_radioValueCaliberDiodeV.get())
+                current=self.intVar_radioValueCaliberDiodeA.get()
+                voltage=self.intVar_radioValueCaliberDiodeV.get()
+        
+                if current == 0:
+                    current="1mA"
+                else:
+                    current="0.1mA"
+
+                if voltage == 0:
+                    voltage="5V"
+                else:
+                    voltage="10V"
+
+                self.controller.setDiode(self.generateArguments(args11=current, args10=voltage))
 
         if self.intVar_radioValueSetup.get() == 7:     
             for child in self.frame_continuity.winfo_children():
@@ -624,7 +637,20 @@ class MultimeterView (DeviceFrame):
 
     def radio_caliberDiode_callback(self):
     #This method is called when clicking on caliber for diodes
-        self.controller.setDiode(current=self.intVar_radioValueCaliberDiodeA.get(), voltage=self.intVar_radioValueCaliberDiodeV.get())
+        current=self.intVar_radioValueCaliberDiodeA.get()
+        voltage=self.intVar_radioValueCaliberDiodeV.get()
+
+        if current == 0:
+            current="1mA"
+        else:
+            current="0.1mA"
+
+        if voltage == 0:
+            voltage="5V"
+        else:
+            voltage="10V"
+
+        self.controller.setDiode(self.generateArguments(args11=current, args10=voltage))
 
     def measure_activate_callback(self):
     #This method call the controller to change output state                  

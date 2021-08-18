@@ -234,6 +234,8 @@ class MultimeterController():
 
     def setDiode(self, args=[]):
     #This method set to DCV
+        print(args[9])
+        print(args[10])
         if self.instrument.state == "unreachable":
             try:
                 self.instrument.ressource = self.resourceManager.open_resource(self.instrument.address)
@@ -249,9 +251,9 @@ class MultimeterController():
                 if (str(args[9]) == "5V") and (str(args[10]) == "1mA"):
                     self.instrument.ressource.write('CONF:DIOD 0, 0')
                 elif (str(args[9]) == "10V") and (str(args[10]) == "1mA"):
-                    self.instrument.ressource.write('CONF:DIOD 1, 0')
-                elif (str(args[9]) == "5V") and (str(args[10]) == "0.1mA"):
                     self.instrument.ressource.write('CONF:DIOD 0, 1')
+                elif (str(args[9]) == "5V") and (str(args[10]) == "0.1mA"):
+                    self.instrument.ressource.write('CONF:DIOD 1, 0')
                 elif (str(args[9]) == "10V") and (str(args[10]) == "0.1mA"):
                     self.instrument.ressource.write('CONF:DIOD 1, 1')
             except:
