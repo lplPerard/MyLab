@@ -112,7 +112,7 @@ class View(Tk):
         self.mainFrame.configure(bg=self.model.parameters_dict['backgroundColorView'])
         self.mainFrame.pack(padx=5, pady=5, fill="both", expand="yes")
 
-        self.mainCanva.create_window(0, 0, anchor='nw', window=self.mainFrame, height=600, width=1920)
+        self.mainCanva.create_window(0, 0, anchor='nw', window=self.mainFrame, height=600, width=4000)
 
         self.mainCanva.config(xscrollcommand= self.defilX_setup.set, height=605)
         self.mainCanva.pack(fill="both", expand="yes")

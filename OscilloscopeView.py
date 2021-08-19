@@ -63,6 +63,16 @@ class OscilloscopeView (DeviceFrame):
         self.defilY_channel2 = Scrollbar(self.labelFrame_channel2, orient='vertical', command=self.canva_channel2.yview, bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.scrollframe_channel2 = Frame(self.canva_channel2)
 
+        self.labelFrame_channel3 = LabelFrame(self.frameline_channel)
+        self.canva_channel3 = Canvas(self.labelFrame_channel3, scrollregion=(0,0,0,190), bd=0, highlightthickness=0, bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.defilY_channel3 = Scrollbar(self.labelFrame_channel3, orient='vertical', command=self.canva_channel3.yview, bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.scrollframe_channel3 = Frame(self.canva_channel3)
+
+        self.labelFrame_channel4 = LabelFrame(self.frameline_channel)
+        self.canva_channel4 = Canvas(self.labelFrame_channel4, scrollregion=(0,0,0,190), bd=0, highlightthickness=0, bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.defilY_channel4 = Scrollbar(self.labelFrame_channel4, orient='vertical', command=self.canva_channel4.yview, bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.scrollframe_channel4 = Frame(self.canva_channel4)
+
         self.labelFrame_horizontal = LabelFrame(self.frameline_configuration, text="Horizontal")
         self.canva_horizontal = Canvas(self.labelFrame_horizontal, scrollregion=(0,0,0,190), bd=0, highlightthickness=0, bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.defilY_horizontal = Scrollbar(self.labelFrame_horizontal, orient='vertical', command=self.canva_horizontal.yview, bg=self.model.parameters_dict['backgroundColorInstrument'])
@@ -87,6 +97,22 @@ class OscilloscopeView (DeviceFrame):
         self.frameline_channel2_probe = Frame(self.scrollframe_channel2)
         self.frameline_channel2_activate = Frame(self.scrollframe_channel2)
 
+        self.frameline_channel3_caliber = Frame(self.scrollframe_channel3)
+        self.frameline_channel3_coupling = Frame(self.scrollframe_channel3)
+        self.frameline_channel3_bandwidth = Frame(self.scrollframe_channel3)
+        self.frameline_channel3_offset = Frame(self.scrollframe_channel3)
+        self.frameline_channel3_probe = Frame(self.scrollframe_channel3)
+        self.frameline_channel3_activate = Frame(self.scrollframe_channel3)
+
+        self.frameline_channel4_caliber = Frame(self.scrollframe_channel4)
+        self.frameline_channel4_coupling = Frame(self.scrollframe_channel4)
+        self.frameline_channel4_bandwidth = Frame(self.scrollframe_channel4)
+        self.frameline_channel4_offset = Frame(self.scrollframe_channel4)
+        self.frameline_channel4_probe = Frame(self.scrollframe_channel4)
+        self.frameline_channel4_activate = Frame(self.scrollframe_channel4)
+
+        self.frameline_captureWaveform = Frame(self.frame)
+
         self.frameline_horizontal_caliber = Frame(self.scrollframe_horizontal)
         self.frameline_horizontal_position = Frame(self.scrollframe_horizontal)
         self.frameline_horizontal_size = Frame(self.scrollframe_horizontal)
@@ -102,12 +128,18 @@ class OscilloscopeView (DeviceFrame):
         self.doublevar_channel1_offset = DoubleVar()
         self.doublevar_channel2_caliber = DoubleVar()
         self.doublevar_channel2_offset = DoubleVar()
+        self.doublevar_channel3_caliber = DoubleVar()
+        self.doublevar_channel3_offset = DoubleVar()
+        self.doublevar_channel4_caliber = DoubleVar()
+        self.doublevar_channel4_offset = DoubleVar()
         self.doublevar_horizontal_caliber = DoubleVar()
         self.doublevar_horizontal_position = DoubleVar()
         self.doublevar_horizontal_size = DoubleVar()
         self.doublevar_trigger_level = DoubleVar()
         self.intVar_radioValue_channel1 = IntVar()
         self.intVar_radioValue_channel2 = IntVar()
+        self.intVar_radioValue_channel3 = IntVar()
+        self.intVar_radioValue_channel4 = IntVar()
 
         self.label_instrumentName = Label(self.frame_instrument_name, text="Name :")
         self.label_instrumentaddress = Label(self.frame_instrument_address, text="Address :")
@@ -124,6 +156,18 @@ class OscilloscopeView (DeviceFrame):
         self.label_channel2_offset = Label(self.frameline_channel2_offset, text="Offset :      ")
         self.label_channel2_probe = Label(self.frameline_channel2_probe, text="Probe :          ")
 
+        self.label_channel3_caliber = Label(self.frameline_channel3_caliber, text="Caliber :     ")
+        self.label_channel3_coupling = Label(self.frameline_channel3_coupling, text="Coupling :     ")
+        self.label_channel3_bandwidth = Label(self.frameline_channel3_bandwidth, text="Bandwidth :  ")
+        self.label_channel3_offset = Label(self.frameline_channel3_offset, text="Offset :      ")
+        self.label_channel3_probe = Label(self.frameline_channel3_probe, text="Probe :          ")
+
+        self.label_channel4_caliber = Label(self.frameline_channel4_caliber, text="Caliber :     ")
+        self.label_channel4_coupling = Label(self.frameline_channel4_coupling, text="Coupling :     ")
+        self.label_channel4_bandwidth = Label(self.frameline_channel4_bandwidth, text="Bandwidth :  ")
+        self.label_channel4_offset = Label(self.frameline_channel4_offset, text="Offset :      ")
+        self.label_channel4_probe = Label(self.frameline_channel4_probe, text="Probe :          ")
+
         self.label_trigger_type = Label(self.frameline_trigger_type, text="Type   :   ")
         self.label_trigger_source = Label(self.frameline_trigger_source, text="Source : ")
         self.label_trigger_level = Label(self.frameline_trigger_level, text="Level :     ")
@@ -135,6 +179,8 @@ class OscilloscopeView (DeviceFrame):
 
         self.combo_channel1 = Combobox(self.frameline_channel, width=10, values=["Channel 1", "Channel 2", "Channel 3", "Channel 4"], background=self.model.parameters_dict['backgroundColorInstrument'])
         self.combo_channel2 = Combobox(self.frameline_channel, width=10, values=["Channel 1", "Channel 2", "Channel 3", "Channel 4"], background=self.model.parameters_dict['backgroundColorInstrument'])
+        self.combo_channel3 = Combobox(self.frameline_channel, width=10, values=["Channel 1", "Channel 2", "Channel 3", "Channel 4"], background=self.model.parameters_dict['backgroundColorInstrument'])
+        self.combo_channel4 = Combobox(self.frameline_channel, width=10, values=["Channel 1", "Channel 2", "Channel 3", "Channel 4"], background=self.model.parameters_dict['backgroundColorInstrument'])
 
         self.combo_channel1_coupling = Combobox(self.frameline_channel1_coupling, width=15, values=["DC", "AC", "GROUND"], background=self.model.parameters_dict['backgroundColorInstrument'])
         self.combo_channel1_bandwidth = Combobox(self.frameline_channel1_bandwidth, width=15, values=["FULL", "200MHZ", "20MHZ"], background=self.model.parameters_dict['backgroundColorInstrument'])
@@ -143,6 +189,14 @@ class OscilloscopeView (DeviceFrame):
         self.combo_channel2_coupling = Combobox(self.frameline_channel2_coupling, width=15, values=["DC", "AC", "GROUND"], background=self.model.parameters_dict['backgroundColorInstrument'])
         self.combo_channel2_bandwidth = Combobox(self.frameline_channel2_bandwidth, width=15, values=["FULL", "200MHZ", "20MHZ"], background=self.model.parameters_dict['backgroundColorInstrument'])
         self.combo_channel2_probe = Combobox(self.frameline_channel2_probe, width=15, values=["1:1", "10:1", "100:1"], background=self.model.parameters_dict['backgroundColorInstrument'])
+
+        self.combo_channel3_coupling = Combobox(self.frameline_channel3_coupling, width=15, values=["DC", "AC", "GROUND"], background=self.model.parameters_dict['backgroundColorInstrument'])
+        self.combo_channel3_bandwidth = Combobox(self.frameline_channel3_bandwidth, width=15, values=["FULL", "200MHZ", "20MHZ"], background=self.model.parameters_dict['backgroundColorInstrument'])
+        self.combo_channel3_probe = Combobox(self.frameline_channel3_probe, width=15, values=["1:1", "10:1", "100:1"], background=self.model.parameters_dict['backgroundColorInstrument'])
+
+        self.combo_channel4_coupling = Combobox(self.frameline_channel4_coupling, width=15, values=["DC", "AC", "GROUND"], background=self.model.parameters_dict['backgroundColorInstrument'])
+        self.combo_channel4_bandwidth = Combobox(self.frameline_channel4_bandwidth, width=15, values=["FULL", "200MHZ", "20MHZ"], background=self.model.parameters_dict['backgroundColorInstrument'])
+        self.combo_channel4_probe = Combobox(self.frameline_channel4_probe, width=15, values=["1:1", "10:1", "100:1"], background=self.model.parameters_dict['backgroundColorInstrument'])
 
         self.combo_horizontal_rate = Combobox(self.frameline_horizontal_rate, width=15, values=["2.5Gsa/s", "125Msa/s"], background=self.model.parameters_dict['backgroundColorInstrument'])
 
@@ -158,6 +212,12 @@ class OscilloscopeView (DeviceFrame):
         self.entry_channel2_caliber = Entry(self.frameline_channel2_caliber, textvariable=self.doublevar_channel2_caliber)
         self.entry_channel2_offset = Entry(self.frameline_channel2_offset, textvariable=self.doublevar_channel2_offset)
 
+        self.entry_channel3_caliber = Entry(self.frameline_channel3_caliber, textvariable=self.doublevar_channel3_caliber)
+        self.entry_channel3_offset = Entry(self.frameline_channel3_offset, textvariable=self.doublevar_channel3_offset)
+
+        self.entry_channel4_caliber = Entry(self.frameline_channel4_caliber, textvariable=self.doublevar_channel4_caliber)
+        self.entry_channel4_offset = Entry(self.frameline_channel4_offset, textvariable=self.doublevar_channel4_offset)
+
         self.entry_trigger_level = Entry(self.frameline_trigger_level, textvariable=self.doublevar_trigger_level)
 
         self.entry_horizontal_caliber = Entry(self.frameline_horizontal_caliber, textvariable=self.doublevar_horizontal_caliber)
@@ -172,7 +232,18 @@ class OscilloscopeView (DeviceFrame):
         self.radio_channel2_StateON = Radiobutton(self.frameline_channel2_activate, text='ON', variable=self.intVar_radioValue_channel2, value=0)
         self.radio_channel2_StateOFF = Radiobutton(self.frameline_channel2_activate, text='OFF', variable=self.intVar_radioValue_channel2, value=1)
 
-        self.button_captureWaveform = Button(self.frame, text='Capture Waveform')
+        self.button_channel3_activate = Button(self.frameline_channel3_activate, text='Channel ON/OFF')
+        self.radio_channel3_StateON = Radiobutton(self.frameline_channel3_activate, text='ON', variable=self.intVar_radioValue_channel3, value=0)
+        self.radio_channel3_StateOFF = Radiobutton(self.frameline_channel3_activate, text='OFF', variable=self.intVar_radioValue_channel3, value=1)
+
+        self.button_channel4_activate = Button(self.frameline_channel4_activate, text='Channel ON/OFF')
+        self.radio_channel4_StateON = Radiobutton(self.frameline_channel4_activate, text='ON', variable=self.intVar_radioValue_channel4, value=0)
+        self.radio_channel4_StateOFF = Radiobutton(self.frameline_channel4_activate, text='OFF', variable=self.intVar_radioValue_channel4, value=1)
+
+        self.button_captureWaveform1 = Button(self.frameline_captureWaveform, text='Capture Waveform')
+        self.button_captureWaveform2 = Button(self.frameline_captureWaveform, text='Capture Waveform')
+        self.button_captureWaveform3 = Button(self.frameline_captureWaveform, text='Capture Waveform')
+        self.button_captureWaveform4 = Button(self.frameline_captureWaveform, text='Capture Waveform')
         
         self.img = None
         self.panel = Label(self.frame, bg=self.model.parameters_dict['backgroundColorInstrument'])
@@ -204,6 +275,8 @@ class OscilloscopeView (DeviceFrame):
                     self.controller.instrument.channelNumber = self.model.devices_dict[item][2]
                     self.combo_channel1.configure(values=self.controller.instrument.channelNumber)
                     self.combo_channel2.configure(values=self.controller.instrument.channelNumber)
+                    self.combo_channel3.configure(values=self.controller.instrument.channelNumber)
+                    self.combo_channel4.configure(values=self.controller.instrument.channelNumber)
                     self.controller.instrument.channelState = self.model.devices_dict[item][3]
                     self.controller.instrument.channelUsed = self.model.devices_dict[item][4]
 
@@ -287,11 +360,19 @@ class OscilloscopeView (DeviceFrame):
         self.labelFrame_channel2.configure(labelwidget=self.combo_channel2)
         self.labelFrame_channel2.pack(padx=5, pady=2, fill="y", side='left')
 
+        self.labelFrame_channel3.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.labelFrame_channel3.configure(labelwidget=self.combo_channel3)
+        self.labelFrame_channel3.pack(padx=5, pady=2, fill="y", side='left')
+
+        self.labelFrame_channel4.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.labelFrame_channel4.configure(labelwidget=self.combo_channel4)
+        self.labelFrame_channel4.pack(padx=5, pady=2, fill="y", side='left')
+
         self.labelFrame_horizontal.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
-        self.labelFrame_horizontal.pack(padx=5, pady=2, fill="y", side='left')
+        self.labelFrame_horizontal.pack(padx=5, pady=2, fill="y", side='left', expand='yes')
 
         self.labelFrame_trigger.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
-        self.labelFrame_trigger.pack(padx=5, pady=2, fill="y", side='left')
+        self.labelFrame_trigger.pack(padx=5, pady=2, fill="y", side='left', expand='yes')
 
     def initFrameLine(self):
     #This method instanciates all the frameline
@@ -313,6 +394,18 @@ class OscilloscopeView (DeviceFrame):
         self.canva_channel2.pack(side="left", fill="both")
         self.defilY_channel2.pack(fill="y", side='left', padx='5')   
         
+        self.canva_channel3.create_window(0, 0, anchor='nw', window=self.scrollframe_channel3)
+        self.scrollframe_channel3.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.canva_channel3.config(yscrollcommand= self.defilY_channel3.set, height=125, width=200)
+        self.canva_channel3.pack(side="left", fill="both")
+        self.defilY_channel3.pack(fill="y", side='left', padx='5')  
+        
+        self.canva_channel4.create_window(0, 0, anchor='nw', window=self.scrollframe_channel4)
+        self.scrollframe_channel4.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.canva_channel4.config(yscrollcommand= self.defilY_channel4.set, height=125, width=200)
+        self.canva_channel4.pack(side="left", fill="both")
+        self.defilY_channel4.pack(fill="y", side='left', padx='5')  
+        
         self.canva_horizontal.create_window(0, 0, anchor='nw', window=self.scrollframe_horizontal)
         self.scrollframe_horizontal.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.canva_horizontal.config(yscrollcommand= self.defilY_horizontal.set, height=95, width=200)
@@ -326,7 +419,10 @@ class OscilloscopeView (DeviceFrame):
         self.defilY_trigger.pack(fill="y", side='left', padx='5')  
 
         self.frameline_channel.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
-        self.frameline_channel.pack(fill="both", pady=5)   
+        self.frameline_channel.pack(fill="both", pady=5)  
+
+        self.frameline_captureWaveform.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frameline_captureWaveform.pack(fill="both", pady=5)   
 
         self.frameline_configuration.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frameline_configuration.pack(fill="both", pady=5)        
@@ -356,6 +452,32 @@ class OscilloscopeView (DeviceFrame):
         self.frameline_channel2_probe.pack(fill="both", pady=5)
         self.frameline_channel2_activate.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frameline_channel2_activate.pack(fill="both", pady=5)
+
+        self.frameline_channel3_caliber.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frameline_channel3_caliber.pack(fill="both", pady=5)
+        self.frameline_channel3_coupling.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frameline_channel3_coupling.pack(fill="both", pady=5)
+        self.frameline_channel3_bandwidth.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frameline_channel3_bandwidth.pack(fill="both", pady=5)
+        self.frameline_channel3_offset.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frameline_channel3_offset.pack(fill="both", pady=5)
+        self.frameline_channel3_probe.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frameline_channel3_probe.pack(fill="both", pady=5)
+        self.frameline_channel3_activate.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frameline_channel3_activate.pack(fill="both", pady=5)
+
+        self.frameline_channel4_caliber.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frameline_channel4_caliber.pack(fill="both", pady=5)
+        self.frameline_channel4_coupling.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frameline_channel4_coupling.pack(fill="both", pady=5)
+        self.frameline_channel4_bandwidth.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frameline_channel4_bandwidth.pack(fill="both", pady=5)
+        self.frameline_channel4_offset.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frameline_channel4_offset.pack(fill="both", pady=5)
+        self.frameline_channel4_probe.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frameline_channel4_probe.pack(fill="both", pady=5)
+        self.frameline_channel4_activate.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frameline_channel4_activate.pack(fill="both", pady=5)
 
         self.frameline_horizontal_caliber.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frameline_horizontal_caliber.pack(fill="both", pady=5)
@@ -408,6 +530,28 @@ class OscilloscopeView (DeviceFrame):
         self.label_channel2_probe.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.label_channel2_probe.pack(side="left")
 
+        self.label_channel3_caliber.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.label_channel3_caliber.pack(side="left")
+        self.label_channel3_coupling.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.label_channel3_coupling.pack(side="left")
+        self.label_channel3_bandwidth.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.label_channel3_bandwidth.pack(side="left")
+        self.label_channel3_offset.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.label_channel3_offset.pack(side="left")
+        self.label_channel3_probe.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.label_channel3_probe.pack(side="left")
+
+        self.label_channel4_caliber.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.label_channel4_caliber.pack(side="left")
+        self.label_channel4_coupling.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.label_channel4_coupling.pack(side="left")
+        self.label_channel4_bandwidth.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.label_channel4_bandwidth.pack(side="left")
+        self.label_channel4_offset.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.label_channel4_offset.pack(side="left")
+        self.label_channel4_probe.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.label_channel4_probe.pack(side="left")
+
         self.label_horizontal_caliber.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.label_horizontal_caliber.pack(side="left")
         self.label_horizontal_position.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
@@ -428,6 +572,8 @@ class OscilloscopeView (DeviceFrame):
     #This methods instanciates all the combobox
         self.combo_channel1.current(0)
         self.combo_channel2.current(1)
+        self.combo_channel3.current(2)
+        self.combo_channel4.current(3)
 
         self.combo_channel1_coupling.pack(side='left', padx=5)
         self.combo_channel1_coupling.current(0)
@@ -442,6 +588,20 @@ class OscilloscopeView (DeviceFrame):
         self.combo_channel2_bandwidth.current(0)
         self.combo_channel2_probe.pack(side='left', padx=5)
         self.combo_channel2_probe.current(0)
+
+        self.combo_channel3_coupling.pack(side='left', padx=5)
+        self.combo_channel3_coupling.current(0)
+        self.combo_channel3_bandwidth.pack(side='left', padx=5)
+        self.combo_channel3_bandwidth.current(0)
+        self.combo_channel3_probe.pack(side='left', padx=5)
+        self.combo_channel3_probe.current(0)
+
+        self.combo_channel4_coupling.pack(side='left', padx=5)
+        self.combo_channel4_coupling.current(0)
+        self.combo_channel4_bandwidth.pack(side='left', padx=5)
+        self.combo_channel4_bandwidth.current(0)
+        self.combo_channel4_probe.pack(side='left', padx=5)
+        self.combo_channel4_probe.current(0)
         
         self.combo_horizontal_rate.pack(side='left', padx=5)
         self.combo_horizontal_rate.current(0)
@@ -464,6 +624,12 @@ class OscilloscopeView (DeviceFrame):
 
         self.entry_channel2_caliber.pack(side='left', padx=5)
         self.entry_channel2_offset.pack(side='left', padx=5)
+
+        self.entry_channel3_caliber.pack(side='left', padx=5)
+        self.entry_channel3_offset.pack(side='left', padx=5)
+
+        self.entry_channel4_caliber.pack(side='left', padx=5)
+        self.entry_channel4_offset.pack(side='left', padx=5)
 
         self.entry_horizontal_caliber.pack(side='left', padx=5)
         self.entry_horizontal_position.pack(side='left', padx=5)
@@ -491,7 +657,28 @@ class OscilloscopeView (DeviceFrame):
 
         self.intVar_radioValue_channel2.set(0)
 
-        self.button_captureWaveform.pack(pady=7)
+        self.button_channel3_activate.pack(side="left", expand="yes")
+
+        self.radio_channel3_StateON.pack(side="left", expand="yes", fill="both")
+        self.radio_channel3_StateON.configure(bg=self.model.parameters_dict['backgroundColorInstrument'], state="disabled", disabledforeground="black")
+        self.radio_channel3_StateOFF.pack(side="left", expand="yes", fill="both")
+        self.radio_channel3_StateOFF.configure(bg=self.model.parameters_dict['backgroundColorInstrument'], state="disabled", disabledforeground="black")
+
+        self.intVar_radioValue_channel3.set(0)
+
+        self.button_channel4_activate.pack(side="left", expand="yes")
+
+        self.radio_channel4_StateON.pack(side="left", expand="yes", fill="both")
+        self.radio_channel4_StateON.configure(bg=self.model.parameters_dict['backgroundColorInstrument'], state="disabled", disabledforeground="black")
+        self.radio_channel4_StateOFF.pack(side="left", expand="yes", fill="both")
+        self.radio_channel4_StateOFF.configure(bg=self.model.parameters_dict['backgroundColorInstrument'], state="disabled", disabledforeground="black")
+
+        self.intVar_radioValue_channel4.set(0)
+
+        self.button_captureWaveform1.pack(side="left", expand="yes")
+        self.button_captureWaveform2.pack(side="left", expand="yes")
+        self.button_captureWaveform3.pack(side="left", expand="yes")
+        self.button_captureWaveform4.pack(side="left", expand="yes")
 
     def entry_instrumentName_callback(self, arg=None, newName=None):
     #This method calls the view to change instrument name

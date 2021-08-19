@@ -62,58 +62,6 @@ class OscilloscopeController():
 
         else:
             self.view.view.sendError('004')
-
-    def setVoltageSource(self, voltage, channel, calibre=0):
-    #This method modify the voltage source 
-        if (self.instrument.state == "free") or (self.instrument.state == "unreachable"):
-            try:
-                self.instrument.ressource = self.resourceManager.open_resource(self.instrument.address)
-                self.instrument.state == "connected"
-            except:
-                self.view.view.sendError('001')
-                self.instrument.state = "unreachable"
-                self.instrument.ressource.close()
-                self.instrument.ressource = None
-                return(-1)
-
-            try:
-                self.instrument.ressource.write('INST:NSEL ' + str(channel))
-                self.instrument.ressource.write('SOUR:VOLT ' + str(voltage))
-            except:
-                self.view.view.sendError('002')
-                self.instrument.state = "unreachable"
-                self.instrument.ressource.close()
-                self.instrument.ressource = None
-                return(-1)
-
-        else:
-            self.view.view.sendError('004')
-
-    def setCurrentSource(self, current, channel, calibre=0):
-    #This method modify the voltage source 
-        if (self.instrument.state == "free") or (self.instrument.state == "unreachable"):
-            try:
-                self.instrument.ressource = self.resourceManager.open_resource(self.instrument.address)
-                self.instrument.state == "connected"
-            except:
-                self.view.view.sendError('002')
-                self.instrument.state = "unreachable"
-                self.instrument.ressource.close()
-                self.instrument.ressource = None
-                return(-1)
-
-            try:
-                self.instrument.ressource.write('INST:NSEL ' + str(channel))
-                self.instrument.ressource.write('SOUR:CURR ' + str(current))
-            except:
-                self.view.view.sendError('002')
-                self.instrument.state = "unreachable"
-                self.instrument.ressource.close()
-                self.instrument.ressource = None
-                return(-1)
-
-        else:
-            self.view.view.sendError('004')
             
     def setChannelState(self, channel):
     #This method modify the output state 
@@ -160,47 +108,6 @@ class OscilloscopeController():
                     self.instrument.state = "unreachable"
                     self.instrument.ressource.close()
                     self.instrument.ressource = None
-                    return(-1)
-
-        else:
-            self.view.view.sendError('004')
-            
-    def setMasterState(self):
-    #This method modify the output state 
-        if (self.instrument.state == "free") or (self.instrument.state == "unreachable"):
-            try:
-                self.instrument.ressource = self.resourceManager.open_resource(self.instrument.address)
-                self.instrument.state == "connected"
-            except:
-                self.view.view.sendError('001')
-                self.instrument.state = "unreachable"
-                return(-1)
-        
-            if self.instrument.id == "0x05E6::0x2220":
-
-                try:            
-                    if self.instrument.masterState == 0:
-                        self.instrument.ressource.write('OUTP:ENAB 1')
-                        self.instrument.masterState = 1
-                    else:
-                        self.instrument.ressource.write('OUTP:ENAB 0')          
-                        self.instrument.masterState = 0
-                except:
-                    self.view.view.sendError('002')
-                    self.instrument.state = "unreachable"
-                    return(-1)
-            
-            else:
-                try:            
-                    if self.instrument.masterState == 0:
-                        self.instrument.ressource.write('OUTP:MAST ON')
-                        self.instrument.masterState = 1
-                    else:
-                        self.instrument.ressource.write('OUTP:MAST OFF')         
-                        self.instrument.masterState = 0
-                except:
-                    self.view.view.sendError('002')
-                    self.instrument.state = "unreachable"
                     return(-1)
 
         else:
