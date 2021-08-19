@@ -1291,24 +1291,3 @@ class WaveformGeneratorView (DeviceFrame):
         if self.combo_signal_waveform.get() == "Noise":
             args = self.generateArguments(args1=amplitude, args2=offset, args3=bandwidth, args8=amplitudeType, args9=bandwidthUnit) 
             self.controller.applyNoise(args)   
-      
-    def generateArguments(self, args1="", args2="", args3="", args4="", args5="", args6="", args7="", args8="", args9="", args10="", args11="", args12="", args13="", args14=""):
-    #This method generates a list of argument
-        liste = [""]*14
-
-        liste[0] = args1
-        liste[1] = args2
-        liste[2] = args3
-        liste[3] = args4
-        liste[4] = args5
-        liste[5] = args6
-        liste[6] = args7
-        liste[7] = args8
-        liste[8] = args9
-        liste[9] = args10
-        liste[10] = args11
-        liste[11] = args12
-        liste[12] = args13
-        liste[13] = args14
-
-        return(liste)

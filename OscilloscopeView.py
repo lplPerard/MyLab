@@ -228,15 +228,15 @@ class OscilloscopeView (DeviceFrame):
         self.radio_channel1_StateON = Radiobutton(self.frameline_channel1_activate, text='ON', variable=self.intVar_radioValue_channel1, value=0)
         self.radio_channel1_StateOFF = Radiobutton(self.frameline_channel1_activate, text='OFF', variable=self.intVar_radioValue_channel1, value=1)
 
-        self.button_channel2_activate = Button(self.frameline_channel2_activate, text='Channel ON/OFF')
+        self.button_channel2_activate = Button(self.frameline_channel2_activate, text='Channel ON/OFF', command=self.button_channel2_activate_callback)
         self.radio_channel2_StateON = Radiobutton(self.frameline_channel2_activate, text='ON', variable=self.intVar_radioValue_channel2, value=0)
         self.radio_channel2_StateOFF = Radiobutton(self.frameline_channel2_activate, text='OFF', variable=self.intVar_radioValue_channel2, value=1)
 
-        self.button_channel3_activate = Button(self.frameline_channel3_activate, text='Channel ON/OFF')
+        self.button_channel3_activate = Button(self.frameline_channel3_activate, text='Channel ON/OFF', command=self.button_channel3_activate_callback)
         self.radio_channel3_StateON = Radiobutton(self.frameline_channel3_activate, text='ON', variable=self.intVar_radioValue_channel3, value=0)
         self.radio_channel3_StateOFF = Radiobutton(self.frameline_channel3_activate, text='OFF', variable=self.intVar_radioValue_channel3, value=1)
 
-        self.button_channel4_activate = Button(self.frameline_channel4_activate, text='Channel ON/OFF')
+        self.button_channel4_activate = Button(self.frameline_channel4_activate, text='Channel ON/OFF', command=self.button_channel4_activate_callback)
         self.radio_channel4_StateON = Radiobutton(self.frameline_channel4_activate, text='ON', variable=self.intVar_radioValue_channel4, value=0)
         self.radio_channel4_StateOFF = Radiobutton(self.frameline_channel4_activate, text='OFF', variable=self.intVar_radioValue_channel4, value=1)
 
@@ -499,6 +499,11 @@ class OscilloscopeView (DeviceFrame):
     #This methods instanciates all the Var
         self.stringvar_instrumentName.set(self.controller.instrument.name)    
         self.stringvar_instrumentaddress.set(self.controller.instrument.address)
+
+        self.intVar_radioValue_channel1.set(0)
+        self.intVar_radioValue_channel2.set(1)
+        self.intVar_radioValue_channel3.set(1)
+        self.intVar_radioValue_channel4.set(1)
         
     def initLabel(self):
     #This methods instanciates all the Label
@@ -681,11 +686,32 @@ class OscilloscopeView (DeviceFrame):
         self.button_captureWaveform4.pack(side="left", expand="yes")
 
     def button_channel1_activate_callback(self):
-        if self.intVar_radioValue_channel1 == 0:
-            self.intVar_radioValue_channel1 = 1
+        if self.intVar_radioValue_channel1.get() == 0:
+            self.intVar_radioValue_channel1.set(1)
 
         else:
-            self.intVar_radioValue_channel1 = 0
+            self.intVar_radioValue_channel1.set(0)
+
+    def button_channel2_activate_callback(self):
+        if self.intVar_radioValue_channel2.get() == 0:
+            self.intVar_radioValue_channel2.set(1)
+
+        else:
+            self.intVar_radioValue_channel2.set(0)
+
+    def button_channel3_activate_callback(self):
+        if self.intVar_radioValue_channel3.get() == 0:
+            self.intVar_radioValue_channel3.set(1)
+
+        else:
+            self.intVar_radioValue_channel3.set(0)
+
+    def button_channel4_activate_callback(self):
+        if self.intVar_radioValue_channel4.get() == 0:
+            self.intVar_radioValue_channel4.set(1)
+
+        else:
+            self.intVar_radioValue_channel4.set(0)
 
     def entry_instrumentName_callback(self, arg=None, newName=None):
     #This method calls the view to change instrument name

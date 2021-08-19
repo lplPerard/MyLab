@@ -155,7 +155,14 @@ class PowerSupplyView (DeviceFrame):
 
                     if self.model.devices_dict[item][0] == "2220-30-1":   
                         self.img = Image.open(self.model.devices_dict[item][5])
-                        self.img = self.img.resize((200, 200), Image.ANTIALIAS)
+                        self.img = self.img.resize((250, 250), Image.ANTIALIAS)
+                        self.img = ImageTk.PhotoImage(self.img)
+                        self.panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColorInstrument'])
+                        self.panel.pack(fill = "both", expand = "yes")
+
+                    if self.model.devices_dict[item][0] == "E3642A":   
+                        self.img = Image.open(self.model.devices_dict[item][5])
+                        self.img = self.img.resize((250, 125), Image.ANTIALIAS)
                         self.img = ImageTk.PhotoImage(self.img)
                         self.panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColorInstrument'])
                         self.panel.pack(fill = "both", expand = "yes")

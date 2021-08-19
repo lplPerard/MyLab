@@ -56,11 +56,16 @@ class SourcemeterView (DeviceFrame):
         self.labelFrame_measure = LabelFrame(self.frame, text="Measure")
 
         self.frame_source1 = Frame(self.labelFrame_source)
-        self.frame_source_voltage = Frame(self.frame_source1)
-        self.frame_source_currentCompliance = Frame(self.frame_source1)
+        self.frame_source1_radio = Frame(self.frame_source1)
+        self.frame_source1_setup = Frame(self.frame_source1)
+        self.frame_source_voltage = Frame(self.frame_source1_setup)
+        self.frame_source_currentCompliance = Frame(self.frame_source1_setup)
         self.frame_source2 = Frame(self.labelFrame_source)
-        self.frame_source_current = Frame(self.frame_source2)
-        self.frame_source_voltageCompliance = Frame(self.frame_source2)
+        self.frame_source2_radio = Frame(self.frame_source2)
+        self.frame_source2_setup = Frame(self.frame_source2)
+        self.frame_source_current = Frame(self.frame_source2_setup)
+        self.frame_source_voltageCompliance = Frame(self.frame_source2_setup)
+        self.frameline_button = Frame(self.frame)
 
         self.frame_measure_voltage = Frame(self.labelFrame_measure)
         self.frame_measure_current = Frame(self.labelFrame_measure)
@@ -93,13 +98,13 @@ class SourcemeterView (DeviceFrame):
         self.entry_instrumentName = Entry(self.frame_instrument_name, textvariable=self.stringvar_instrumentName, width=25)
         self.entry_instrumentaddress = Entry(self.frame_instrument_address, textvariable=self.stringvar_instrumentaddress, width=25, state="readonly")
 
-        self.entry_source_voltage = Entry(self.frame_source_voltage, textvariable=self.doubleVar_source_voltage, state="readonly", width=10)
-        self.entry_source_currentCompliance = Entry(self.frame_source_currentCompliance, textvariable=self.doubleVar_source_currentCompliance, state="readonly", width=10)
-        self.entry_source_current = Entry(self.frame_source_current, textvariable=self.doubleVar_source_current, state="readonly", width=10)
-        self.entry_source_voltageCompliance = Entry(self.frame_source_voltageCompliance, textvariable=self.doubleVar_source_voltageCompliance, state="readonly", width=10)
-        self.entry_measure_voltage = Entry(self.frame_measure_voltage, textvariable=self.doubleVar_measure_voltage, state="readonly", width=10)
-        self.entry_measure_current = Entry(self.frame_measure_current, textvariable=self.doubleVar_measure_current, state="readonly", width=10)
-        self.entry_measure_resistance = Entry(self.frame_measure_resistance, textvariable=self.doubleVar_measure_resistance, state="readonly", width=10)
+        self.entry_source_voltage = Entry(self.frame_source_voltage, textvariable=self.doubleVar_source_voltage, width=10)
+        self.entry_source_currentCompliance = Entry(self.frame_source_currentCompliance, textvariable=self.doubleVar_source_currentCompliance, width=10)
+        self.entry_source_current = Entry(self.frame_source_current, textvariable=self.doubleVar_source_current, width=10)
+        self.entry_source_voltageCompliance = Entry(self.frame_source_voltageCompliance, textvariable=self.doubleVar_source_voltageCompliance, width=10)
+        self.entry_measure_voltage = Entry(self.frame_measure_voltage, textvariable=self.doubleVar_measure_voltage, width=10)
+        self.entry_measure_current = Entry(self.frame_measure_current, textvariable=self.doubleVar_measure_current, width=10)
+        self.entry_measure_resistance = Entry(self.frame_measure_resistance, textvariable=self.doubleVar_measure_resistance, width=10)
 
         self.combo_source_voltage = Combobox(self.frame_source_voltage, state="readonly", width=8, values=["V", "mV"])
         self.combo_source_currentCompliance = Combobox(self.frame_source_currentCompliance, state="readonly", width=8, values=["A", "mA"])
@@ -112,13 +117,13 @@ class SourcemeterView (DeviceFrame):
         self.img = None
         self.panel = Label(self.frame, bg=self.model.parameters_dict['backgroundColorInstrument'])
         
-        self.radio_source1 = Radiobutton(self.frame_source1, variable=self.intVar_radio_source, value=0)
-        self.radio_source2 = Radiobutton(self.frame_source2, variable=self.intVar_radio_source, value=1)
+        self.radio_source1 = Radiobutton(self.frame_source1_radio, variable=self.intVar_radio_source, value=0)
+        self.radio_source2 = Radiobutton(self.frame_source2_radio, variable=self.intVar_radio_source, value=1)
 
-        self.radio_masterStateOFF = Radiobutton(self.frame, text='OFF', variable=self.intVar_radio_masterState, value=0)
-        self.radio_masterStateON = Radiobutton(self.frame, text='ON', variable=self.intVar_radio_masterState, value=1)
+        self.radio_masterStateOFF = Radiobutton(self.frameline_button, text='OFF', variable=self.intVar_radio_masterState, value=0)
+        self.radio_masterStateON = Radiobutton(self.frameline_button, text='ON', variable=self.intVar_radio_masterState, value=1)
 
-        self.master_activate = Button(self.frame, text='Master ON/OFF', command=self.master_activate_callback)
+        self.master_activate = Button(self.frameline_button, text='Master ON/OFF', command=self.master_activate_callback)
 
     def updateView(self, configuration=False):
     #This method refresh the content of the view
@@ -132,9 +137,9 @@ class SourcemeterView (DeviceFrame):
                 newName = self.model.devices_dict[item][0] + " (0)"
                 self.entry_instrumentName_callback(newName=newName)
 
-                if self.model.devices_dict[item][0] == "8845A":   
+                if self.model.devices_dict[item][0] == "2400":   
                     self.img = Image.open(self.model.devices_dict[item][2])
-                    self.img = self.img.resize((200, 100), Image.ANTIALIAS)
+                    self.img = self.img.resize((230, 105), Image.ANTIALIAS)
                     self.img = ImageTk.PhotoImage(self.img)
                     self.panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColorInstrument'])
                     self.panel.pack(fill = "both", expand = "yes")
@@ -184,8 +189,20 @@ class SourcemeterView (DeviceFrame):
         self.frame_source1.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_source1.pack(fill="both", pady=5)
 
+        self.frame_source1_radio.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frame_source1_radio.pack(side='left', fill="both", pady=5)
+
+        self.frame_source1_setup.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frame_source1_setup.pack(side='left', fill="both", pady=5)
+
         self.frame_source2.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_source2.pack(fill="both", pady=5)
+
+        self.frame_source2_radio.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frame_source2_radio.pack(side='left', fill="both", pady=5)
+
+        self.frame_source2_setup.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frame_source2_setup.pack(side='left', fill="both", pady=5)
 
         self.frame_source_voltage.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_source_voltage.pack(fill="both", pady=5)
@@ -207,6 +224,9 @@ class SourcemeterView (DeviceFrame):
 
         self.frame_measure_resistance.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_measure_resistance.pack(padx=5, pady=5, fill="y")
+
+        self.frameline_button.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frameline_button.pack(padx=5, pady=5, fill="y")
     
     def initVar(self):
     #This methods instanciates all the Var
@@ -290,12 +310,16 @@ class SourcemeterView (DeviceFrame):
         self.entry_instrumentaddress.pack(side='right', padx=5)
 
         self.entry_source_voltage.pack(side='right', padx=5)
+        self.entry_source_voltage.bind('<Return>', self.entry_source_voltage_callback)
 
         self.entry_source_currentCompliance.pack(side='right', padx=5)
+        self.entry_source_currentCompliance.bind('<Return>', self.entry_source_voltage_callback)
         
         self.entry_source_current.pack(side='right', padx=5)
+        self.entry_source_current.bind('<Return>', self.entry_source_current_callback)
         
         self.entry_source_voltageCompliance.pack(side='right', padx=5)
+        self.entry_source_voltageCompliance.bind('<Return>', self.entry_source_current_callback)
         
         self.entry_measure_voltage.pack(side='right', padx=5)
         
@@ -305,10 +329,10 @@ class SourcemeterView (DeviceFrame):
 
     def initButton(self):
     #This method instanciates the buttons
-        self.radio_source1.pack()
+        self.radio_source1.pack(expand="yes")
         self.radio_source1.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
 
-        self.radio_source2.pack()
+        self.radio_source2.pack(expand="yes")
         self.radio_source2.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         
         self.master_activate.pack(side='left', expand="yes")
@@ -352,6 +376,20 @@ class SourcemeterView (DeviceFrame):
             else:
                 self.intVar_radio_masterState.set(0)
                 self.radio_masterStateOFF.select() 
+
+    def entry_source_voltage_callback(self, args=[]):
+    #This method set Voltage source and current limit
+        voltage = self.doubleVar_source_voltage.get()
+        current = self.doubleVar_source_currentCompliance.get()
+
+        self.controller.setVoltageSource(self.generateArguments(args1=voltage, args2=current))
+
+    def entry_source_current_callback(self, args=[]):
+    #This method set Voltage source and current limit
+        current = self.doubleVar_source_current.get()
+        voltage = self.doubleVar_source_voltageCompliance.get()
+
+        self.controller.setCurrentSource(self.generateArguments(args1=current, args2=voltage))
 
     def updateMonitoring(self):
     #This method  updates the measurement content

@@ -1,6 +1,7 @@
 {
     "0x0AAD::0x0135":      ["HMC8042", "Power Supply", ["1", "2"], [0, 0], ["", ""], "HMC8042.png"],
     "0x05E6::0x2220":      ["2220-30-1", "Power Supply", ["1", "2"], [0, 0], ["", ""], "2220-30-1.png"],
+    "GPIB0::4::INSTR":     ["E3642A", "Power Supply", ["1"], [0], [""], "E3642A.png"],
 
     "0x0957::0x2507":      ["33500B", "Waveform Generator", "33500B.png"],
     "0x0957::0x4807":      ["33600A", "Waveform Generator", "33600A.png"],
@@ -14,6 +15,9 @@
 
     "192.168.0.5::3490":   ["8845A", "Multimeter", "8845A.png"],
     "169.254.1.1::3490":   ["8845A", "Multimeter", "8845A.png"],
+    "GPIB0::30::INSTR":    ["8845A", "Multimeter", "8845A.png"],
+    
+    "GPIB0::15::INSTR":    ["2400", "Sourcemeter", "2400.png"],
 
     
     "COM6":                ["VT4002 EMC", "Climatic Chamber", "VT4002_EMC.png"]
