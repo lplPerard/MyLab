@@ -6,10 +6,10 @@
     "0x0957::0x4807":      ["33600A", "Waveform Generator", "33600A.png"],
     "0x0957::0x1507":      ["33210A", "Waveform Generator", "33210A.png"],
     
-    "ASR":                 ["HMO3004", "Oscilloscope", ["1", "2", "3", "4"], [0, 0, 0, 0], ["", "", "", ""], "HMO3004.png"],
-    "osc2":                ["RTM1054", "Oscilloscope", ["1", "2", "3", "4"], [0, 0, 0, 0], ["", "", "", ""], "RTM1054.png"],
-    "osc3":                ["RTM3004", "Oscilloscope", ["1", "2", "3", "4"], [0, 0, 0, 0], ["", "", "", ""], "RTM3004.png"],
-    "0x0699::0x0377":      ["MSO2014", "Oscilloscope", ["1", "2", "3", "4"], [0, 0, 0, 0], ["", "", "", ""], "MSO2014.png"],
+    "ASR":                 ["HMO3004", "Oscilloscope", ["Channel 1", "Channel 2", "Channel 3", "Channel 4"], [0, 0, 0, 0], ["", "", "", ""], "HMO3004.png"],
+    "osc2":                ["RTM1054", "Oscilloscope", ["Channel 1", "Channel 2", "Channel 3", "Channel 4"], [0, 0, 0, 0], ["", "", "", ""], "RTM1054.png"],
+    "osc3":                ["RTM3004", "Oscilloscope", ["Channel 1", "Channel 2", "Channel 3", "Channel 4"], [0, 0, 0, 0], ["", "", "", ""], "RTM3004.png"],
+    "0x0699::0x0377":      ["MSO2014", "Oscilloscope", ["Channel 1", "Channel 2", "Channel 3", "Channel 4"], [0, 0, 0, 0], ["", "", "", ""], "MSO2014.png"],
     "osc5":                ["DL9040", "Oscilloscope", ["1", "2", "3", "4"], [0, 0, 0, 0], ["", "", "", ""], "DL9040.png"],
 
     "192.168.0.5::3490":   ["8845A", "Multimeter", "8845A.png"],

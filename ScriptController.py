@@ -163,6 +163,10 @@ class ScriptController():
                     tmp=self.generateForCommand(self.listeCommand.index(item))
                     subListExe.extend(tmp)
                     
+                elif (item.combo_choice1 == "STORE") and (item.ifstate == ifstate):
+                    tmp = self.generateStoreCommand(item)                
+                    self.listeExecutable.append(tmp)
+                    
                 elif (item.combo_choice1 == "END") and (item.ifstate == ifstate):
                     None
 
@@ -264,6 +268,10 @@ class ScriptController():
                     elif (item.combo_choice1 == "IF") and (item.forstate == forstate) and (item.ifstate < 666):
                         tmp = self.generateIfCommand(index=ind, ifstate=666)
                         subListExe.append(tmp)
+
+                    elif (item.combo_choice1 == "STORE") and (item.forstate == forstate) and (item.ifstate < 666):
+                        tmp = self.generateStoreCommand(item)                
+                        self.listeExecutable.append(tmp)
 
                     elif (item.combo_choice1 == "ENDIF") and (item.forstate == forstate) and (item.ifstate < 666):
                         None

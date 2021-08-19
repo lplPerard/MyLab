@@ -353,6 +353,7 @@ class View(Tk):
                     self.listViews.clear()
                     self.script.clearCommandLine()
                     self.path = ""
+                    self.title("MyLab")
 
     def menu1_Save_callBack(self, args=None):
     #Callback function for  menu1 1 option        
@@ -418,6 +419,9 @@ class View(Tk):
                 
                 for item in self.script.listeCommand:
                     item.updateLine()
+                
+                name = self.path.split('/')
+                self.title("MyLab - " + name[-1][:-6])
 
     def menu2_Parameters_callBack(self, args=None):
     #Callback function for menu2 1 option
