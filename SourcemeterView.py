@@ -65,6 +65,9 @@ class SourcemeterView (DeviceFrame):
         self.frame_source2_setup = Frame(self.frame_source2)
         self.frame_source_current = Frame(self.frame_source2_setup)
         self.frame_source_voltageCompliance = Frame(self.frame_source2_setup)
+        self.frame_source3 = Frame(self.labelFrame_source)
+        self.frame_source3_radio = Frame(self.frame_source3)
+        self.frame_source3_setup = Frame(self.frame_source3)
         self.frameline_button = Frame(self.frame)
 
         self.frame_measure_voltage = Frame(self.labelFrame_measure)
@@ -73,6 +76,7 @@ class SourcemeterView (DeviceFrame):
 
         self.stringvar_instrumentName = StringVar()    
         self.stringvar_instrumentaddress = StringVar()
+        self.stringvar_waveform = StringVar()
 
         self.doubleVar_source_voltage = DoubleVar()
         self.doubleVar_source_currentCompliance = DoubleVar()
@@ -82,6 +86,7 @@ class SourcemeterView (DeviceFrame):
         self.doubleVar_measure_current = DoubleVar()
         self.doubleVar_measure_resistance = DoubleVar()
         self.intVar_radio_source = IntVar()
+        self.intVar_waveform = IntVar()
         self.intVar_radio_masterState = IntVar()
 
         self.label_instrumentName = Label(self.frame_instrument_name, text="Name :")
@@ -94,6 +99,7 @@ class SourcemeterView (DeviceFrame):
         self.label_measure_voltage = Label(self.frame_measure_voltage, text="Voltage :    ")
         self.label_measure_current = Label(self.frame_measure_current, text="Current :    ")
         self.label_measure_resistance = Label(self.frame_measure_resistance, text="Resistance :")
+        self.label_waveform = Label(self.frame_source3_setup, text="Waveform :")
 
         self.entry_instrumentName = Entry(self.frame_instrument_name, textvariable=self.stringvar_instrumentName, width=25)
         self.entry_instrumentaddress = Entry(self.frame_instrument_address, textvariable=self.stringvar_instrumentaddress, width=25, state="readonly")
@@ -102,6 +108,7 @@ class SourcemeterView (DeviceFrame):
         self.entry_source_currentCompliance = Entry(self.frame_source_currentCompliance, textvariable=self.doubleVar_source_currentCompliance, width=10)
         self.entry_source_current = Entry(self.frame_source_current, textvariable=self.doubleVar_source_current, width=10)
         self.entry_source_voltageCompliance = Entry(self.frame_source_voltageCompliance, textvariable=self.doubleVar_source_voltageCompliance, width=10)
+        self.entry_waveform = Entry(self.frame_source3_setup, textvariable=self.stringvar_waveform, width=17, state="readonly")
         self.entry_measure_voltage = Entry(self.frame_measure_voltage, textvariable=self.doubleVar_measure_voltage, width=10)
         self.entry_measure_current = Entry(self.frame_measure_current, textvariable=self.doubleVar_measure_current, width=10)
         self.entry_measure_resistance = Entry(self.frame_measure_resistance, textvariable=self.doubleVar_measure_resistance, width=10)
@@ -114,15 +121,21 @@ class SourcemeterView (DeviceFrame):
         self.combo_measure_current = Combobox(self.frame_measure_current, state="readonly", width=8, values=["A", "mA"])        
         self.combo_measure_resistance = Combobox(self.frame_measure_resistance, state="readonly", width=8, values=["kΩ", "Ω", "MΩ"])
 
+        self.graphImg = Image.open("sine.png")
+        self.graphImg = self.graphImg.resize((12, 13), Image.ANTIALIAS)
+        self.graphImg = ImageTk.PhotoImage(self.graphImg)
+
         self.img = None
         self.panel = Label(self.frame, bg=self.model.parameters_dict['backgroundColorInstrument'])
         
         self.radio_source1 = Radiobutton(self.frame_source1_radio, variable=self.intVar_radio_source, value=0)
         self.radio_source2 = Radiobutton(self.frame_source2_radio, variable=self.intVar_radio_source, value=1)
+        self.radio_source3 = Radiobutton(self.frame_source3_radio, variable=self.intVar_waveform, value=1)
 
         self.radio_masterStateOFF = Radiobutton(self.frameline_button, text='OFF', variable=self.intVar_radio_masterState, value=0)
         self.radio_masterStateON = Radiobutton(self.frameline_button, text='ON', variable=self.intVar_radio_masterState, value=1)
 
+        self.button_waveform = Button(self.frame_source3_setup, image=self.graphImg, command=self.view.menu3_Waveform_callBack)
         self.master_activate = Button(self.frameline_button, text='Master ON/OFF', command=self.master_activate_callback)
 
     def updateView(self, configuration=False):
@@ -187,46 +200,55 @@ class SourcemeterView (DeviceFrame):
         self.frame_instrument_address.pack(fill="both", pady=3)
 
         self.frame_source1.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
-        self.frame_source1.pack(fill="both", pady=5)
+        self.frame_source1.pack(fill="both", pady=2)
 
         self.frame_source1_radio.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
-        self.frame_source1_radio.pack(side='left', fill="both", pady=5)
+        self.frame_source1_radio.pack(side='left', fill="both", pady=2)
 
         self.frame_source1_setup.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
-        self.frame_source1_setup.pack(side='left', fill="both", pady=5)
+        self.frame_source1_setup.pack(side='left', fill="both", pady=2)
 
         self.frame_source2.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
-        self.frame_source2.pack(fill="both", pady=5)
+        self.frame_source2.pack(fill="both", pady=2)
 
         self.frame_source2_radio.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
-        self.frame_source2_radio.pack(side='left', fill="both", pady=5)
+        self.frame_source2_radio.pack(side='left', fill="both", pady=2)
 
         self.frame_source2_setup.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
-        self.frame_source2_setup.pack(side='left', fill="both", pady=5)
+        self.frame_source2_setup.pack(side='left', fill="both", pady=2)
+
+        self.frame_source3.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frame_source3.pack(fill="both", pady=2)
+
+        self.frame_source3_radio.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frame_source3_radio.pack(side='left', fill="both", pady=2)
+
+        self.frame_source3_setup.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frame_source3_setup.pack(side='left', fill="both", pady=2)
 
         self.frame_source_voltage.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
-        self.frame_source_voltage.pack(fill="both", pady=5)
+        self.frame_source_voltage.pack(fill="both", pady=3)
 
         self.frame_source_currentCompliance.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
-        self.frame_source_currentCompliance.pack(fill="both", pady=5)
+        self.frame_source_currentCompliance.pack(fill="both", pady=3)
 
         self.frame_source_current.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
-        self.frame_source_current.pack(fill="both", pady=5)
+        self.frame_source_current.pack(fill="both", pady=3)
 
         self.frame_source_voltageCompliance.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
-        self.frame_source_voltageCompliance.pack(fill="both", pady=5)        
+        self.frame_source_voltageCompliance.pack(fill="both", pady=3)        
 
         self.frame_measure_voltage.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
-        self.frame_measure_voltage.pack(padx=5, pady=5, fill="y")
+        self.frame_measure_voltage.pack(padx=5, pady=3, fill="y")
 
         self.frame_measure_current.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
-        self.frame_measure_current.pack(padx=5, pady=5, fill="y")
+        self.frame_measure_current.pack(padx=5, pady=3, fill="y")
 
         self.frame_measure_resistance.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
-        self.frame_measure_resistance.pack(padx=5, pady=5, fill="y")
+        self.frame_measure_resistance.pack(padx=5, pady=3, fill="y")
 
         self.frameline_button.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
-        self.frameline_button.pack(padx=5, pady=5, fill="y")
+        self.frameline_button.pack(padx=5, pady=3, fill="y")
     
     def initVar(self):
     #This methods instanciates all the Var
@@ -260,6 +282,9 @@ class SourcemeterView (DeviceFrame):
 
         self.label_source_voltageCompliance.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.label_source_voltageCompliance.pack(side="left")
+
+        self.label_waveform.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.label_waveform.pack(side="left")
 
         self.label_measure_voltage.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.label_measure_voltage.pack(side="left")
@@ -303,11 +328,11 @@ class SourcemeterView (DeviceFrame):
 
     def initEntries(self):
     #This method instanciates the entries    
-        self.entry_instrumentName.bind("<KeyRelease>", self.entry_instrumentName_callback)
         self.entry_instrumentName.pack(side='right', padx=5)
+        self.entry_instrumentName.bind("<KeyRelease>", self.entry_instrumentName_callback)
 
-        self.entry_instrumentaddress.bind('<Double-Button-1>', self.entry_instrumentaddress_callback)
         self.entry_instrumentaddress.pack(side='right', padx=5)
+        self.entry_instrumentaddress.bind('<Double-Button-1>', self.entry_instrumentaddress_callback)
 
         self.entry_source_voltage.pack(side='right', padx=5)
         self.entry_source_voltage.bind('<Return>', self.entry_source_voltage_callback)
@@ -320,6 +345,9 @@ class SourcemeterView (DeviceFrame):
         
         self.entry_source_voltageCompliance.pack(side='right', padx=5)
         self.entry_source_voltageCompliance.bind('<Return>', self.entry_source_current_callback)
+
+        self.entry_waveform.pack(side='left', padx=5)
+        #self.entry_instrumentaddress.bind('<Double-Button-1>', self.entry_instrumentaddress_callback)
         
         self.entry_measure_voltage.pack(side='right', padx=5)
         
@@ -334,6 +362,11 @@ class SourcemeterView (DeviceFrame):
 
         self.radio_source2.pack(expand="yes")
         self.radio_source2.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+
+        self.radio_source3.pack(expand="yes")
+        self.radio_source3.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+
+        self.button_waveform.pack(side='right', expand="yes")
         
         self.master_activate.pack(side='left', expand="yes")
 

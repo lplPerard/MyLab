@@ -6,6 +6,7 @@ File description : Class container for the application's view
 
 """
 
+from WebcamTL import WebcamTL
 from ScriptController import ScriptController
 from OscilloscopeView import OscilloscopeView
 from OscilloscopeController import OscilloscopeController
@@ -32,6 +33,7 @@ from tkinter.constants import BOTH, YES, END, BOTTOM, RIGHT
 from DeviceFrame import DeviceFrame
 from ParametersTL import ParametersTL
 from ConnectionsTL import ConnectionsTL
+from WaveformTL import WaveformTL
 from WakeUpTL import WakeUpTL
 from Model import Model
 
@@ -68,12 +70,16 @@ class View(Tk):
         self.topLevel_term = Toplevel(self)        
         self.topLevel_param = Toplevel(self)
         self.topLevel_connect = Toplevel(self)
+        self.topLevel_waveform = Toplevel(self)
+        self.topLevel_webcam = Toplevel(self)
         
         self.term_text = Text(self.topLevel_term, height=30, width=70, bg="black", fg="green")
 
         self.wakeUpTL = WakeUpTL(frame=self.topLevel_wakeUp, model=self.model, view=self)
         self.parametersTL = ParametersTL(self.topLevel_param, model=self.model)
         self.connectionsTL = ConnectionsTL(self.topLevel_connect, view=self)
+        self.waveformTL = WaveformTL(self.topLevel_waveform, model=self.model, view=self)
+        self.webcamTL = WebcamTL(self.topLevel_webcam, model=self.model, view=self)
 
         self.menubar = Menu(self)
         self.menu1 = Menu(self.menubar, tearoff=0)
@@ -143,6 +149,24 @@ class View(Tk):
         self.topLevel_param.configure(bg=self.model.parameters_dict['backgroundColor'])
         self.topLevel_param.attributes('-alpha', self.model.parameters_dict['backgroundAlpha'])
         self.parametersTL.frame.pack()
+        
+        self.topLevel_waveform.title("SMU Waveform Editor")
+        self.topLevel_waveform.resizable(False, False)
+        self.topLevel_waveform.protocol('WM_DELETE_WINDOW', self.topLevel_waveform.withdraw)
+        self.topLevel_waveform.transient()
+        self.topLevel_waveform.withdraw()
+        self.topLevel_waveform.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.topLevel_waveform.geometry(self.model.parameters_dict['geometryWaveformTL'])
+        self.topLevel_waveform.attributes('-alpha', self.model.parameters_dict['backgroundAlpha'], '-topmost', 'true')
+        
+        self.topLevel_webcam.title("Snapper")
+        self.topLevel_webcam.resizable(False, False)
+        self.topLevel_webcam.protocol('WM_DELETE_WINDOW', self.topLevel_webcam.withdraw)
+        self.topLevel_webcam.transient()
+        self.topLevel_webcam.withdraw()
+        self.topLevel_webcam.configure(bg=self.model.parameters_dict['backgroundColor'])
+        self.topLevel_webcam.geometry(self.model.parameters_dict['geometryWebcamTL'])
+        self.topLevel_webcam.attributes('-alpha', self.model.parameters_dict['backgroundAlpha'], '-topmost', 'true')
         
         self.topLevel_connect.title("Connections")
         self.topLevel_connect.resizable(False, True)
@@ -310,11 +334,11 @@ class View(Tk):
         self.menu2.add_command(label="Connections", command=self.menu2_Connections_callBack)
         self.menu2.bind_all('<Control-Key-a>', self.menu2_WakeUp_callBack)
 
-        self.menubar.add_cascade(label="Display", menu=self.menu3)
-        self.menu3.add_command(label="Terminal", command=self.menu3_Terminal_callBack)
-        self.menu3.add_command(label="Script", command=self.menu3_Script_callBack)
+        self.menubar.add_cascade(label="Applications", menu=self.menu3)
+        self.menu3.add_command(label="Snapper", command=self.menu3_Webcam_callBack)
+        self.menu3.add_command(label="SMU Waveform Editor", command=self.menu3_Waveform_callBack)
         self.menu3.add_separator()
-        self.menu3.add_command(label="Change logs", command=self.menu3_logs_callBack)  
+        self.menu3.add_command(label="Terminal", command=self.menu3_Terminal_callBack)
 
         self.menu4.add_command(label="Configuration", command=self.menu4_Configuration_callBack)
         self.menu4.add_command(label="Climatic Chamber", command=self.menu4_ClimaticChamber_callBack) 
@@ -456,12 +480,22 @@ class View(Tk):
         elif self.topLevel_term.state() == "normal":
             self.topLevel_term.withdraw()
             
-    def menu3_Script_callBack(self, args=None):
+    def menu3_Waveform_callBack(self, args=None):
     #Callback function for menu2 1 option
-        if self.frameLine_script.winfo_ismapped() :
-            self.frameLine_script.pack_forget()
-        else:
-            self.frameLine_script.pack(padx=5, pady=5, fill="both", expand="yes")
+        if self.topLevel_waveform.state() == "withdrawn":
+            self.topLevel_waveform.deiconify()
+
+        elif self.topLevel_waveform.state() == "normal":
+            self.topLevel_waveform.withdraw()
+            
+    def menu3_Webcam_callBack(self, args=None):
+    #Callback function for menu2 1 option
+        if self.topLevel_webcam.state() == "withdrawn":
+            self.topLevel_webcam.deiconify()
+            self.webcamTL.show_frames()
+
+        elif self.topLevel_webcam.state() == "normal":
+            self.topLevel_webcam.withdraw()
 
     def menu3_logs_callBack(self, args=None):
     #Callback function for menu2 2 option

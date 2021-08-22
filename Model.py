@@ -61,6 +61,20 @@ class Model():
             json.dump(listeInstrumentsJSON, File, indent=4)  
 
         File.close()
+
+    def saveWaveform(self, path, waveform, timeBase):
+        listejson = [timeBase, waveform]
+        if (path != "") and (path[-8:] != "waveform"):
+            File  = open(path + ".waveform", 'w')                   
+            listeInstrumentsJSON = jsonpickle.encode(listejson, unpicklable=True)
+            json.dump(listeInstrumentsJSON, File, indent=4)   
+
+        if (path != "") and (path[-8:] == "waveform"):  
+            File  = open(path, 'w')         
+            listeInstrumentsJSON = jsonpickle.encode(listejson, unpicklable=True)
+            json.dump(listeInstrumentsJSON, File, indent=4)  
+
+        File.close()
     
     def openConfiguration(self, path):
     #This method import a serialized object result into the software

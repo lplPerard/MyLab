@@ -49,7 +49,7 @@ class CommandLine():
     def initAttributes(self):
     #this method list all the attributes
         self.commandType = ""
-        self.variablesList = ["Temperature", "Voltage", "Current", "Frequency", "Power", "Period", "Time", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "Easter_Egg"]
+        self.variablesList = ["Temperature", "Voltage", "Current", "Frequency", "Power", "Period", "Time", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "La_Réponse_D"]
         self.operatorsList = ["==", "!=", ">", ">=", "<=", "<"]
 
         self.line = Frame(self.frame, bg=self.model.parameters_dict['backgroundColorCommandLine'])

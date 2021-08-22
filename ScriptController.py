@@ -395,7 +395,7 @@ class ScriptController():
 
     def runScript(self, args=None):
     #This method generates the executable liste and run it
-        listeVariable = ["Temperature", "Voltage", "Current", "Frequency", "Power", "Period", "Time", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "Easter_Egg"]
+        listeVariable = ["Temperature", "Voltage", "Current", "Frequency", "Power", "Period", "Time", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "La_Réponse_D"]
 
         for variable in listeVariable:
             globals()[variable] = 0

@@ -203,8 +203,8 @@ class OscilloscopeView (DeviceFrame):
         self.combo_trigger_source = Combobox(self.frameline_trigger_source, width=15, values=["Channel 1", "Channel 2", "Channel 3", "Channel 4", "External"], background=self.model.parameters_dict['backgroundColorInstrument'])
         self.combo_trigger_type = Combobox(self.frameline_trigger_type, width=15, values=["Rising Edge", "Falling Edge", "Both Edge", "Width"], background=self.model.parameters_dict['backgroundColorInstrument'])
 
-        self.entry_instrumentName = Entry(self.frame_instrument_name, textvariable=self.stringvar_instrumentName)
-        self.entry_instrumentaddress = Entry(self.frame_instrument_address, textvariable=self.stringvar_instrumentaddress, state="readonly")
+        self.entry_instrumentName = Entry(self.frame_instrument_name, textvariable=self.stringvar_instrumentName, width=35)
+        self.entry_instrumentaddress = Entry(self.frame_instrument_address, textvariable=self.stringvar_instrumentaddress, state="readonly", width=35)
 
         self.entry_channel1_scale = Entry(self.frameline_channel1_scale, textvariable=self.doublevar_channel1_scale)
         self.entry_channel1_offset = Entry(self.frameline_channel1_offset, textvariable=self.doublevar_channel1_offset)

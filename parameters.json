@@ -1,6 +1,7 @@
 {
     "backgroundColor": "#8998aa",
     "viewColor": "#8998aa",
+    "backgroundColorGraph": "white",
     "backgroundColorView": "#8998aa",
     "backgroundColorScript": "#8998aa",
     "backgroundColorInstrument": "#758598",
@@ -14,7 +15,9 @@
 
     "instrumentBorderwidth" : "2",
     "labelFont": "Helvetica",
-    "geometryWakeUpTL": "300x120",
 
+    "geometryWakeUpTL": "300x120",
+    "geometryWaveformTL": "800x650",
+    "geometryWebcamTL": "450x400",
     "geometryConnectionsTL": "200x300"
 }

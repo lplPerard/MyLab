@@ -492,16 +492,16 @@ class MultimeterView (DeviceFrame):
         for child in self.frame_period.winfo_children():
             child.configure(state="disabled")
                 
-            self.radio_DCV.configure(fg="grey24")
-            self.radio_ACV.configure(fg="grey24")
-            self.radio_DCI.configure(fg="grey24")
-            self.radio_ACI.configure(fg="grey24")
-            self.radio_2WR.configure(fg="grey24")
-            self.radio_4WR.configure(fg="grey24")
-            self.radio_diode.configure(fg="grey24", image=self.diodeImg_grey)
-            self.radio_continuity.configure(fg="grey24", image=self.continuityImg_grey)
-            self.radio_frequency.configure(fg="grey24")
-            self.radio_period.configure(fg="grey24")
+        self.radio_DCV.configure(fg="grey24")
+        self.radio_ACV.configure(fg="grey24")
+        self.radio_DCI.configure(fg="grey24")
+        self.radio_ACI.configure(fg="grey24")
+        self.radio_2WR.configure(fg="grey24")
+        self.radio_4WR.configure(fg="grey24")
+        self.radio_diode.configure(fg="grey24", image=self.diodeImg_grey)
+        self.radio_continuity.configure(fg="grey24", image=self.continuityImg_grey)
+        self.radio_frequency.configure(fg="grey24")
+        self.radio_period.configure(fg="grey24")
 
         if self.intVar_radioValueSetup.get() == 0 :            
             for child in self.frame_DCV.winfo_children():
