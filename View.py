@@ -270,7 +270,7 @@ class View(Tk):
                 self.sendWarning("W000")
 
         if deviceType == "Sourcemeter":
-            localController = SourcemeterController(view=self, term=self.term_text, instrument=instrument)
+            localController = SourcemeterController(view=self, term=self.term_text, instrument=instrument, model=self.model)
             if len(self.listViews) < 15:
                 pos = len(self.listViews)
                 name= deviceType + " (" + str(pos) + ")"
@@ -284,7 +284,7 @@ class View(Tk):
                 self.sendWarning("W000")
 
         if deviceType == "Oscilloscope":
-            localController = OscilloscopeController(view=self, term=self.term_text, instrument=instrument)
+            localController = OscilloscopeController(view=self, term=self.term_text, instrument=instrument, model=self.model)
             if len(self.listViews) < 15:
                 pos = len(self.listViews)
                 name= deviceType + " (" + str(pos) + ")"

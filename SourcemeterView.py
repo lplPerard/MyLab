@@ -10,7 +10,7 @@ from tkinter.constants import END
 from SourcemeterController import SourcemeterController
 from DeviceFrame import DeviceFrame
 
-from tkinter import Button, Canvas, Frame, IntVar, Label, Scrollbar
+from tkinter import Button, Canvas, Frame, IntVar, Label, Scrollbar, filedialog
 from tkinter import LabelFrame
 from tkinter import StringVar
 from tkinter import DoubleVar
@@ -68,6 +68,7 @@ class SourcemeterView (DeviceFrame):
         self.frame_source3 = Frame(self.labelFrame_source)
         self.frame_source3_radio = Frame(self.frame_source3)
         self.frame_source3_setup = Frame(self.frame_source3)
+        self.frame_source3_type = Frame(self.labelFrame_source)
         self.frameline_button = Frame(self.frame)
 
         self.frame_measure_voltage = Frame(self.labelFrame_measure)
@@ -86,7 +87,7 @@ class SourcemeterView (DeviceFrame):
         self.doubleVar_measure_current = DoubleVar()
         self.doubleVar_measure_resistance = DoubleVar()
         self.intVar_radio_source = IntVar()
-        self.intVar_waveform = IntVar()
+        self.intVar_source3_type = IntVar()
         self.intVar_radio_masterState = IntVar()
 
         self.label_instrumentName = Label(self.frame_instrument_name, text="Name :")
@@ -96,22 +97,22 @@ class SourcemeterView (DeviceFrame):
         self.label_source_currentCompliance = Label(self.frame_source_currentCompliance, text="C.C.  :")
         self.label_source_current = Label(self.frame_source_current, text="Current :")
         self.label_source_voltageCompliance = Label(self.frame_source_voltageCompliance, text="V.C.  :")
-        self.label_measure_voltage = Label(self.frame_measure_voltage, text="Voltage :    ")
-        self.label_measure_current = Label(self.frame_measure_current, text="Current :    ")
-        self.label_measure_resistance = Label(self.frame_measure_resistance, text="Resistance :")
+        self.label_measure_voltage = Label(self.frame_measure_voltage, text="Voltage :      ")
+        self.label_measure_current = Label(self.frame_measure_current, text="Current :      ")
+        self.label_measure_resistance = Label(self.frame_measure_resistance, text="Resistance : ")
         self.label_waveform = Label(self.frame_source3_setup, text="Waveform :")
 
         self.entry_instrumentName = Entry(self.frame_instrument_name, textvariable=self.stringvar_instrumentName, width=25)
         self.entry_instrumentaddress = Entry(self.frame_instrument_address, textvariable=self.stringvar_instrumentaddress, width=25, state="readonly")
 
-        self.entry_source_voltage = Entry(self.frame_source_voltage, textvariable=self.doubleVar_source_voltage, width=10)
-        self.entry_source_currentCompliance = Entry(self.frame_source_currentCompliance, textvariable=self.doubleVar_source_currentCompliance, width=10)
-        self.entry_source_current = Entry(self.frame_source_current, textvariable=self.doubleVar_source_current, width=10)
-        self.entry_source_voltageCompliance = Entry(self.frame_source_voltageCompliance, textvariable=self.doubleVar_source_voltageCompliance, width=10)
-        self.entry_waveform = Entry(self.frame_source3_setup, textvariable=self.stringvar_waveform, width=17, state="readonly")
-        self.entry_measure_voltage = Entry(self.frame_measure_voltage, textvariable=self.doubleVar_measure_voltage, width=10)
-        self.entry_measure_current = Entry(self.frame_measure_current, textvariable=self.doubleVar_measure_current, width=10)
-        self.entry_measure_resistance = Entry(self.frame_measure_resistance, textvariable=self.doubleVar_measure_resistance, width=10)
+        self.entry_source_voltage = Entry(self.frame_source_voltage, textvariable=self.doubleVar_source_voltage, width=13)
+        self.entry_source_currentCompliance = Entry(self.frame_source_currentCompliance, textvariable=self.doubleVar_source_currentCompliance, width=13)
+        self.entry_source_current = Entry(self.frame_source_current, textvariable=self.doubleVar_source_current, width=13)
+        self.entry_source_voltageCompliance = Entry(self.frame_source_voltageCompliance, textvariable=self.doubleVar_source_voltageCompliance, width=13)
+        self.entry_waveform = Entry(self.frame_source3_setup, textvariable=self.stringvar_waveform, width=15, state="readonly")
+        self.entry_measure_voltage = Entry(self.frame_measure_voltage, textvariable=self.doubleVar_measure_voltage, width=13)
+        self.entry_measure_current = Entry(self.frame_measure_current, textvariable=self.doubleVar_measure_current, width=13)
+        self.entry_measure_resistance = Entry(self.frame_measure_resistance, textvariable=self.doubleVar_measure_resistance, width=13)
 
         self.combo_source_voltage = Combobox(self.frame_source_voltage, state="readonly", width=8, values=["V", "mV"])
         self.combo_source_currentCompliance = Combobox(self.frame_source_currentCompliance, state="readonly", width=8, values=["A", "mA"])
@@ -125,17 +126,24 @@ class SourcemeterView (DeviceFrame):
         self.graphImg = self.graphImg.resize((12, 13), Image.ANTIALIAS)
         self.graphImg = ImageTk.PhotoImage(self.graphImg)
 
+        self.playImg = Image.open("play.png")
+        self.playImg = self.playImg.resize((12, 13), Image.ANTIALIAS)
+        self.playImg = ImageTk.PhotoImage(self.playImg)
+
         self.img = None
         self.panel = Label(self.frame, bg=self.model.parameters_dict['backgroundColorInstrument'])
         
-        self.radio_source1 = Radiobutton(self.frame_source1_radio, variable=self.intVar_radio_source, value=0)
-        self.radio_source2 = Radiobutton(self.frame_source2_radio, variable=self.intVar_radio_source, value=1)
-        self.radio_source3 = Radiobutton(self.frame_source3_radio, variable=self.intVar_waveform, value=1)
+        self.radio_source1 = Radiobutton(self.frame_source1_radio, variable=self.intVar_radio_source, value=0, command=self.radio_source_callback)
+        self.radio_source2 = Radiobutton(self.frame_source2_radio, variable=self.intVar_radio_source, value=1, command=self.radio_source_callback)
+        self.radio_source3 = Radiobutton(self.frame_source3_radio, variable=self.intVar_radio_source, value=2, command=self.radio_source_callback)
+        self.radio_source3_voltage = Radiobutton(self.frame_source3_type, text='Source Voltage', variable=self.intVar_source3_type, value=0)
+        self.radio_source3_current = Radiobutton(self.frame_source3_type, text='Source Current', variable=self.intVar_source3_type, value=1)
 
         self.radio_masterStateOFF = Radiobutton(self.frameline_button, text='OFF', variable=self.intVar_radio_masterState, value=0)
         self.radio_masterStateON = Radiobutton(self.frameline_button, text='ON', variable=self.intVar_radio_masterState, value=1)
 
         self.button_waveform = Button(self.frame_source3_setup, image=self.graphImg, command=self.view.menu3_Waveform_callBack)
+        self.button_play = Button(self.frame_source3_setup, image=self.playImg, command=self.button_play_callback)
         self.master_activate = Button(self.frameline_button, text='Master ON/OFF', command=self.master_activate_callback)
 
     def updateView(self, configuration=False):
@@ -225,6 +233,9 @@ class SourcemeterView (DeviceFrame):
 
         self.frame_source3_setup.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_source3_setup.pack(side='left', fill="both", pady=2)
+
+        self.frame_source3_type.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frame_source3_type.pack(fill="both", pady=2)
 
         self.frame_source_voltage.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frame_source_voltage.pack(fill="both", pady=3)
@@ -347,7 +358,7 @@ class SourcemeterView (DeviceFrame):
         self.entry_source_voltageCompliance.bind('<Return>', self.entry_source_current_callback)
 
         self.entry_waveform.pack(side='left', padx=5)
-        #self.entry_instrumentaddress.bind('<Double-Button-1>', self.entry_instrumentaddress_callback)
+        self.entry_waveform.bind('<Double-Button-1>', self.entry_waveform_callback)
         
         self.entry_measure_voltage.pack(side='right', padx=5)
         
@@ -366,7 +377,14 @@ class SourcemeterView (DeviceFrame):
         self.radio_source3.pack(expand="yes")
         self.radio_source3.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
 
-        self.button_waveform.pack(side='right', expand="yes")
+        self.radio_source3_voltage.pack(side='left', expand="yes")
+        self.radio_source3_voltage.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+
+        self.radio_source3_current.pack(side='left', expand="yes")
+        self.radio_source3_current.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+
+        self.button_play.pack(side='right', expand="yes", padx=3)
+        self.button_waveform.pack(side='right', expand="yes", padx=3)
         
         self.master_activate.pack(side='left', expand="yes")
 
@@ -374,6 +392,8 @@ class SourcemeterView (DeviceFrame):
         self.radio_masterStateON.configure(bg=self.model.parameters_dict['backgroundColorInstrument'], state="disabled", disabledforeground="black")
         self.radio_masterStateOFF.pack(side="top", expand="yes", fill="both")
         self.radio_masterStateOFF.configure(bg=self.model.parameters_dict['backgroundColorInstrument'], state="disabled", disabledforeground="black")
+
+        self.radio_source_callback()
 
     def entry_instrumentName_callback(self, arg=None, newName=None):
     #This method calls the view to change instrument name
@@ -395,20 +415,15 @@ class SourcemeterView (DeviceFrame):
 
     def master_activate_callback(self):
     #This method call the controller to change output state 
-        if self.controller.setMasterState() != -1:
-            if (self.intVar_radio_masterState.get() == 0) and (self.controller.instrument.address != ""):
-                None
-                #self.entry_currentSource_callback()
-                #self.entry_voltageSource_callback()
+        if (self.controller.instrument.masterState == 0) and (self.controller.instrument.address != ""):
+            self.intVar_radio_masterState.set(1) 
+            self.radio_masterStateON.select()  
+            self.controller.setMasterState()
 
-                self.intVar_radio_masterState.set(1) 
-                self.radio_masterStateON.select()  
-                thread = Thread(target=self.controller.Measure) 
-                thread.start()
-                self.updateMonitoring()
-            else:
-                self.intVar_radio_masterState.set(0)
-                self.radio_masterStateOFF.select() 
+        elif self.controller.instrument.address != "":
+            self.intVar_radio_masterState.set(0)
+            self.radio_masterStateOFF.select() 
+            self.controller.setMasterState()
 
     def entry_source_voltage_callback(self, args=[]):
     #This method set Voltage source and current limit
@@ -417,6 +432,64 @@ class SourcemeterView (DeviceFrame):
 
         self.controller.setVoltageSource(self.generateArguments(args1=voltage, args2=current))
 
+    def radio_source_callback(self, args=[]):
+    #This methods updates the view according to the radio_source state
+        for child in self.frame_source1_radio.winfo_children():
+            child.configure(state="disabled")
+        for child in self.frame_source_voltage.winfo_children():
+            child.configure(state="disabled")
+        for child in self.frame_source_currentCompliance.winfo_children():
+            child.configure(state="disabled")
+        for child in self.frame_source2_radio.winfo_children():
+            child.configure(state="disabled")
+        for child in self.frame_source_current.winfo_children():
+            child.configure(state="disabled")
+        for child in self.frame_source_voltageCompliance.winfo_children():
+            child.configure(state="disabled")
+        for child in self.frame_source3_radio.winfo_children():
+            child.configure(state="disabled")
+        for child in self.frame_source3_setup.winfo_children():
+            child.configure(state="disabled")
+        for child in self.frame_source3_type.winfo_children():
+            child.configure(state="disabled")
+                
+        self.radio_source1.configure(fg="grey24")
+        self.radio_source2.configure(fg="grey24")
+        self.radio_source3.configure(fg="grey24")
+        self.radio_source3_voltage.configure(fg="grey24")
+        self.radio_source3_current.configure(fg="grey24")
+
+        if self.intVar_radio_source.get() == 0:
+            for child in self.frame_source1_radio.winfo_children():
+                child.configure(state="normal")
+            for child in self.frame_source_voltage.winfo_children():
+                child.configure(state="normal")
+            for child in self.frame_source_currentCompliance.winfo_children():
+                child.configure(state="normal")
+            self.radio_source1.configure(fg="black")
+
+        if self.intVar_radio_source.get() == 1:
+            for child in self.frame_source2_radio.winfo_children():
+                child.configure(state="normal")
+            for child in self.frame_source_current.winfo_children():
+                child.configure(state="normal")
+            for child in self.frame_source_voltageCompliance.winfo_children():
+                child.configure(state="normal")
+            self.radio_source2.configure(fg="black")
+
+        if self.intVar_radio_source.get() == 2:
+            for child in self.frame_source3_radio.winfo_children():
+                child.configure(state="normal")
+            for child in self.frame_source3_setup.winfo_children():
+                child.configure(state="normal")
+            self.radio_source3.configure(fg="black")
+            self.radio_source3_voltage.configure(fg="black", state='normal')
+            self.radio_source3_current.configure(fg="black", state='normal')
+
+        self.radio_source1.configure(state='normal')
+        self.radio_source2.configure(state='normal')
+        self.radio_source3.configure(state='normal')
+
     def entry_source_current_callback(self, args=[]):
     #This method set Voltage source and current limit
         current = self.doubleVar_source_current.get()
@@ -424,11 +497,20 @@ class SourcemeterView (DeviceFrame):
 
         self.controller.setCurrentSource(self.generateArguments(args1=current, args2=voltage))
 
-    def updateMonitoring(self):
-    #This method  updates the measurement content
-        if self.intVar_radio_masterState.get() == 1: 
-            self.doubleVar_measure_voltage.set(self.controller.instrument.measure_voltage)
-            self.doubleVar_measure_current.set(self.controller.instrument.measure_current)
-            self.doubleVar_measure_resistance.set(self.controller.instrument.measure_resistance)
+    def entry_waveform_callback(self, args=[]):
+    #This method set Voltage source and current limit           
+        self.path = filedialog.askopenfilename(title = "Select file", filetypes = (("all files","*.*"), ("Waveform files","*.waveform")))
 
-            self.label_instrumentName.after(500, self.updateMonitoring)
+        if self.path != '':
+            name = self.path.split('/')
+            self.stringvar_waveform.set(name[-1][:-9])
+
+    def button_play_callback(self, args=None):
+    #This method plays the desired waveform
+            if self.intVar_source3_type.get() == 0:                
+                thread = Thread(target=self.controller.generateVoltageWaveform, args=([self.generateArguments(args1=self.path)])) 
+                thread.start()
+            elif self.intVar_source3_type.get() == 1:
+                thread = Thread(target=self.controller.generateCurrentWaveform, args=([self.generateArguments(args1=self.path)])) 
+                thread.start()
+

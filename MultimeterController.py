@@ -52,7 +52,6 @@ class MultimeterController():
                 self.instrument.ressource.write('*RST')
                 self.instrument.ressource.write('*CLS')
                 self.instrument.ressource.write('SYST:REM')
-                self.instrument.ressource.read_termination = "\r\n"
 
             except:
                 if(self.instrument.state != "unreachable"):

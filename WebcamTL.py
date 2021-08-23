@@ -69,8 +69,8 @@ class WebcamTL():
     #this method is called when the button add is clicked.    
         image = self.img   
         self.path = filedialog.asksaveasfilename(title = "Select file", filetypes = (("all files","*.*"), ("png files","*.png"), ("jpeg files","*.jpeg")))
-        if self.path != "":
-            image.save(self.path)
+        if (self.path != "") and (self.path[-4:] != '.png'):
+            image.save(self.path + ".png")
 
     def combo_webcam_callback(self, args=None):
     #This method change the selected webcam
@@ -79,15 +79,16 @@ class WebcamTL():
         
     def show_frames(self, args=None):
     # Get the latest frame and convert into Image
-        cv2image= cv2.cvtColor(self.capture.read()[1],cv2.COLOR_BGR2RGB)
-        self.img = Image.fromarray(cv2image)
-        cv2image = cv2.resize(cv2image,(400,300))
-        img = Image.fromarray(cv2image)
-        imgtk = ImageTk.PhotoImage(image = img)
-        self.label_webcam.imgtk = imgtk
-        self.label_webcam.configure(image=imgtk)
+        try:
+            cv2image= cv2.cvtColor(self.capture.read()[1],cv2.COLOR_BGR2RGB)
+            self.img = Image.fromarray(cv2image)
+            cv2image = cv2.resize(cv2image,(700,520))
+            img = Image.fromarray(cv2image)
+            imgtk = ImageTk.PhotoImage(image = img)
+            self.label_webcam.imgtk = imgtk
+            self.label_webcam.configure(image=imgtk)
+        except:
+            None
 
         if self.view.topLevel_webcam.state() == "normal":
             self.label_webcam.after(40, self.show_frames)
-        else:
-            cv2.destroyAllWindows()

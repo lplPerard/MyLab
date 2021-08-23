@@ -43,7 +43,7 @@ class WaveformTL():
         self.waveform_editor = [0]
         self.timeBase = [0]
         self.timeBase_editor = [0]
-        self.stepDelay =0.01
+        self.stepDelay = 0.0094
 
         self.frameline_top = Frame(self.frame, bg=self.model.parameters_dict['backgroundColor'])
         self.frameline_edit = Frame(self.frameline_top, width=470, bg=self.model.parameters_dict['backgroundColor'])
@@ -193,7 +193,7 @@ class WaveformTL():
             time_stop = time_start + duration
 
             self.timeBase_editor = np.linspace(time_start, time_stop, time_step)
-            self.waveform_editor = ramp * np.linspace(0, 1, time_step) + start
+            self.waveform_editor = ramp * np.linspace(0, duration, time_step) + start
 
         elif self.intVar_waveform.get() == 2:
             duration = self.doublevar_pulse_duration.get()
