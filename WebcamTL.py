@@ -38,7 +38,7 @@ class WebcamTL():
         self.frameline_webcam = Frame(self.frame, bg=self.model.parameters_dict['backgroundColor'])
         self.frameline_button = Frame(self.frame, bg=self.model.parameters_dict['backgroundColor'])
 
-        self.snapperImg = Image.open("snapper.png")
+        self.snapperImg = Image.open("Images/snapper.png")
         self.snapperImg = self.snapperImg.resize((45, 40), Image.ANTIALIAS)
         self.snapperImg = ImageTk.PhotoImage(self.snapperImg)
 

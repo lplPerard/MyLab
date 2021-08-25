@@ -55,21 +55,27 @@ class CommandLine():
         self.line = Frame(self.frame, bg=self.model.parameters_dict['backgroundColorCommandLine'])
         self.line.pack(fill="x", expand="yes", side="top", anchor='nw', pady=2)
 
-        self.deleteImg = Image.open("delete.png")
+        self.deleteImg = Image.open("Images/delete.png")
         self.deleteImg = self.deleteImg.resize((10, 12), Image.ANTIALIAS)
         self.deleteImg = ImageTk.PhotoImage(self.deleteImg)
 
-        self.emptyImg = Image.open("empty.png")
+        self.emptyImg = Image.open("Images/empty.png")
         self.emptyImg = self.emptyImg.resize((10, 10), Image.ANTIALIAS)
         self.emptyImg = ImageTk.PhotoImage(self.emptyImg)
 
-        self.breakpointImg = Image.open("breakpoint.png")
+        self.breakpointImg = Image.open("Images/breakpoint.png")
         self.breakpointImg = self.breakpointImg.resize((10, 10), Image.ANTIALIAS)
         self.breakpointImg = ImageTk.PhotoImage(self.breakpointImg)
+
+        self.noteImg = Image.open("Images/note.png")
+        self.noteImg = self.noteImg.resize((10, 12), Image.ANTIALIAS)
+        self.noteImg = ImageTk.PhotoImage(self.noteImg)
 
         self.label_number = Label(self.line, text=str(self.number), bg=self.model.parameters_dict['backgroundColorCommandLine'])
         self.label_breakpoint = Label(self.line, image=self.emptyImg, bg=self.model.parameters_dict['backgroundColorCommandLine'])
         self.label_breakpoint.bind('<Button-1>', self.label_breakpoint_onClick_callback)
+        self.label_note = Label(self.line, image=self.emptyImg, bg=self.model.parameters_dict['backgroundColorCommandLine'])
+        self.label_note.bind('<Button-1>', self.label_note_onClick_callback)
 
         self.combo_choice1 = Combobox(self.line, state="readonly", width=25, value=['Select', 'WAIT', 'FOR', 'END', 'STORE', 'IF', 'ENDIF'], postcommand=self.combo_choice1_update)
         self.combo_instrCommand = Combobox(self.line, state="readonly", width=25)
@@ -135,6 +141,7 @@ class CommandLine():
     def initLabel(self):
     #This method instanciates all labels
         self.label_breakpoint.pack(expand="no", side="left", anchor='w', padx=2)
+        self.label_note.pack(expand="no", side="left", anchor='w', padx=2)
         self.label_number.pack(expand="no", side="left", anchor='nw', padx=2)
 
     def initCombo(self):
@@ -248,6 +255,16 @@ class CommandLine():
             self.label_breakpoint.config(image=self.emptyImg) 
             self.command.breakpoint = 0   
 
+    def label_note_onClick_callback(self, args=None):
+    #Ths method adds a breakpoint to the command line
+        if (self.command.note == 0) and (self.combo_choice1.get() not in ['FOR', 'END', 'ENDIF', 'IF', 'STORE', 'WAIT']):
+            self.label_note.config(image=self.noteImg)    
+            self.command.note= 1     
+
+        else :
+            self.label_note.config(image=self.emptyImg) 
+            self.command.note = 0   
+
     def updateLine(self, args=None):
     #this method is called to load saved data
         if self.command.combo_choice1 != "":
@@ -356,6 +373,12 @@ class CommandLine():
 
         elif self.commandType  == "Waveform Generator":
             self.generateWaveformGeneratorAttributes()
+
+        elif self.commandType  == "Sourcemeter":
+            self.generateSourcemeterAttributes()
+
+        elif self.commandType  == "Oscilloscope":
+            self.generateOscilloscopeAttributes()
 
     def cleanAttributes(self):
     #This method unpacks all attributes
@@ -647,4 +670,94 @@ class CommandLine():
             self.combo_attribute1.current(0)
 
         if self.combo_instrCommand.get() == "setMasterState":
+            None
+            
+    def generateSourcemeterAttributes(self):
+    #This method generates the attributes for Power Supply commands
+        self.command.combo_instrCommand = self.combo_instrCommand.get()
+
+        if self.combo_instrCommand.get() == "setVoltageSource":
+            self.entry_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.stringVar_defaultText1.set("Voltage")
+            self.entry_attribute2.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.stringVar_defaultText2.set("Current Compliance")
+
+        if self.combo_instrCommand.get() == "setCurrentSource":
+            self.entry_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.stringVar_defaultText1.set("Current")
+            self.entry_attribute2.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.stringVar_defaultText2.set("Voltage Compliance")
+
+        if self.combo_instrCommand.get() == "generateVoltageWaveform":
+            self.entry_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.stringVar_defaultText1.set("Path")
+
+        if self.combo_instrCommand.get() == "generateCurrentWaveform":
+            self.entry_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.stringVar_defaultText1.set("Path")
+
+        if self.combo_instrCommand.get() == "setMasterState":
+            None
+
+    def generateOscilloscopeAttributes(self):
+    #This method generates the attributes for Power Supply commands
+        self.command.combo_instrCommand = self.combo_instrCommand.get()
+
+        if self.combo_instrCommand.get() == "setChannelState":
+            self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.combo_attribute1.config(value=["1","2","3","4","5","6","7","8"])
+            self.combo_attribute1.current(0)
+
+        if self.combo_instrCommand.get() == "setBandwidth":
+            self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.combo_attribute1.config(value=["FULL","20MHZ"])
+            self.combo_attribute1.current(0)
+            self.combo_attribute2.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.combo_attribute2.config(value=["1","2","3","4","5","6","7","8"])
+            self.combo_attribute2.current(0)
+
+        if self.combo_instrCommand.get() == "setCoupling":
+            self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.combo_attribute1.config(value=["DC","AC","GND"])
+            self.combo_attribute1.current(0)
+            self.combo_attribute2.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.combo_attribute2.config(value=["1","2","3","4","5","6","7","8"])
+            self.combo_attribute2.current(0)
+
+        if self.combo_instrCommand.get() == "setOffset":
+            self.entry_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.stringVar_defaultText1.set("Offset (Division)")
+            self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.combo_attribute1.config(value=["1","2","3","4","5","6","7","8"])
+            self.combo_attribute1.current(0)
+
+        if self.combo_instrCommand.get() == "setProbe":
+            self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.combo_attribute1.config(value=["x1","x10","x100","x1000"])
+            self.combo_attribute1.current(0)
+            self.combo_attribute2.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.combo_attribute2.config(value=["1","2","3","4","5","6","7","8"])
+            self.combo_attribute2.current(0)
+
+        if self.combo_instrCommand.get() == "setChannelScale":
+            self.entry_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.stringVar_defaultText1.set("Voltage Scale (V)")
+            self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.combo_attribute1.config(value=["1","2","3","4","5","6","7","8"])
+            self.combo_attribute1.current(0)
+
+        if self.combo_instrCommand.get() == "setTimeScale":
+            self.entry_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.stringVar_defaultText1.set("Scale (s)")
+
+        if self.combo_instrCommand.get() == "setPosition":
+            self.entry_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.stringVar_defaultText1.set("Position")
+
+        if self.combo_instrCommand.get() == "getCurve":
+            self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.combo_attribute1.config(value=["1","2","3","4","5","6","7","8"])
+            self.combo_attribute1.current(0)
+
+        if self.combo_instrCommand.get() == "setRunStop":
             None

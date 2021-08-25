@@ -34,7 +34,7 @@ class ConnectionsTL():
     #This method instanciate all attributes
         self.frame.pack(fill="both", expand="yes")
 
-        self.combo_instrumentName = Combobox(self.frame, state="readonly", width=20)
+        self.combo_instrumentName = Combobox(self.frame, state="readonly", width=20, postcommand=self.actualizeInstruments)
 
         self.combo_type = Combobox(self.frame, state="readonly", width=20, values=["All",
                                                                                    "USB",
@@ -94,10 +94,23 @@ class ConnectionsTL():
             self.view.refresh()
 
     def actualizeInstruments(self):
-        list=[]
-        for item in self.view.listViews:
-            list.append(item.controller.instrument.name)
+        list = []
+        instrList=self.view.getInstrList()
+        instrList.reverse()
+
+        for item in instrList:
+            list.append(item.name)
 
         self.combo_instrumentName.configure(values=list)
         self.combo_instrumentName.current(0)
         self.button_actualize_onclick()
+
+    def setCurrentInstrument(self, name):
+        liste = self.view.listViews
+
+        i=0
+        for item in self.view.listViews:
+            if item == name:
+                self.combo_instrumentName.current(i)
+                break
+            i+=1

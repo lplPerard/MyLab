@@ -20,4 +20,6 @@ class ClimaticChamber(Instrument):
 
         self.type = "Climatic Chamber"
         self.commandList = ["setTemperature"]
+
+        self.measure = {"temperature" : []}
  

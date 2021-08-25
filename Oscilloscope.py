@@ -29,5 +29,22 @@ class Oscilloscope(Instrument):
         self.bandwidth = ["Full", "200MHz", "20MHz", "2MHz"]
         self.coupling = ["DC", "AC", "GND"]
 
-        self.measure_timeBase = []
-        self.measure_waveform = []
+        self.measure = {"channel_1_timebase" : [],
+                        "channel_1_waveform" : [],
+                        "channel_2_timebase" : [],
+                        "channel_2_waveform" : [],
+                        "channel_3_timebase" : [],
+                        "channel_3_waveform" : [],
+                        "channel_4_timebase" : [],
+                        "channel_4_waveform" : [],}
+
+        self.commandList=["setChannelState",
+                          "setBandwidth",
+                          "setCoupling",
+                          "setOffset",
+                          "setProbe",
+                          "setChannelScale",
+                          "setTimeScale",
+                          "setPosition",
+                          "getCurve",
+                          "setRunStop"]

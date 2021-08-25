@@ -42,7 +42,7 @@ class View(Tk):
 
     """
 
-    def __init__(self, controller, model):
+    def __init__(self, controller, model, path):
     #Constructor for the View class
         """
             Constructor for the class View. The class inherits from Tk from GUI management.
@@ -54,17 +54,20 @@ class View(Tk):
         self.model = model
         self.controller = controller
         self.protocol("WM_DELETE_WINDOW", self.closeView)
+        self.path=path
 
-        self.iconbitmap("icon.ico")
+        self.iconbitmap("Images/icon.ico")
+        self.title("MyLab")
 
         self.initAttributes()
         self.__initWidgets()
 
+        if self.path != "":
+            self.openFromFile()
+
     def initAttributes(self):
     #This method instanciates all the attributes    
         self.listViews=[]
-
-        self.path=""
 
         self.topLevel_wakeUp = Toplevel(self) 
         self.topLevel_term = Toplevel(self)        
@@ -104,7 +107,6 @@ class View(Tk):
     #This method is used to encapsulate the creation of sequences and menues
         
         self.resizable(True, True)
-        self.title("MyLab")
         self.geometry(self.model.parameters_dict['geometry'])
         self.attributes('-alpha', self.model.parameters_dict['backgroundAlpha'])
         self.configure(bg=self.model.parameters_dict['viewColor'])
@@ -227,7 +229,7 @@ class View(Tk):
             else:
                 self.sendWarning("W000")
 
-        if deviceType == "Climatic Chamber":
+        elif deviceType == "Climatic Chamber":
             localController = ClimaticChamberController(view=self, term=self.term_text, instrument=instrument)
             if len(self.listViews) < 15:
                 pos = len(self.listViews)
@@ -241,7 +243,7 @@ class View(Tk):
             else:
                 self.sendWarning("W000")
 
-        if deviceType == "Waveform Generator":
+        elif deviceType == "Waveform Generator":
             localController = WaveformGeneratorController(view=self, term=self.term_text, instrument=instrument)
             if len(self.listViews) < 15:
                 pos = len(self.listViews)
@@ -255,7 +257,7 @@ class View(Tk):
             else:
                 self.sendWarning("W000")
 
-        if deviceType == "Multimeter":
+        elif deviceType == "Multimeter":
             localController = MultimeterController(view=self, term=self.term_text, instrument=instrument)
             if len(self.listViews) < 15:
                 pos = len(self.listViews)
@@ -269,7 +271,7 @@ class View(Tk):
             else:
                 self.sendWarning("W000")
 
-        if deviceType == "Sourcemeter":
+        elif deviceType == "Sourcemeter":
             localController = SourcemeterController(view=self, term=self.term_text, instrument=instrument, model=self.model)
             if len(self.listViews) < 15:
                 pos = len(self.listViews)
@@ -283,7 +285,7 @@ class View(Tk):
             else:
                 self.sendWarning("W000")
 
-        if deviceType == "Oscilloscope":
+        elif deviceType == "Oscilloscope":
             localController = OscilloscopeController(view=self, term=self.term_text, instrument=instrument, model=self.model)
             if len(self.listViews) < 15:
                 pos = len(self.listViews)
@@ -447,6 +449,44 @@ class View(Tk):
                 name = self.path.split('/')
                 self.title("MyLab - " + name[-1][:-6])
 
+    def openFromFile(self):
+    #Callback function for menu1 2 option
+        canOpen = True
+        for item in self.getInstrList():
+            if item.masterState == 1:
+                self.sendError("008")
+                canOpen = False
+
+        if canOpen == True:
+            if (self.listViews != []) and (self.path != ""):
+                for item in self.listViews:
+                    index = self.listViews.index(item)
+                    self.listViews[index].clearInstrument()
+                    self.listViews[index].clearFrame()
+                    self.menu5.delete(self.listViews[index].controller.instrument.name)
+
+                self.listViews.clear()
+            
+            if (self.script.listeCommand != []) and (self.path != ""):
+                self.script.clearCommandLine()
+            
+            if self.path != "":                
+                liste = self.model.openConfiguration(path=self.path)
+
+                for item in liste[0]:
+                    self.addDeviceFrame(deviceType=item.type, instrument=item, configuration=True)
+
+                for item in liste[1]:
+                    self.script.addCommandLine(command=item)
+                
+                for item in self.script.listeCommand:
+                    item.updateLine()
+                
+                name = self.path.split('/')
+                self.title("MyLab - " + name[-1][:-6])
+            
+            self.topLevel_wakeUp.withdraw()
+
     def menu2_Parameters_callBack(self, args=None):
     #Callback function for menu2 1 option
         if self.topLevel_param.state() == "withdrawn":
@@ -463,11 +503,14 @@ class View(Tk):
         elif self.topLevel_connect.state() == "normal":
             self.topLevel_connect.withdraw()
 
-    def menu2_Connections_callBack(self, args=None):
+    def menu2_Connections_callBack(self, event=None, name=None):
     #Callback function for menu2 2 option
         if self.topLevel_connect.state() == "withdrawn":
             self.topLevel_connect.deiconify()
             self.connectionsTL.actualizeInstruments()
+            if (event != None) and (name != None):
+                self.connectionsTL.setCurrentInstrument(name)
+            
 
         elif self.topLevel_connect.state() == "normal":
             self.topLevel_connect.withdraw()

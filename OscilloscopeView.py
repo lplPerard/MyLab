@@ -240,10 +240,19 @@ class OscilloscopeView (DeviceFrame):
         self.radio_channel4_StateON = Radiobutton(self.frameline_channel4_activate, text='ON', variable=self.intVar_radioValue_channel4, value=0)
         self.radio_channel4_StateOFF = Radiobutton(self.frameline_channel4_activate, text='OFF', variable=self.intVar_radioValue_channel4, value=1)
 
+        self.graphImg = Image.open("Images/graph.png")
+        self.graphImg = self.graphImg.resize((12, 13), Image.ANTIALIAS)
+        self.graphImg = ImageTk.PhotoImage(self.graphImg)
+
         self.button_captureWaveform1 = Button(self.frameline_captureWaveform, text='Capture Waveform', command=self.button_captureWaveform1_callback)
         self.button_captureWaveform2 = Button(self.frameline_captureWaveform, text='Capture Waveform', command=self.button_captureWaveform2_callback)
         self.button_captureWaveform3 = Button(self.frameline_captureWaveform, text='Capture Waveform', command=self.button_captureWaveform3_callback)
         self.button_captureWaveform4 = Button(self.frameline_captureWaveform, text='Capture Waveform', command=self.button_captureWaveform4_callback)
+
+        self.button_displayWaveform1 = Button(self.frameline_captureWaveform, image=self.graphImg, command=self.button_displayWaveform1_callback)
+        self.button_displayWaveform2 = Button(self.frameline_captureWaveform, image=self.graphImg, command=self.button_displayWaveform2_callback)
+        self.button_displayWaveform3 = Button(self.frameline_captureWaveform, image=self.graphImg, command=self.button_displayWaveform3_callback)
+        self.button_displayWaveform4 = Button(self.frameline_captureWaveform, image=self.graphImg, command=self.button_displayWaveform4_callback)
 
         self.button_RunStop = Button(self.frameline_configuration, text='Run/Stop', command=self.button_runstop_callback)
         
@@ -657,7 +666,7 @@ class OscilloscopeView (DeviceFrame):
         self.entry_instrumentName.bind("<KeyRelease>", self.entry_instrumentName_callback)
         self.entry_instrumentName.pack(side='right', padx=5)
 
-        self.entry_instrumentaddress.bind('<Double-Button-1>', self.view.menu2_Connections_callBack)
+        self.entry_instrumentaddress.bind('<Double-Button-1>', lambda event, name=self : self.view.menu2_Connections_callBack(event, name))
         self.entry_instrumentaddress.pack(side='right', padx=5)
 
         self.entry_channel1_scale.pack(side='left', padx=5)
@@ -727,9 +736,14 @@ class OscilloscopeView (DeviceFrame):
         self.intVar_radioValue_channel4.set(0)
 
         self.button_captureWaveform1.pack(side="left", expand="yes")
+        self.button_displayWaveform1.pack(side="left", expand="yes")
         self.button_captureWaveform2.pack(side="left", expand="yes")
+        self.button_displayWaveform2.pack(side="left", expand="yes")
         self.button_captureWaveform3.pack(side="left", expand="yes")
+        self.button_displayWaveform3.pack(side="left", expand="yes")
         self.button_captureWaveform4.pack(side="left", expand="yes")
+        self.button_displayWaveform4.pack(side="left", expand="yes")
+
 
     def button_channel1_activate_callback(self, args=None):
     #This method is called to change the channel state
@@ -739,7 +753,7 @@ class OscilloscopeView (DeviceFrame):
         else:
             self.intVar_radioValue_channel1.set(0)
         
-        self.controller.setChannelState(self.generateArguments(args8=self.combo_channel1.current()))
+        self.controller.setChannelState(self.generateArguments(args8=self.combo_channel1.current()+1))
 
     def button_channel2_activate_callback(self, args=None):
     #This method is called to change the channel state
@@ -749,7 +763,7 @@ class OscilloscopeView (DeviceFrame):
         else:
             self.intVar_radioValue_channel2.set(0)
         
-        self.controller.setChannelState(self.generateArguments(args8=self.combo_channel2.current()))
+        self.controller.setChannelState(self.generateArguments(args8=self.combo_channel2.current()+1))
 
     def button_channel3_activate_callback(self, args=None):
     #This method is called to change the channel state
@@ -759,7 +773,7 @@ class OscilloscopeView (DeviceFrame):
         else:
             self.intVar_radioValue_channel3.set(0)
         
-        self.controller.setChannelState(self.generateArguments(args8=self.combo_channel3.current()))
+        self.controller.setChannelState(self.generateArguments(args8=self.combo_channel3.current()+1))
 
     def button_channel4_activate_callback(self, args=None):
     #This method is called to change the channel state
@@ -769,7 +783,7 @@ class OscilloscopeView (DeviceFrame):
         else:
             self.intVar_radioValue_channel4.set(0)
         
-        self.controller.setChannelState(self.generateArguments(args8=self.combo_channel4.current()))
+        self.controller.setChannelState(self.generateArguments(args8=self.combo_channel4.current()+1))
 
     def entry_instrumentName_callback(self, arg=None, newName=None):
     #This method calls the view to change instrument name
@@ -874,18 +888,38 @@ class OscilloscopeView (DeviceFrame):
     def button_captureWaveform1_callback(self, args=None):
     #This method sets the horizontal scale
         self.controller.getCurve(self.generateArguments(args8=self.combo_channel1.current()+1))
+        self.button_displayWaveform1_callback()
 
     def button_captureWaveform2_callback(self, args=None):
     #This method sets the horizontal scale
         self.controller.getCurve(self.generateArguments(args8=self.combo_channel2.current()+1))
+        self.button_displayWaveform2_callback()
 
     def button_captureWaveform3_callback(self, args=None):
     #This method sets the horizontal scale
         self.controller.getCurve(self.generateArguments(args8=self.combo_channel3.current()+1))
+        self.button_displayWaveform3_callback()
 
     def button_captureWaveform4_callback(self, args=None):
     #This method sets the horizontal scale
         self.controller.getCurve(self.generateArguments(args8=self.combo_channel4.current()+1))
+        self.button_displayWaveform4_callback()
+
+    def button_displayWaveform1_callback(self, args=None):
+    #This method sets the horizontal scale
+        self.controller.plotCurve(self.generateArguments(args8=self.combo_channel1.current()+1))
+
+    def button_displayWaveform2_callback(self, args=None):
+    #This method sets the horizontal scale
+        self.controller.plotCurve(self.generateArguments(args8=self.combo_channel2.current()+1))
+
+    def button_displayWaveform3_callback(self, args=None):
+    #This method sets the horizontal scale
+        self.controller.plotCurve(self.generateArguments(args8=self.combo_channel3.current()+1))
+
+    def button_displayWaveform4_callback(self, args=None):
+    #This method sets the horizontal scale
+        self.controller.plotCurve(self.generateArguments(args8=self.combo_channel4.current()+1))
 
     def button_runstop_callback(self, args=None):
     #This method sets the acquisition state

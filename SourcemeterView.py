@@ -122,11 +122,11 @@ class SourcemeterView (DeviceFrame):
         self.combo_measure_current = Combobox(self.frame_measure_current, state="readonly", width=8, values=["A", "mA"])        
         self.combo_measure_resistance = Combobox(self.frame_measure_resistance, state="readonly", width=8, values=["kΩ", "Ω", "MΩ"])
 
-        self.graphImg = Image.open("sine.png")
+        self.graphImg = Image.open("Images/sine.png")
         self.graphImg = self.graphImg.resize((12, 13), Image.ANTIALIAS)
         self.graphImg = ImageTk.PhotoImage(self.graphImg)
 
-        self.playImg = Image.open("play.png")
+        self.playImg = Image.open("Images/play.png")
         self.playImg = self.playImg.resize((12, 13), Image.ANTIALIAS)
         self.playImg = ImageTk.PhotoImage(self.playImg)
 
@@ -343,7 +343,7 @@ class SourcemeterView (DeviceFrame):
         self.entry_instrumentName.bind("<KeyRelease>", self.entry_instrumentName_callback)
 
         self.entry_instrumentaddress.pack(side='right', padx=5)
-        self.entry_instrumentaddress.bind('<Double-Button-1>', self.entry_instrumentaddress_callback)
+        self.entry_instrumentaddress.bind('<Double-Button-1>', lambda event, name=self : self.view.menu2_Connections_callBack(event, name))
 
         self.entry_source_voltage.pack(side='right', padx=5)
         self.entry_source_voltage.bind('<Return>', self.entry_source_voltage_callback)

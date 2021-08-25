@@ -321,7 +321,7 @@ class ScriptController():
             listeVariable.index(command.entry_attribute1)
             args.append(globals()[command.entry_attribute1])
         except:
-            if command.entry_attribute1 != '':
+            if type(command.entry_attribute1) != type(""):
                 args.append(float(command.entry_attribute1))
             else:
                 args.append(command.entry_attribute1)                
@@ -426,8 +426,8 @@ class ScriptController():
                     self.view.button_runScript.config(image=self.view.pauseImg)
                     try:
                         result = item[0](item[1])  
-                        print("Problem during execution")
                     except:
+                        print("Problem during execution")
                         break
                     self.view.button_runScript.config(image=self.view.playImg)
 

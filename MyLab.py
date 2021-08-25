@@ -10,7 +10,18 @@ File description : Application Launcher
 """
 
 from Controller import Controller
+import sys
+import os
 
 if __name__ == "__main__":
+
+    path = ""
+    company_name = 'Oticon medical'
+    product_version = '0.0'
+    product_name = 'MyLab_V' + product_version
     
-    controller = Controller()
+    if len(sys.argv) > 1:
+        path = sys.argv[1]
+
+    controller = Controller(path)
+    

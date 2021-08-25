@@ -22,19 +22,19 @@ class Model():
         """
         self.controller = controller
 
-        with open("Error.json") as f:
+        with open("Configuration/Error.json") as f:
             self.error_dict = json.load(f)
             f.close()
 
-        with open("Metadata.json") as f:
+        with open("Configuration/Metadata.json") as f:
             self.meta_dict = json.load(f)
             f.close()
 
-        with open("Devices.json") as f:
+        with open("Configuration/Devices.json") as f:
             self.devices_dict = json.load(f)
             f.close()
 
-        with open("Parameters.json") as f:
+        with open("Configuration/Parameters.json") as f:
             self.parameters_dict = json.load(f)
             f.close()
 

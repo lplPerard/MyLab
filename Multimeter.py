@@ -30,6 +30,16 @@ class Multimeter(Instrument):
         self.measure_frequency = 0
         self.measure_period = 0
 
+        self.measure = {"DC_voltage" : [],
+                        "DC_current" : [],
+                        "AC_voltage" : [],
+                        "AC_current" : [],
+                        "2W_resistance" : [],
+                        "4W_resistance" : [],
+                        "diode" : [],
+                        "frequency" : [],
+                        "period" : []}
+
         self.masterState = 0
 
         self.commandList=["setDCV",

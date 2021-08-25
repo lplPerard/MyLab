@@ -38,6 +38,10 @@ class PowerSupply(Instrument):
         self.source_current = 0
         self.source_current_caliber = "A"
 
+        self.measure = {"voltage" : [],
+                        "current" : [],
+                        "power" : []}
+
         self.measure_voltage = 0
         self.measure_voltage_caliber = "V"
         self.measure_current = 0

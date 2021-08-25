@@ -20,14 +20,14 @@ class Controller():
 
     """
 
-    def __init__(self):
+    def __init__(self, path=""):
     #Constructor for the Controller class     
 
         self.instrument = Instrument()
         self.instrList=[]
         
         self.model = Model(self)
-        self.view = View(controller=self, model=self.model)
+        self.view = View(controller=self, model=self.model, path=path)
         self.view.mainloop()
 
     def VISA_connect(self):

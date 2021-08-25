@@ -11,7 +11,7 @@ from tkinter.ttk import Progressbar
 from PIL import Image, ImageTk
 from CommandLine import CommandLine
 from Instrument import Instrument
-from tkinter import Button, Canvas, Entry, Frame, LabelFrame, Scrollbar, IntVar
+from tkinter import Button, Canvas, Entry, Frame, LabelFrame, Scrollbar, IntVar, StringVar
 from tkinter import Label
 from tkinter import Toplevel
 from tkinter import Text
@@ -34,6 +34,7 @@ class ScriptView():
         self.model = model
         self.controller = controller
         self.root=root
+        self.path = self.model.parameters_dict['outputFolder']
 
         self.listeCommand = []
         self.scriptState = "STOP"
@@ -46,25 +47,32 @@ class ScriptView():
 
         self.frameline_insert = Frame(self.dataFrame, bg=self.model.parameters_dict['backgroundColorConfiguration'])
         self.frameline_buttons = Frame(self.dataFrame, bg=self.model.parameters_dict['backgroundColorConfiguration'])
+        self.frameline_path = Frame(self.dataFrame, bg=self.model.parameters_dict['backgroundColorConfiguration'])
 
         self.intvar_insertPos = IntVar()
         self.intvar_insertPos.set(0)
+        self.stringvar_path = StringVar()
+        self.stringvar_path.set(self.path)
 
-        self.playImg = Image.open("play.png")
+        self.playImg = Image.open("Images/play.png")
         self.playImg = self.playImg.resize((15, 15), Image.ANTIALIAS)
         self.playImg = ImageTk.PhotoImage(self.playImg)
 
-        self.pauseImg = Image.open("pause.png")
+        self.pauseImg = Image.open("Images/pause.png")
         self.pauseImg = self.pauseImg.resize((15, 15), Image.ANTIALIAS)
         self.pauseImg = ImageTk.PhotoImage(self.pauseImg)
 
-        self.nextImg = Image.open("next.png")
+        self.nextImg = Image.open("Images/next.png")
         self.nextImg = self.nextImg.resize((15, 15), Image.ANTIALIAS)
         self.nextImg = ImageTk.PhotoImage(self.nextImg)
 
-        self.stopImg = Image.open("stop.png")
+        self.stopImg = Image.open("Images/stop.png")
         self.stopImg = self.stopImg.resize((15, 15), Image.ANTIALIAS)
         self.stopImg = ImageTk.PhotoImage(self.stopImg)
+
+        self.noteImg = Image.open("Images/note.png")
+        self.noteImg = self.noteImg.resize((15, 19), Image.ANTIALIAS)
+        self.noteImg = ImageTk.PhotoImage(self.noteImg)
 
         self.button_addCommandLine = Button(self.dataFrame, text=" Add Command Line  ", command=self.addCommandLine)
         self.button_addCommandLine.bind_all('<Control-Key-n>', self.addCommandLine)
@@ -77,7 +85,10 @@ class ScriptView():
 
         self.progressbar = Progressbar(self.dataFrame, orient='horizontal', length = 100, mode = 'determinate')
 
+        self.label_note = Label(self.frameline_path, image=self.noteImg, bg=self.model.parameters_dict['backgroundColorConfiguration'])
+
         self.entry_insertPos = Entry(self.frameline_insert, textvariable=self.intvar_insertPos, width=5)
+        self.entry_path = Entry(self.frameline_path, textvariable=self.stringvar_path, width=17)
         
     def initFrame(self, padx=10, pady=10):
     #This method generates the Frame's parameters for the sequence
@@ -95,15 +106,22 @@ class ScriptView():
         self.defilX_setup.pack(fill="x", side='bottom', padx='3', pady=3) 
         #self.defilY_setup.pack(fill="y", side='right', padx='3', pady=3) 
 
+        self.frameline_path.pack()
+        self.label_note.pack(side='left', anchor='nw', pady=2)
+        self.entry_path.pack(side='left', padx=3)
+
         self.button_addCommandLine.pack(pady=2, padx=3)
         self.frameline_insert.pack()
         self.button_insertCommandLine.pack(side='left', anchor='nw', pady=2)
         self.entry_insertPos.pack(side='left', padx=3)
         self.button_clearCommandLine.pack(pady=2, padx=6)
+
         self.frameline_buttons.pack()
+
         self.button_stopScript.pack(side='left', ipadx=5, pady=2, padx=6)
         self.button_runScript.pack(side='left', ipadx=5, pady=2, padx=6)
         self.button_nextInScript.pack(side='left', ipadx=5, pady=2, padx=6)
+
         self.progressbar.pack(padx=5, fill='x', pady=4)
 
     def addCommandLine(self, args=None, pos=None, command=None):

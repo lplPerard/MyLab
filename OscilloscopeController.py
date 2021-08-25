@@ -7,6 +7,7 @@ File description : Class container for Power Supply Controller.
 """
 
 
+from threading import Thread
 import numpy as np
 from Oscilloscope import Oscilloscope
 from tkinter.constants import END
@@ -82,12 +83,12 @@ class OscilloscopeController():
 
             if self.instrument.id == "0x0699::0x0377":
                 try: 
-                    if self.instrument.channelState[args[7]] == 0:
-                        self.instrument.ressource.write('SEL:CH' + str(args[7] + 1) + ' ON')
-                        self.instrument.channelState[args[7]] = 1
+                    if self.instrument.channelState[int(args[7])-1] == 0:
+                        self.instrument.ressource.write('SEL:CH' + str(args[7]) + ' ON')
+                        self.instrument.channelState[int(args[7])-1] = 1
                     else:
-                        self.instrument.ressource.write('SEL:CH' + str(args[7] + 1) + ' OFF')
-                        self.instrument.channelState[args[7]] = 0
+                        self.instrument.ressource.write('SEL:CH' + str(args[7]) + ' OFF')
+                        self.instrument.channelState[int(args[7])-1] = 0
                 except:
                     self.view.view.sendError('002')
                     self.instrument.state = "unreachable"
@@ -133,10 +134,10 @@ class OscilloscopeController():
 
             if self.instrument.id == "0x0699::0x0377":
                 try: 
-                    if args[8] == "FULL":
-                        self.instrument.ressource.write('CH' + str(args[7]) + ':BAN FUL')
-                    elif args[8] == "20MHZ":
-                        self.instrument.ressource.write('CH' + str(args[7]) + ':BAN TWE')
+                    if args[7] == "FULL":
+                        self.instrument.ressource.write('CH' + str(args[8]) + ':BAN FUL')
+                    elif args[7] == "20MHZ":
+                        self.instrument.ressource.write('CH' + str(args[8]) + ':BAN TWE')
                 except:
                     self.view.view.sendError('002')
                     self.instrument.state = "unreachable"
@@ -146,10 +147,10 @@ class OscilloscopeController():
 
             else:
                 try: 
-                    if args[8] == "FULL":
-                        self.instrument.ressource.write('CH' + str(args[7]) + ':BAN FUL')
-                    elif args[8] == "20MHZ":
-                        self.instrument.ressource.write('CH' + str(args[7]) + ':BAN TWE')
+                    if args[7] == "FULL":
+                        self.instrument.ressource.write('CH' + str(args[8]) + ':BAN FUL')
+                    elif args[7] == "20MHZ":
+                        self.instrument.ressource.write('CH' + str(args[8]) + ':BAN TWE')
                 except:
                     self.view.view.sendError('002')
                     self.instrument.state = "unreachable"
@@ -175,12 +176,12 @@ class OscilloscopeController():
 
             if self.instrument.id == "0x0699::0x0377":
                 try: 
-                    if args[8] == "DC":
-                        self.instrument.ressource.write('CH' + str(args[7]) + ':COUP DC')
-                    elif args[8] == "AC":
-                        self.instrument.ressource.write('CH' + str(args[7]) + ':COUP AC')
-                    elif args[8] == "GND":
-                        self.instrument.ressource.write('CH' + str(args[7]) + ':COUP GND')
+                    if args[7] == "DC":
+                        self.instrument.ressource.write('CH' + str(args[8]) + ':COUP DC')
+                    elif args[7] == "AC":
+                        self.instrument.ressource.write('CH' + str(args[8]) + ':COUP AC')
+                    elif args[7] == "GND":
+                        self.instrument.ressource.write('CH' + str(args[8]) + ':COUP GND')
                 except:
                     self.view.view.sendError('002')
                     self.instrument.state = "unreachable"
@@ -190,12 +191,12 @@ class OscilloscopeController():
 
             else:
                 try: 
-                    if args[8] == "DC":
-                        self.instrument.ressource.write('CH' + str(args[7]) + ':BAN DC')
-                    elif args[8] == "AC":
-                        self.instrument.ressource.write('CH' + str(args[7]) + ':BAN AC')
-                    elif args[8] == "GND":
-                        self.instrument.ressource.write('CH' + str(args[7]) + ':BAN GND')
+                    if args[7] == "DC":
+                        self.instrument.ressource.write('CH' + str(args[8]) + ':COUP DC')
+                    elif args[7] == "AC":
+                        self.instrument.ressource.write('CH' + str(args[8]) + ':COUP AC')
+                    elif args[7] == "GND":
+                        self.instrument.ressource.write('CH' + str(args[8]) + ':COUP GND')
                 except:
                     self.view.view.sendError('002')
                     self.instrument.state = "unreachable"
@@ -262,14 +263,14 @@ class OscilloscopeController():
 
             if self.instrument.id == "0x0699::0x0377":
                 try: 
-                    if args[8] == "x1":
-                        self.instrument.ressource.write('CH' + str(args[7]) + ':PRO:GAIN 1.0')
-                    elif args[8] == "x10":
-                        self.instrument.ressource.write('CH' + str(args[7]) + ':PRO:GAIN 0.1')
-                    elif args[8] == "x100":
-                        self.instrument.ressource.write('CH' + str(args[7]) + ':PRO:GAIN 0.01')
-                    elif args[8] == "x1000":
-                        self.instrument.ressource.write('CH' + str(args[7]) + ':PRO:GAIN 0.001')
+                    if args[7] == "x1":
+                        self.instrument.ressource.write('CH' + str(args[8]) + ':PRO:GAIN 1.0')
+                    elif args[7] == "x10":
+                        self.instrument.ressource.write('CH' + str(args[8]) + ':PRO:GAIN 0.1')
+                    elif args[7] == "x100":
+                        self.instrument.ressource.write('CH' + str(args[8]) + ':PRO:GAIN 0.01')
+                    elif args[7] == "x1000":
+                        self.instrument.ressource.write('CH' + str(args[8]) + ':PRO:GAIN 0.001')
                 except:
                     self.view.view.sendError('002')
                     self.instrument.state = "unreachable"
@@ -279,14 +280,14 @@ class OscilloscopeController():
 
             else:
                 try: 
-                    if args[8] == "x1":
-                        self.instrument.ressource.write('CH' + str(args[7]) + ':PROBE:GAIN 1')
-                    elif args[8] == "x10":
-                        self.instrument.ressource.write('CH' + str(args[7]) + ':PROBE:GAIN 10')
-                    elif args[8] == "x100":
-                        self.instrument.ressource.write('CH' + str(args[7]) + ':PROBE:GAIN 100')
-                    elif args[8] == "x1000":
-                        self.instrument.ressource.write('CH' + str(args[7]) + ':PROBE:GAIN 100')
+                    if args[7] == "x1":
+                        self.instrument.ressource.write('CH' + str(args[8]) + ':PRO:GAIN 1.0')
+                    elif args[7] == "x10":
+                        self.instrument.ressource.write('CH' + str(args[8]) + ':PRO:GAIN 0.1')
+                    elif args[7] == "x100":
+                        self.instrument.ressource.write('CH' + str(args[8]) + ':PRO:GAIN 0.01')
+                    elif args[7] == "x1000":
+                        self.instrument.ressource.write('CH' + str(args[8]) + ':PRO:GAIN 0.001')
                 except:
                     self.view.view.sendError('002')
                     self.instrument.state = "unreachable"
@@ -421,13 +422,13 @@ class OscilloscopeController():
 
             if self.instrument.id == "0x0699::0x0377":
                 try: 
-                    if args[7] == 1:
+                    if int(args[7]) == 1:
                         self.instrument.ressource.write('DATA:SOU ch1')
-                    elif args[7] == 2:
+                    elif int(args[7]) == 2:
                         self.instrument.ressource.write('DATA:SOU ch2')
-                    elif args[7] == 3:
+                    elif int(args[7]) == 3:
                         self.instrument.ressource.write('DATA:SOU ch3')
-                    elif args[7] == 4:
+                    elif int(args[7]) == 4:
                         self.instrument.ressource.write('DATA:SOU ch4')
                         
                     self.instrument.ressource.write('DATA:WIDTH 1')
@@ -449,16 +450,19 @@ class OscilloscopeController():
                     volt = (ADC_wave - yoff) * ymult + yzero
                     time = np.arange(0, xincr * len(volt), xincr)
 
-                    self.instrument.measure_timeBase = time
-                    self.instrument.measure_waveform = volt
+                    if int(args[7]) == 1:
+                        self.instrument.measure["channel_1_timebase"] = time
+                        self.instrument.measure["channel_1_waveform"] = volt 
+                    elif int(args[7]) == 2:
+                        self.instrument.measure["channel_2_timebase"] = time
+                        self.instrument.measure["channel_2_waveform"] = volt 
+                    elif int(args[7]) == 3:
+                        self.instrument.measure["channel_3_timebase"] = time
+                        self.instrument.measure["channel_3_waveform"] = volt 
+                    elif int(args[7]) == 4:
+                        self.instrument.measure["channel_4_timebase"] = time
+                        self.instrument.measure["channel_4_waveform"] = volt 
 
-                    fig = plt.figure(facecolor=self.model.parameters_dict['backgroundColorInstrument'])
-                    ax1 = fig.add_subplot(111)
-                    ax1.set_xlabel(('Time (s)'))
-                    ax1.set_ylabel(('Voltage (V)'))
-                    ax1.plot(time, volt)
-                    plt.grid()
-                    plt.show()
 
                 except:
                     self.view.view.sendError('002')
@@ -522,3 +526,26 @@ class OscilloscopeController():
 
         else:
             self.view.view.sendError('004')
+
+    def plotCurve(self, args=[]):
+    #This method plots the last captured curve
+        if int(args[7]) == 1:
+            time = self.instrument.measure["channel_1_timebase"]
+            volt = self.instrument.measure["channel_1_waveform"]
+        elif int(args[7]) == 2:
+            time = self.instrument.measure["channel_2_timebase"]
+            volt = self.instrument.measure["channel_2_waveform"]
+        elif int(args[7]) == 3:
+            time = self.instrument.measure["channel_3_timebase"]
+            volt = self.instrument.measure["channel_3_waveform"]
+        elif int(args[7]) == 4:
+            time = self.instrument.measure["channel_4_timebase"]
+            volt = self.instrument.measure["channel_4_waveform"]
+
+        fig = plt.figure(facecolor=self.model.parameters_dict['backgroundColorInstrument'])
+        ax1 = fig.add_subplot(111)
+        ax1.set_xlabel(('Time (s)'))
+        ax1.set_ylabel(('Voltage (V)'))
+        ax1.plot(time, volt)
+        plt.grid()
+        plt.show()

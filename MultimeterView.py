@@ -123,17 +123,17 @@ class MultimeterView (DeviceFrame):
         self.combo_2WR = Combobox(self.frame_2WR, state="readonly", width=8, values=["1kΩ", "100Ω", "10kΩ", "100kΩ", "1MΩ", "10MΩ", "100MΩ"])
         self.combo_4WR = Combobox(self.frame_4WR, state="readonly", width=8, values=["1kΩ", "100Ω", "10kΩ", "100kΩ", "1MΩ", "10MΩ", "100MΩ"])
         
-        self.diodeImg = Image.open("diode.png")
+        self.diodeImg = Image.open("Images/diode.png")
         self.diodeImg = self.diodeImg.resize((30, 17), Image.ANTIALIAS)
         self.diodeImg = ImageTk.PhotoImage(self.diodeImg)
-        self.diodeImg_grey = Image.open("diode_grey.png")
+        self.diodeImg_grey = Image.open("Images/diode_grey.png")
         self.diodeImg_grey = self.diodeImg_grey.resize((30, 17), Image.ANTIALIAS)
         self.diodeImg_grey = ImageTk.PhotoImage(self.diodeImg_grey)
 
-        self.continuityImg = Image.open("continuity.png")
+        self.continuityImg = Image.open("Images/continuity.png")
         self.continuityImg = self.continuityImg.resize((25, 15), Image.ANTIALIAS)
         self.continuityImg = ImageTk.PhotoImage(self.continuityImg)   
-        self.continuityImg_grey = Image.open("continuity_grey.png")
+        self.continuityImg_grey = Image.open("Images/continuity_grey.png")
         self.continuityImg_grey = self.continuityImg_grey.resize((25, 15), Image.ANTIALIAS)
         self.continuityImg_grey = ImageTk.PhotoImage(self.continuityImg_grey)         
 
@@ -357,7 +357,7 @@ class MultimeterView (DeviceFrame):
         self.entry_instrumentName.bind("<KeyRelease>", self.entry_instrumentName_callback)
         self.entry_instrumentName.pack(side='right', padx=5)
 
-        self.entry_instrumentaddress.bind('<Double-Button-1>', self.entry_instrumentaddress_callback)
+        self.entry_instrumentaddress.bind('<Double-Button-1>', lambda event, name=self : self.view.menu2_Connections_callBack(event, name))
         self.entry_instrumentaddress.pack(side='right', padx=5)
 
         self.entry_DCV.pack(side='right', padx=5)

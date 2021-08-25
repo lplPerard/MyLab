@@ -212,14 +212,13 @@ class ClimaticChamberView (DeviceFrame):
         self.entry_instrumentName.bind("<KeyRelease>", self.entry_instrumentName_callback)
         self.entry_instrumentName.pack(side='right', padx=5)
 
-        self.entry_instrumentaddress.bind('<Double-Button-1>', self.view.menu2_Connections_callBack)
+        self.entry_instrumentaddress.bind('<Double-Button-1>', lambda event, name=self : self.view.menu2_Connections_callBack(event, name))
         self.entry_instrumentaddress.pack(side='right', padx=5)
 
         #self.entry_temperatureSource.bind("<Return>", self.entry_temperatureSource_callback)
         self.entry_temperatureSource.pack(side='right', padx=5)
 
         self.entry_temperatureMeasure.pack(side='right', padx=5)
-
 
     def entry_instrumentName_callback(self, arg=None, newName=None):
     #This method calls the view to change instrument name

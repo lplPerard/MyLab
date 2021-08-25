@@ -26,9 +26,12 @@ class Sourcemeter(Instrument):
 
         self.masterState = 0
 
-        self.commandList=["setDCV",
-                          "setACV",
-                          "setDCI",
-                          "measure4WR",
-                          "measureDiode",
-                          "measurePeriod"]
+        self.measure = {"voltage" : [],
+                        "current" : [],
+                        "resistance" : []}
+
+        self.commandList=["setVoltageSource",
+                          "setCurrentSource",
+                          "generateVoltageWaveform",
+                          "generateCurrentWaveform",
+                          "setMasterState"]

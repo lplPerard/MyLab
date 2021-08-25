@@ -5,23 +5,62 @@
 import sys
 from cx_Freeze import setup, Executable
 
+company_name = 'Oticon medical'
+product_version = '0.0'
+product_name = 'MyLab'
+
+shortcut_table = [
+    ("DesktopShortcut",        # Shortcut
+     "DesktopFolder",          # Directory_
+     "MyLab",                  # Name
+     "TARGETDIR",              # Component_
+     "[TARGETDIR]MyLab.exe",   # Target
+     None,                     # Arguments
+     None,                     # Description
+     None,                     # Hotkey
+     None,                     # Icon
+     None,                     # IconIndex
+     None,                     # ShowCmd
+     'TARGETDIR'               # WkDir
+     )
+    ]
+
+extensions = [
+        # open / print / view text files
+        {
+            "extension": "mylab",
+            "verb": "open",
+            "executable": "MyLab.exe",
+            "context": "Open with MyLab",
+        }
+        ]
+
+bdist_msi_options = {'upgrade_code': '{48B079F4-B598-438D-A62A-8A233A3F8901}',
+                     'add_to_path': False,
+                     'initial_target_dir': r'C:\%s\%s' % (company_name, product_name),
+                     'target_name': product_name,
+                     'install_icon': 'Images/icon2.ico',
+                     'extensions': extensions,
+                     'data': {"Shortcut":shortcut_table}
+                    }
+
 base = None
 if sys.platform == 'win32':
     base = 'Win32GUI'
 
-includefiles = ['Parameters.json', 'Metadata.json', 'Error.json', 'Devices.json',
-                'NIVISA_19.5.exe', 'GPIB_Driver.exe', 'Keysight_Driver.exe', 'ReadMe.txt',
-                'HMC8042.png', '2220-30-1.png', 'VT4002_EMC.png', '33500B.png', '8845A.png', 'E3642A.png', '2400.png',
-                'RTM1054.png', 'RTM3004.png', 'MSO2014.png', 'HMO3004.png', 'DL9040.png',
-                'icon.ico', 'diode.png', 'diode_grey.png', 'continuity.png', 'continuity_grey.png', 'delete.png', 'play.png', 'pause.png', 'next.png', 'stop.png', 'empty.png', 'breakpoint.png', 'sine.png', 'snapper.png']
+includefiles = ['Configuration/',
+                'Drivers/',
+                'Results/',
+                'ReadMe.txt',
+                'Images/']
 
 executables = [
-    Executable('MyLab.py', base=base, icon='icon2.ico')
+    Executable('MyLab.py', base=base, icon='Images/icon2.ico')
 ]
 
-setup(name='MyLab',
-      version='0.0',
+setup(name=product_name,
+      version=product_version,
       author='Luc PERARD',
-      options = {'build_exe': {'include_files':includefiles}},    
+      options = {'build_exe': {'include_files':includefiles}, 'bdist_msi': bdist_msi_options},    
       executables=executables
       )
