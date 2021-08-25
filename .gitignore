@@ -1,0 +1,6 @@
+GPIB_Driver.exe
+Keysight_Driver.exe
+NIVISA_19.5.exe
+/dist/
+/build/
+/__pycache__/
