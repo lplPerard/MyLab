@@ -1,26 +1,3 @@
-{
-    "000": "VISA is not supported on this computer. \nYou can install it using NI VISA 19.5",
-    "001": "Impossible to detect any instruments using VISA",
-    "002": "Fail to send VISA command",
-    "003": "This channel is currently used on this instrument !\nA free channel was selected",
-    
-    "004": "Please specify an address for each instrument",
-    "005": "The recognized instrument for this address doesn't seem to match the created instrument type.\n",
-    "006": "All channel seems to be currently used on this instrument !\nIf not, consider adding this instrument to known devices",
-
-    "007": "Configuration cannot be saved while a process is pending.\nPlease turn every instrument OFF.",
-    "008": "Configuration cannot be opened while a process is pending.\nPlease turn every instrument OFF.",
-    "009": "The software cannot be closed while a process is pending.\nPlease turn every instrument OFF.",
-
-    "010": "Impossible to init communication using Serial",
-    "011": "Fail to send Serial command",
-
-    "100": "Unknown instrument in script.\nPlease check instrument name : ",
-    "101": " SYNTAX ERROR\nEND missing in script !",
-    "102": " SYNTAX ERROR\nENDIF missing in script !",
-
-    "404": "This functionnality is not implemented yet !\nContact the developper for further information",
-
-    "W000": "Maximum number of instrument : 15",
-    "xxx": "Undeclared error"
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:32da2e4b5b4607266efd02d4fe5430a608de4ce2ff22cf11f71b039de69a0afe
+size 1586
