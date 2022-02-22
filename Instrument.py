@@ -1,32 +1,3 @@
-"""Copyright Oticon Medical NICE
-
-Developped by : Luc PERARD
-
-File description : Class container for Instrument.
-
-"""
-
-import json
-
-
-class Instrument():
-    """Class containing Instrument specification.
-
-    """
-
-    def __init__(self):
-    #Constructor for the Instrument Class
-        
-        self.type = ""
-        self.name = ""
-        self.address = ""
-        self.connectMode = ""
-        self.masterState = 0 # 0 => OFF state 1 => ON state
-        self.state = "free"
-        self.id = ""
-        self.ressource = None
-        self.commandList = ["To be updated"]
-
-        self.result = 2.5
-
-        
+version https://git-lfs.github.com/spec/v1
+oid sha256:5f59c06bbf8daee15b00709000f88cc8811dcc2338686f7eb9d9bb872fa8e42f
+size 655
