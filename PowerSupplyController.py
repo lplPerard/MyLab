@@ -66,7 +66,7 @@ class PowerSupplyController():
     #This method modify the voltage source 
         pass
 
-    def setCurrentSource(self, args=[]):
+    def setCurrentLimit(self, args=[]):
         pass
             
     def setChannelState(self, args=[]):

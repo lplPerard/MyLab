@@ -1,3 +1,47 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:95a698ef0d6deb135bcdb6990db8e3d395030b3acd257a052010c4c4cfd95fb5
-size 1368
+"""Copyright Oticon Medical NICE
+
+Developped by : Luc PERARD
+
+File description : Class container for Power Supply Instrument.
+
+"""
+
+import json
+from Instrument import Instrument
+
+
+class PowerSupply(Instrument):
+    """Class containing Power Supply.
+
+    """
+
+    def __init__(self):
+    #Constructor for the Instrument Class
+        Instrument.__init__(self)
+
+        self.type = "Power Supply"
+
+        self.commandList=["setVoltageSource",
+                          "setCurrentLimit",
+                          "setChannelState",
+                          "setMasterState",
+                          "MeasureVoltage",
+                          "MeasureCurrent",
+                          "MeasurePower"]
+ 
+        self.channelNumber = ["1", "2", "3", "4"]
+        self.channelState = [0, 0, 0, 0]         # 0 => OFF state 1 => ON state
+        self.channelUsed = ["", "", "", ""]      # "" => free state 
+
+        self.source_voltage = 0
+        self.source_voltage_caliber = "V"
+        self.source_current = 0
+        self.source_current_caliber = "A"
+
+        self.measure = {"voltageChannel1" : [],
+                        "currentChannel1" : [],
+                        "powerChannel1" : [],
+                        "voltageChannel2" : [],
+                        "currentChannel2" : [],
+                        "powerChannel2" : []}
+

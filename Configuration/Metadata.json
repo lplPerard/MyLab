@@ -1,3 +1,6 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:40a06f7fb4b49b883f467a18a9cae0fa5d7325132ae42d06b6c6cd16b467b202
-size 143
+{
+    "version": "V2.0",
+    "copyright": "Oticon Medical NICE",
+    "developper": "Luc PERARD",
+    "contact": "luea@oticonmedical.com"
+}

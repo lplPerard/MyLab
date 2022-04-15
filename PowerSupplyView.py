@@ -2,14 +2,14 @@
 
 Developped by : Luc PERARD
 
-File description : Class container for the POwerSupply instrument's View.
+File description : Class container for the PowerSupply instrument's View.
 
 """
 
 import imp
-from os import listdir
+import sys
 import os
-from tkinter.constants import END
+from os import listdir
 
 from PowerSupplyController import PowerSupplyController
 from DeviceFrame import DeviceFrame
@@ -21,12 +21,11 @@ from tkinter import DoubleVar
 from tkinter import Entry
 from tkinter import Radiobutton
 from tkinter.ttk import Combobox
+from tkinter.constants import END
+
 from PIL import Image, ImageTk
 
-from threading import Thread
 
-import sys
-import importlib.util
 
 class PowerSupplyView (DeviceFrame):
     """Class containing the PowerSupply's View
@@ -72,7 +71,7 @@ class PowerSupplyView (DeviceFrame):
         self.stringvar_instrumentName = StringVar()    
         self.stringvar_instrumentaddress = StringVar()
         self.doubleVar_voltageSource = DoubleVar()
-        self.doubleVar_currentSource = DoubleVar()
+        self.doubleVar_currentLimit = DoubleVar()
         self.intVar_radioValueChannel = IntVar()
         self.intVar_radioValueMaster = IntVar()
 
@@ -82,19 +81,19 @@ class PowerSupplyView (DeviceFrame):
         self.label_instrumentChannel = Label(self.frame_instrument_channel, text="Channel :")
 
         self.label_voltageSource = Label(self.frame_source_voltage, text="Voltage :")
-        self.label_currentSource = Label(self.frame_source_current, text="Current :")
+        self.label_currentLimit = Label(self.frame_source_current, text="Current :")
 
         self.combo_instrument = Combobox(self.frame_instrument, state="readonly", width=15, values=["path1"])
-        self.combo_instrumentChannel = Combobox(self.frame_instrument_channel, state="readonly", width=5, values=["1", "2"])
+        self.combo_instrumentChannel = Combobox(self.frame_instrument_channel, state="readonly", width=5, values=["1", "2", "3", "4"])
 
         self.combo_voltageSource = Combobox(self.frame_source_voltage, state="readonly", width=5, values=["V", "mV"])
-        self.combo_currentSource = Combobox(self.frame_source_current, state="readonly", width=5, values=["A", "mA"])
+        self.combo_currentLimit = Combobox(self.frame_source_current, state="readonly", width=5, values=["A", "mA"])
 
         self.entry_instrumentName = Entry(self.frame_instrument_name, textvariable=self.stringvar_instrumentName)
         self.entry_instrumentaddress = Entry(self.frame_instrument_address, textvariable=self.stringvar_instrumentaddress, state="readonly")
 
         self.entry_voltageSource = Entry(self.frame_source_voltage, textvariable=self.doubleVar_voltageSource, width=15)
-        self.entry_currentSource = Entry(self.frame_source_current, textvariable=self.doubleVar_currentSource, width=15)
+        self.entry_currentLimit = Entry(self.frame_source_current, textvariable=self.doubleVar_currentLimit, width=15)
 
         self.channel_activate = Button(self.frame_source_button, text='Channel ON/OFF', command=self.channel_activate_callback)
         self.master_activate = Button(self.frame_master_button, text='Master ON/OFF', command=self.master_activate_callback)
@@ -116,6 +115,7 @@ class PowerSupplyView (DeviceFrame):
                 self.controller.instrument.channelUsed[i]=""
 
     def renameInstrument(self):
+    #This method is used to change instrumen'ts name and guarantee there are no duplicates
         for item in self.view.listViews:
             if self.controller.instrument.name == item.controller.instrument.name:  
                 if (self != item):
@@ -124,56 +124,12 @@ class PowerSupplyView (DeviceFrame):
                     self.entry_instrumentName_callback(newName=newName)
 
     def updateView(self, configuration=False):
-    #This method refresh the content of the view
+    #This method refresh the content of the view, its is used when loading a configuration file
         self.stringvar_instrumentaddress.set(self.controller.instrument.address)
-        self.panel.destroy()
-        found=0
-
-        for item in self.model.devices_dict:
-            if (item in self.controller.instrument.address):
-                if self.model.devices_dict[item][1] == "Power Supply":
-                    self.controller.instrument.id = item
-                    self.controller.instrument.channelNumber = self.model.devices_dict[item][2]
-                    self.combo_instrumentChannel.configure(values=self.controller.instrument.channelNumber)
-                    self.controller.instrument.channelState = self.model.devices_dict[item][3]
-                    self.controller.instrument.channelUsed = self.model.devices_dict[item][4]
-
-                    newName = self.model.devices_dict[item][0] + " (0)"
-                    self.entry_instrumentName_callback(newName=newName)
-
-                    if self.model.devices_dict[item][0] == "HMC8042":   
-                        self.img = Image.open(self.model.devices_dict[item][5])
-                        self.img = self.img.resize((300, 150), Image.ANTIALIAS)
-                        self.img = ImageTk.PhotoImage(self.img)
-                        self.panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColorInstrument'])
-                        self.panel.pack(fill = "both", expand = "yes")
-
-                    if self.model.devices_dict[item][0] == "2220-30-1":   
-                        self.img = Image.open(self.model.devices_dict[item][5])
-                        self.img = self.img.resize((250, 250), Image.ANTIALIAS)
-                        self.img = ImageTk.PhotoImage(self.img)
-                        self.panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColorInstrument'])
-                        self.panel.pack(fill = "both", expand = "yes")
-
-                    if self.model.devices_dict[item][0] == "E3642A":   
-                        self.img = Image.open(self.model.devices_dict[item][5])
-                        self.img = self.img.resize((250, 125), Image.ANTIALIAS)
-                        self.img = ImageTk.PhotoImage(self.img)
-                        self.panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColorInstrument'])
-                        self.panel.pack(fill = "both", expand = "yes")
-
-                    break
-
-                found=1
-
-        if (found==1) and (self.model.devices_dict[item][1] != "Power Supply"):
-            self.view.menu5_callback(self)
-            self.view.sendError('005')
-
         self.renameInstrument()
 
-        if (found == 0) and (self.controller.instrument.address != ""):                
-            sys.stdout("\nUnknown device connected")
+        if self.controller.instrument.address != "":                
+            sys.stdout("\n" + self.combo_instrument.get() + " is now connected to " + self.controller.instrument.address)
             used = 0
             for item in self.view.getInstrList():
                 if (item.name != self.controller.instrument.name) and (item.address == self.controller.instrument.address):
@@ -185,18 +141,11 @@ class PowerSupplyView (DeviceFrame):
                 self.controller.instrument.channelState = [0, 0]
                 self.controller.instrument.channelUsed = ["", ""]
 
-        if (found == 0) and (self.controller.instrument.address == ""):    
-            self.img = Image.open("Images/HMC8042.png")
-            self.img = self.img.resize((300, 150), Image.ANTIALIAS)
-            self.img = ImageTk.PhotoImage(self.img)
-            self.panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColorInstrument'])
-            self.panel.pack(fill = "both", expand = "yes")
-
         if configuration == True:
             self.doubleVar_voltageSource.set(self.controller.instrument.source_voltage)
             self.combo_voltageSource.set(self.controller.instrument.source_voltage_caliber)
-            self.doubleVar_currentSource.set(self.controller.instrument.source_current)
-            self.combo_currentSource.set(self.controller.instrument.source_current_caliber)
+            self.doubleVar_currentLimit.set(self.controller.instrument.source_current)
+            self.combo_currentLimit.set(self.controller.instrument.source_current_caliber)
             
         if self.controller.instrument.address != "":
             self.controller.connectToDevice()
@@ -212,6 +161,7 @@ class PowerSupplyView (DeviceFrame):
         self.panel.pack(fill = "both", expand = "yes")
 
     def initFrameLine(self):
+    #This method instanciates all the Framelines
         self.frame_instrument_name.configure(bg=self.model.parameters_dict['backgroundColorInstrumentData'])
         self.frame_instrument_name.pack(fill="both", pady=3)
 
@@ -250,7 +200,7 @@ class PowerSupplyView (DeviceFrame):
         self.stringvar_instrumentName.set(self.controller.instrument.name)    
         self.stringvar_instrumentaddress.set(self.controller.instrument.address)
         self.doubleVar_voltageSource.set(0)
-        self.doubleVar_currentSource.set(0)
+        self.doubleVar_currentLimit.set(0)
         
     def initLabel(self):
     #This methods instanciates all the Label
@@ -269,15 +219,15 @@ class PowerSupplyView (DeviceFrame):
         self.label_voltageSource.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.label_voltageSource.pack(side="left")
 
-        self.label_currentSource.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
-        self.label_currentSource.pack(side="left")
+        self.label_currentLimit.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.label_currentLimit.pack(side="left")
 
     def initCombo(self):
     #This methods instanciates all the combobox
         list=[]
-        for file in listdir("C:\\Oticon medical\\MyLab\\Instruments\\PowerSupply"):
-            if file[-3:] == ".py":
-                list.append(file[:-3])
+        for dir in listdir("C:\\Oticon medical\\MyLab\\Instruments\\PowerSupply"):
+            if dir != "__pycache__":
+                list.append(dir)
             
         self.combo_instrument.configure(values=list)    
         self.combo_instrument.bind("<<ComboboxSelected>>", self.combo_instrument_callback)
@@ -297,10 +247,10 @@ class PowerSupplyView (DeviceFrame):
         self.combo_voltageSource.current(0)
         self.combo_voltageSource.pack(side="right", padx=5)
     
-        self.combo_currentSource.bind("<<ComboboxSelected>>", self.combo_currentSource_callback)
-        self.combo_currentSource.configure(background='white')
-        self.combo_currentSource.current(0)
-        self.combo_currentSource.pack(side="right", padx=5)
+        self.combo_currentLimit.bind("<<ComboboxSelected>>", self.combo_currentLimit_callback)
+        self.combo_currentLimit.configure(background='white')
+        self.combo_currentLimit.current(0)
+        self.combo_currentLimit.pack(side="right", padx=5)
 
     def initEntries(self):
     #This method instanciates the entries    
@@ -313,8 +263,8 @@ class PowerSupplyView (DeviceFrame):
         self.entry_voltageSource.bind("<Return>", self.entry_voltageSource_callback)
         self.entry_voltageSource.pack(side='right', padx=5)
 
-        self.entry_currentSource.bind("<Return>", self.entry_currentSource_callback)
-        self.entry_currentSource.pack(side='right', padx=5)
+        self.entry_currentLimit.bind("<Return>", self.entry_currentLimit_callback)
+        self.entry_currentLimit.pack(side='right', padx=5)
 
     def initButton(self):
     #This method instanciates the buttons
@@ -334,13 +284,13 @@ class PowerSupplyView (DeviceFrame):
         self.intVar_radioValueMaster.set(1)
 
     def combo_instrument_callback(self, arg=None):
-    #This method import the needed controller module
+    #This method is called when selectionning an instrument via combo_instrument
         list=[]
-        for file in listdir("C:\\Oticon medical\\MyLab\\Instruments\\PowerSupply"):
-            if file[-3:] == ".py":
-                list.append(file)
+        for dir in listdir("C:\\Oticon medical\\MyLab\\Instruments\\PowerSupply"):
+            if dir != "__pycache__":
+                list.append(dir)
 
-        file_path = "C:\\Oticon medical\\MyLab\\Instruments\\PowerSupply\\" + list[self.combo_instrument.current()]
+        file_path = "C:\\Oticon medical\\MyLab\\Instruments\\PowerSupply\\" + list[self.combo_instrument.current()] + "\\" + list[self.combo_instrument.current()] + ".py"
 
         mod_name,file_ext = os.path.splitext(os.path.split(file_path)[-1])
 
@@ -358,9 +308,20 @@ class PowerSupplyView (DeviceFrame):
         controller.resourceManager = self.controller.resourceManager
 
         self.controller = controller
+        self.panel.destroy()
+
+        try :                
+            self.img = Image.open("C:\\Oticon medical\\MyLab\\Instruments\\PowerSupply\\" + self.combo_instrument.get() + "\\" + self.combo_instrument.get() + ".png")
+            self.img = self.img.resize((300, 150), Image.ANTIALIAS)
+            self.img = ImageTk.PhotoImage(self.img)
+            self.panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColorInstrument'])
+            self.panel.pack(fill = "both", expand = "yes")
+
+        except:
+            sys.stdout("\n  No Image were found associated to " + self.combo_instrument.get() + "\n")
 
     def combo_instrumentChannel_callback(self, arg=None):
-    #This method sets the channel to avoid conflict
+    #This method is called when selectionning a channel via combo_instrumentChannel
         for i in range(len(self.controller.instrument.channelUsed)):
             if self.controller.instrument.channelUsed[i] == self.controller.instrument:
                 self.controller.instrument.channelUsed[i]=""
@@ -396,12 +357,12 @@ class PowerSupplyView (DeviceFrame):
             self.view.sendError('006')    
 
     def combo_voltageSource_callback(self, args=None):
-    #This method is called when clicking on combobox
+    #This method is called when changing units for volatge source 
         self.controller.instrument.source_voltage_caliber = self.combo_voltageSource.get()
 
-    def combo_currentSource_callback(self, args=None):
-    #This method is called when clicking on combobox
-        self.controller.instrument.source_current_caliber = self.combo_currentSource.get()
+    def combo_currentLimit_callback(self, args=None):
+    #This method is called when changing units for current limit
+        self.controller.instrument.source_current_caliber = self.combo_currentLimit.get()
 
     def entry_instrumentName_callback(self, arg=None, newName=None):
     #This method calls the view to change instrument name
@@ -420,21 +381,21 @@ class PowerSupplyView (DeviceFrame):
         voltage = self.doubleVar_voltageSource.get()  
         channel = self.combo_instrumentChannel.current() + 1    
         self.controller.instrument.source_voltage = voltage   
-        self.controller.setVoltageSource(self.generateArguments(arg0=voltage, arg7=channel))
+        self.controller.setVoltageSource(self.generateArguments(arg1=voltage, arg8=channel))
 
-    def entry_currentSource_callback(self, arg=None):
+    def entry_currentLimit_callback(self, arg=None):
     #This method calls the controller to change the voltage
-        current = self.doubleVar_currentSource.get()    
+        current = self.doubleVar_currentLimit.get()    
         channel = self.combo_instrumentChannel.current() + 1     
         self.controller.instrument.source_current = current                 
-        self.controller.setCurrentSource(self.generateArguments(arg0=current, arg7=channel))
+        self.controller.setcurrentLimit(self.generateArguments(arg1=current, arg8=channel))
 
     def channel_activate_callback(self):
-    #This method call the controller to change output state 
+    #This method call the controller to change channel output state 
         channel = self.combo_instrumentChannel.current() + 1 
-        if self.controller.setChannelState(self.generateArguments(arg7=channel)) != "ERROR":
+        if self.controller.setChannelState(self.generateArguments(arg8=channel)) != "ERROR":
             if (self.intVar_radioValueChannel.get() == 1) and (self.controller.instrument.address != ""):
-                self.entry_currentSource_callback()
+                self.entry_currentLimit_callback()
                 self.entry_voltageSource_callback()
 
                 self.intVar_radioValueChannel.set(2) 
@@ -444,10 +405,10 @@ class PowerSupplyView (DeviceFrame):
                 self.radio_channelStateOFF.select() 
 
     def master_activate_callback(self):
-    #This method call the controller to change output state 
+    #This method call the controller to change Master output state 
         if self.controller.setMasterState([]) != "ERROR":
             if (self.intVar_radioValueMaster.get() == 1) and (self.controller.instrument.address != ""):
-                self.entry_currentSource_callback()
+                self.entry_currentLimit_callback()
                 self.entry_voltageSource_callback()
 
                 self.intVar_radioValueMaster.set(2) 
@@ -456,12 +417,3 @@ class PowerSupplyView (DeviceFrame):
             else:
                 self.intVar_radioValueMaster.set(1)
                 self.radio_masterStateOFF.select() 
-
-    def generateArguments(self, arg0="", arg1="", arg7=""):
-    #This method generates a list of arguments to pilot the controller
-        liste=[""]*14
-        liste[0] = arg0
-        liste[1] = arg1
-        liste[7] = arg7
-
-        return(liste)
