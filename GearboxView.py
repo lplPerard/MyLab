@@ -6,6 +6,7 @@ File description : Class container for the Gearbox instrument's View.
 
 """
 from os import listdir
+import sys
 
 from tkinter.constants import END
 from DeviceFrame import DeviceFrame
@@ -38,17 +39,11 @@ class GearboxView (DeviceFrame):
         self.initLabel()
         self.initButtons()
         self.initCombo()
+        self.initVar()
         self.initEntries()
 
     def updateView(self, configuration=False):
     #This method refresh the content of the view
-        found=0
-
-        for item in self.model.devices_dict:
-            if item in self.controller.instrument.address:
-                newName = self.model.devices_dict[item][0] + " (0)"
-                self.entry_instrumentName_callback(newName=newName)
-
         self.renameInstrument()
     
     def initAttributes(self):
@@ -96,15 +91,6 @@ class GearboxView (DeviceFrame):
         self.connectImg = Image.open("Images/connect.png")
         self.connectImg = self.connectImg.resize((15, 15), Image.ANTIALIAS)
         self.connectImg = ImageTk.PhotoImage(self.connectImg)
-
-    def renameInstrument(self):
-        i = 0
-        liste = self.view.listViews
-        for item in liste:
-            if self.controller.instrument.name == item.controller.instrument.name:    
-                newName = self.controller.instrument.name[:-2] + str(i) + ")"
-                self.entry_instrumentName_callback(newName=newName)
-                i = i+1
              
     def initLabelFrame(self):
     #This method instanciates all the LabelFrame
@@ -172,6 +158,10 @@ class GearboxView (DeviceFrame):
         self.combo_instrumentVersion.configure(values=list, background='white')
         self.combo_instrumentVersion.current(0)
         self.combo_instrumentVersion.pack(side="right", padx=5)
+        
+    def initVar(self):
+    #This methods instanciates all the Var
+        self.stringvar_instrumentName.set(self.controller.instrument.name) 
 
     def initEntries(self):
     #This method instanciates the entries    
@@ -195,7 +185,7 @@ class GearboxView (DeviceFrame):
 
     def entry_instrumentImage_callback(self, arg=None, newName=None):
     #This method calls the view to change instrument name
-        path = filedialog.askopenfilename(title = "Select file", filetypes = (("Corona files","*.corona"), ("all files","*.*")))
+        path = filedialog.askopenfilename(title = "Select file", filetypes = (("Corona files","*.corona"), ("Metax files","*.metax"),("all files","*.*")))
         self.stringvar_instrumentImage.set(path)
  
     def button_set_server_callback(self):

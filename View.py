@@ -308,7 +308,7 @@ class View(Tk):
                 localController.updateView(tamp)
                 self.listViews.insert(0, tamp)
                 self.menu5.add_command(label=name, command=lambda: self.menu5_callback(tamp))
-                tamp.updateView(configuration)
+                tamp.updateView(instrument=instrument)
                 sys.stdout("\nNew Multimeter added : " + deviceType + " (" + str(pos) + ")\n")
             else:
                 self.sendWarning("W000")
@@ -350,7 +350,7 @@ class View(Tk):
                 localController.updateView(tamp)
                 self.listViews.insert(0, tamp)
                 self.menu5.add_command(label=name, command=lambda: self.menu5_callback(tamp))
-                tamp.updateView(configuration)
+                tamp.updateView(instrument)
                 sys.stdout("\nNew Gearbox added : " + deviceType + " (" + str(pos) + ")\n")
             else:
                 self.sendWarning("W000")
@@ -443,8 +443,8 @@ class View(Tk):
         self.menu4.add_command(label="Gearbox", command=self.menu4_Gearbox_callBack) 
         self.menu4.add_command(label="Autospacer", command=self.menu4_Autospacer_callBack) 
         
-        self.menu6.add_command(label="HTOL", command=self.menu6_HTOL_callBack)
         self.menu6.add_command(label="Bode", command=self.menu6_Bode_callBack)
+        self.menu6.add_command(label="RF Sensitivity - NIC", command=self.menu6_Sensitivity_callBack)
         self.menu6.add_command(label="I/V Characteristic", command=self.menu6_IV_callBack)
 
         self.menubar.add_cascade(label="Help", menu=self.menu7)
@@ -737,7 +737,7 @@ class View(Tk):
         else:
             self.sendError("007")
 
-    def menu6_HTOL_callBack(self, args=None):
+    def menu6_Sensitivity_callBack(self, args=None):
     #Callback function for menu2 2 option
         self.sendError("404")
 

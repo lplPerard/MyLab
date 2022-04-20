@@ -23,7 +23,6 @@ class Instrument():
         
         self.masterState = 0 # 0 => OFF state 1 => ON state
         self.state = "free"
-        #self.id = ""
         self.ressource = None
 
         self.commandList = ["To be updated"]

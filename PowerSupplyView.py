@@ -105,10 +105,6 @@ class PowerSupplyView (DeviceFrame):
         self.img = self.img.resize((300, 150), Image.ANTIALIAS)
         self.img = ImageTk.PhotoImage(self.img)
         self.panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColorInstrument'])
-        
-    def clearInstrument(self):
-    #This method is used to clear every trace of this instrument before being deleted
-        pass
 
     def updateView(self, instrument=None):
     #This method refresh the content of the view, its is used when loading a configuration file
@@ -231,7 +227,7 @@ class PowerSupplyView (DeviceFrame):
 
     def initButton(self):
     #This method instanciates the buttons
-        self.channel_activate.pack(expand="yes")
+        self.channel_activate.pack(expand="yes", padx=5)
         self.master_activate.pack(expand="yes")
 
         self.radio_channelStateON.pack(side="top", expand="yes", fill="both")
