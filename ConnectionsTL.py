@@ -108,7 +108,6 @@ class ConnectionsTL():
 
     def button_select_onclick(self):
     #This method is called when user clicks on select
-
         index = self.combo_instrumentName.current()
         self.view.listViews[index].controller.instrument.address = self.list_devices.get(ANCHOR)
         
@@ -116,10 +115,7 @@ class ConnectionsTL():
             self.view.topLevel_connect.withdraw()
             sys.stdout("address changed for : " + self.view.listViews[index].controller.instrument.name + "\n")   
             sys.stdout("   New address is : " + self.view.listViews[index].controller.instrument.address + "\n")   
-            self.view.listViews[self.combo_instrumentName.current()].controller.instrument.state="free"  
-            #self.view.listViews[self.combo_instrumentName.current()].state="changed"   
             self.view.listViews[self.combo_instrumentName.current()].updateView()
-            #self.view.refresh()
 
     def actualizeInstruments(self):
     #This method
@@ -139,10 +135,10 @@ class ConnectionsTL():
         except:
             None
 
-        if self.view.listViews[index].controller.instrument.type == "Climatic Chamber":
+        if instrList[index].type == "Climatic Chamber":
             self.combo_type.current(4)
         
-        elif self.view.listViews[index].controller.instrument.type == "Autospacer":
+        elif instrList[index].type == "Autospacer":
             self.combo_type.current(4)
 
         else :
@@ -152,14 +148,28 @@ class ConnectionsTL():
 
     def setCurrentInstrument(self, name):
     #This method
-        liste = self.view.listViews
-
         i=0
+        instrList=self.view.getInstrList()
+        instrList.reverse()  
+
         for item in self.view.listViews:
             if item == name:
                 self.combo_instrumentName.current(i)
                 break
             i+=1
+
+        index=self.combo_instrumentName.current() 
+
+        if instrList[index].type == "Climatic Chamber":
+            self.combo_type.current(4)
+        
+        elif instrList[index].type == "Autospacer":
+            self.combo_type.current(4)
+
+        else :
+            self.combo_type.current(0)
+
+        self.button_actualize_onclick()
 
     def filterByName(self, name):
     #This method

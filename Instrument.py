@@ -20,6 +20,7 @@ class Instrument():
         self.type = ""
         self.name = ""
         self.address = ""
+        
         self.masterState = 0 # 0 => OFF state 1 => ON state
         self.state = "free"
         #self.id = ""

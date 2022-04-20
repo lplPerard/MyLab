@@ -20,6 +20,10 @@ class PowerSupply(Instrument):
         Instrument.__init__(self)
 
         self.type = "Power Supply"
+        self.ident = ""
+
+        self.source_voltage = 0
+        self.source_current = 0
 
         self.commandList=["setVoltageSource",
                           "setCurrentLimit",
@@ -28,20 +32,17 @@ class PowerSupply(Instrument):
                           "MeasureVoltage",
                           "MeasureCurrent",
                           "MeasurePower"]
- 
-        self.channelNumber = ["1", "2", "3", "4"]
-        self.channelState = [0, 0, 0, 0]         # 0 => OFF state 1 => ON state
-        self.channelUsed = ["", "", "", ""]      # "" => free state 
 
-        self.source_voltage = 0
-        self.source_voltage_caliber = "V"
-        self.source_current = 0
-        self.source_current_caliber = "A"
-
-        self.measure = {"voltageChannel1" : [],
-                        "currentChannel1" : [],
-                        "powerChannel1" : [],
-                        "voltageChannel2" : [],
-                        "currentChannel2" : [],
-                        "powerChannel2" : []}
+        self.measure = {"voltage_C1" : [],
+                        "current_C1" : [],
+                        "power_C1" : [],
+                        "voltage_C2" : [],
+                        "current_C2" : [],
+                        "power_C2" : [],
+                        "voltage_C3" : [],
+                        "current_C3" : [],
+                        "power_C3" : [],
+                        "voltage_C4" : [],
+                        "current_C4" : [],
+                        "power_C4" : []}
 

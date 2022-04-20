@@ -73,7 +73,7 @@ class KT2220():
             self.instrument.ressource = None
             return("ERROR")
 
-    def setCurrentSource(self, args=[]):
+    def setCurrentLimit(self, args=[]):
         try:
             self.instrument.ressource = self.resourceManager.open_resource(self.instrument.address)
         except:

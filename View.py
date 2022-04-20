@@ -94,7 +94,7 @@ class View(Tk):
         self.topLevel_waveform = Toplevel(self)
         self.topLevel_webcam = Toplevel(self)
         
-        self.term_text = Text(self.topLevel_term, height=30, width=70, bg="black", fg="#3EFE01")
+        self.term_text = Text(self.topLevel_term, height=30, width=70, wrap="word", bg="black", fg="#3EFE01")
         
         now = datetime.now()
         self.logFileName = now.strftime(self.model.parameters_dict['logFolder'] + "logFile-%d-%m-%Y-%Hh%Mmn%Ss.txt")
@@ -148,9 +148,9 @@ class View(Tk):
         self.mainFrame.configure(bg=self.model.parameters_dict['backgroundColorView'])
         self.mainFrame.pack(padx=5, pady=5, fill="both", expand="yes")
 
-        self.mainCanva.create_window(0, 0, anchor='nw', window=self.mainFrame, height=600, width=4000)
+        self.mainCanva.create_window(0, 0, anchor='nw', window=self.mainFrame, height=530, width=4000)
 
-        self.mainCanva.config(xscrollcommand= self.defilX_setup.set, height=605)
+        self.mainCanva.config(xscrollcommand= self.defilX_setup.set, height=530)
         self.mainCanva.pack(fill="both", expand="yes")
         self.defilX_setup.pack(fill="x", side='bottom', padx='5') 
 
@@ -258,29 +258,29 @@ class View(Tk):
     def addDeviceFrame(self, deviceType=None, instrument=None, configuration=False):
     #This methods is used to change the device display
         if deviceType == "Power Supply":
-            localController = PowerSupplyController(view=self, term=self.term_text, instrument=instrument)
             if len(self.listViews) < 15:
+                localController = PowerSupplyController(view=self, term=self.term_text)
                 pos = len(self.listViews)
                 name= deviceType + " (" + str(pos) + ")"
                 tamp = PowerSupplyView(self, frame=self.mainFrame, terminal=self.term_text, model=self.model, controller=localController, name=name)
                 localController.updateView(tamp)
                 self.listViews.insert(0, tamp)
                 self.menu5.add_command(label=name, command=lambda: self.menu5_callback(tamp))
-                tamp.updateView(configuration)
+                tamp.updateView(instrument=instrument)
                 sys.stdout("\nNew Power Supply added : " + deviceType + " (" + str(pos) + ")\n")
             else:
                 self.sendWarning("W000")
 
         elif deviceType == "Climatic Chamber":
-            localController = ClimaticChamberController(view=self, term=self.term_text, instrument=instrument)
             if len(self.listViews) < 15:
+                localController = ClimaticChamberController(view=self, term=self.term_text)
                 pos = len(self.listViews)
                 name= deviceType + " (" + str(pos) + ")"
                 tamp = ClimaticChamberView(self, frame=self.mainFrame, terminal=self.term_text, model=self.model, controller=localController, name=name)
                 localController.updateView(tamp)
                 self.listViews.insert(0, tamp)
                 self.menu5.add_command(label=name, command=lambda: self.menu5_callback(tamp))
-                tamp.updateView(configuration)
+                tamp.updateView(instrument)
                 sys.stdout("\nNew Climatic Chamber added : " + deviceType + " (" + str(pos) + ")\n")
             else:
                 self.sendWarning("W000")
@@ -494,6 +494,7 @@ class View(Tk):
                 self.model.saveConfiguration(listeInstruments=self.getInstrList(), path=self.path, listeCommand=self.script.getListeCommand())
             else:
                 self.model.saveConfiguration(listeInstruments=self.getInstrList(), path=self.path, listeCommand=self.script.getListeCommand())
+        sys.stdout("\nConfiguration saved successfully at : \n" + " " + self.path)
 
     def menu1_SaveAs_callBack(self, args=None):
     #Callback function for menu1 2 option     
@@ -508,6 +509,8 @@ class View(Tk):
         if canSave == True:
             self.path = filedialog.asksaveasfilename(title = "Select file", filetypes = (("all files","*.*"), ("MyLab files","*.mylab")))
             self.model.saveConfiguration(listeInstruments=self.getInstrList(), path=self.path, listeCommand=self.script.getListeCommand())
+            
+        sys.stdout("\nConfiguration saved successfully at : \n" + " " + self.path)
 
     def menu1_Open_callBack(self, args=None):
     #Callback function for menu1 2 option

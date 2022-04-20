@@ -136,35 +136,6 @@ class HMC8042():
             self.view.view.sendError('002')
             return("ERROR")
         
-    def Measure(self, args=[]):
-    #This method update the content of the view with content from device   
-        try:
-            self.instrument.ressource = self.resourceManager.open_resource(self.instrument.address)
-            self.instrument.ressource.write('INST:NSEL ' + str(args[7])[-1])
-        except:
-            self.view.view.sendError('001')
-            self.instrument.ressource.close()
-            return("ERROR")
-
-            
-        try:
-            self.instrument.ressource.write('MEAS:CURR?')         
-            current = float(self.instrument.ressource.read())
-            self.instrument.measure["currentChannel"+ str(args[7])[-1]] = [current]
-            
-            self.instrument.ressource.write('MEAS:VOLT?')         
-            voltage = float(self.instrument.ressource.read())
-            self.instrument.measure["voltageChannel"+ str(args[7])[-1]] = [voltage]
-            
-            self.instrument.ressource.write('MEAS:POW?')         
-            power = float(self.instrument.ressource.read())
-            self.instrument.measure["powerChannel"+ str(args[7])[-1]] = [power]
-
-        except:
-            self.view.view.sendError('001')
-            self.instrument.ressource.close()
-            return("ERROR")
-        
     def MeasureVoltage(self, args=[]):
     #This method update the content of the view with content from device   
         try:
