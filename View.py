@@ -9,6 +9,7 @@ import sys
 
 from WaveformGeneratorView import WaveformGeneratorView
 from ClimaticChamberView import ClimaticChamberView
+from RFSensitivityView import RFSensitivityView
 from OscilloscopeView import OscilloscopeView
 from SourcemeterView import SourcemeterView
 from PowerSupplyView import PowerSupplyView
@@ -20,6 +21,7 @@ from IVView import IVView
 
 from WaveformGeneratorController import WaveformGeneratorController
 from ClimaticChamberController import ClimaticChamberController
+from RFSensitivityController import RFSensitivityController
 from OscilloscopeController import OscilloscopeController
 from PowerSupplyController import PowerSupplyController
 from SourcemeterController import SourcemeterController
@@ -383,6 +385,20 @@ class View(Tk):
             else:
                 self.sendWarning("W000")
 
+        elif deviceType == "RFSensitivity":
+            localController = RFSensitivityController(view=self, term=self.term_text, instrument=instrument, model=self.model)
+            if len(self.listViews) < 15:
+                pos = len(self.listViews)
+                name= deviceType + " (" + str(pos) + ")"
+                tamp = RFSensitivityView(self, frame=self.mainFrame, terminal=self.term_text, model=self.model, controller=localController, name=name)
+                localController.updateView(tamp)
+                self.listViews.insert(0, tamp)
+                self.menu5.add_command(label=name, command=lambda: self.menu5_callback(tamp))
+                tamp.updateView(configuration)
+                sys.stdout("\nNew RF Sensitivity TestBench added : " + deviceType + " (" + str(pos) + ")\n")
+            else:
+                self.sendWarning("W000")
+
     def sendError(self, error="xxx", complement=""):
     #This method generates message boxes from error returns
         messagebox.showerror(title="Error : " + error + " " + complement, message=self.model.error_dict[error])
@@ -739,7 +755,9 @@ class View(Tk):
 
     def menu6_Sensitivity_callBack(self, args=None):
     #Callback function for menu2 2 option
-        self.sendError("404")
+        mbox = messagebox.askyesno("Add Instrument", "Do you want to add an RF Sensitivity TestBench ?\nThis requires a specific setup only available in NIC")
+        if mbox == True:
+            self.addDeviceFrame("RFSensitivity")
 
     def menu6_Bode_callBack(self, args=None):
     #Callback function for menu2 2 option

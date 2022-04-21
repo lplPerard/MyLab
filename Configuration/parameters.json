@@ -1,3 +1,28 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:55c91bff1000e79e1adf92ca1a4508dc148209ba11b5f53d1bc609b4644bde5f
-size 902
+{
+    "backgroundColor": "#8998aa",
+    "viewColor": "#8998aa",
+    "backgroundColorGraph": "white",
+    "backgroundColorView": "#8998aa",
+    "backgroundColorScript": "#8998aa",
+    "backgroundColorInstrument": "#758598",
+    "backgroundColorInstrumentData": "#8998aa",
+    "backgroundColorCommandLine": "#a3989d",
+    "backgroundColorConfiguration": "#758598",
+    "highlightBackgroundColor": "#a3989d",
+    
+    "backgroundAlpha": "1",
+    "geometry": "1050x900",
+
+    "instrumentBorderwidth" : "2",
+    "labelFont": "Helvetica",
+
+    "geometryWakeUpTL": "300x150",
+    "geometryWaveformTL": "800x650",
+    "geometryWebcamTL": "750x600",
+    "geometryCheatSheetTL_power": "350x300",
+    "geometryCheatSheetTL_RF": "350x360",
+    "geometryConnectionsTL": "275x300",
+
+    "outputFolder": "C:/Oticon medical/MyLab/Results/",
+    "logFolder": "C:/Oticon medical/MyLab/Logs/"
+}
