@@ -1,3 +1,65 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:468815639887f8af1bf682da8b30a14fbcaa272e9531a508eb46177ef1d14d70
-size 2671
+{
+    "000": "VISA is not supported on this computer. \nYou can install it using NI VISA 19.5",
+    "001": "Impossible to detect any instruments using VISA",
+    "002": "Fail to send VISA command",
+    "003": "This channel is currently used on this instrument !\nA free channel was selected",    
+    "004": "Please specify an address for each instrument",
+    "005": "The recognized instrument for this address doesn't seem to match the created instrument type.\n",
+    "006": "All channel seems to be currently used on this instrument !\nIf not, consider adding this instrument to known devices",
+
+    "007": "Configuration cannot be saved while a process is pending.\nPlease turn every instrument OFF.",
+    "008": "Configuration cannot be opened while a process is pending.\nPlease turn every instrument OFF.",
+    "009": "The software cannot be closed while a process is pending.\nPlease turn every instrument OFF.",
+
+    "010": "Impossible to init communication using Serial",
+    "011": "Fail to send Serial command",
+
+
+
+    "100": "Unknown instrument in script.\nPlease check instrument name : ",
+    "101": " SYNTAX ERROR\nEND missing in script !",
+    "102": " SYNTAX ERROR\nENDIF missing in script !",
+    
+    "200": " IMAGE MISSING\nPlease specify a test image to start a connection with Gearbox !",
+
+
+    
+    "300": "Please Frequency and Distance entries to solve Friis equation",
+
+
+
+    "404": "This functionnality is not implemented yet !\nContact the developper for further information",
+
+
+
+    "500": "Communication error with AutoSpacer Mini\n Check USB and Mode on AutoSpacer",
+
+
+
+    "600": "Impossible to run CMD : Identify_FE_chip",
+    "601": "Impossible to run CMD : Identify_DSP_chip",
+    "602": "Impossible to run CMD : Identify_RF_chip",
+
+    "603": "Impossible to run CMD : Read_Serial_Number",
+    "604": "Impossible to run CMD : Read_Device_Info",
+    "605": "Impossible to run CMD : Read_Identity",
+    
+    "606": "Impossible to run CMD : DTM_Start_TX_Test",
+    "607": "Impossible to run CMD : DTM_Start_RX_Test",
+    "608": "Impossible to run CMD : DTM_End_Test",
+    
+    "609": "Impossible to run CMD : init_XP",
+    "610": "Impossible to run CMD : getID_XP",
+    "611": "Impossible to run CMD : getClock_XP",
+    "612": "Impossible to run CMD : getVunreg_XP",
+    "613": "Impossible to run CMD : StopCMD",
+    
+    "698": "Impossible to run CMD : Custom",
+    "699": "Impossible to run CMD : CustomRead",
+
+
+
+    "W000": "Maximum number of instrument : 15",
+    "W001": "Please take care, you may not verify the far field condition",
+    "xxx":  "Undeclared error"
+}

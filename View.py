@@ -324,7 +324,7 @@ class View(Tk):
                 localController.updateView(tamp)
                 self.listViews.insert(0, tamp)
                 self.menu5.add_command(label=name, command=lambda: self.menu5_callback(tamp))
-                tamp.updateView(configuration)
+                tamp.updateView(instrument=instrument)
                 sys.stdout("\nNew Sourcemeter added : " + deviceType + " (" + str(pos) + ")\n")
             else:
                 self.sendWarning("W000")

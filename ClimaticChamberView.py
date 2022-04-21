@@ -97,8 +97,8 @@ class ClimaticChamberView (DeviceFrame):
         self.entry_instrumentName = Entry(self.frame_instrument_name, textvariable=self.stringvar_instrumentName)
         self.entry_instrumentaddress = Entry(self.frame_instrument_address, textvariable=self.stringvar_instrumentaddress, state="readonly")
 
-        self.entry_temperatureSource = Entry(self.frame_source_temperature, textvariable=self.doubleVar_temperatureSource, width=6)
-        self.entry_temperatureMeasure = Entry(self.frame_measure_temperature, textvariable=self.doubleVar_temperatureMeasure, width=6, state="readonly")
+        self.entry_temperatureSource = Entry(self.frame_source_temperature, textvariable=self.doubleVar_temperatureSource, justify="right", width=6)
+        self.entry_temperatureMeasure = Entry(self.frame_measure_temperature, textvariable=self.doubleVar_temperatureMeasure, justify="right", width=6, state="readonly")
 
         self.combo_instrument = Combobox(self.frame_instrument, state="readonly", width=15, values=["path1"])
 
