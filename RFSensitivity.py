@@ -20,7 +20,7 @@ class RFSensitivity(Instrument):
 
         self.type = "RFSensitivity"
 
-        self.measure = {"voltage" : [],
-                        "current" : []}
+        self.measure = {"frequency" : [],
+                        "sensitivity" : []}
 
-        self.commandList=["IV_test"]
+        self.commandList=["RFSensitivity_testbench"]

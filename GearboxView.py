@@ -191,6 +191,7 @@ class GearboxView (DeviceFrame):
     def button_set_server_callback(self):
     #This method call the controller to change output state 
         if self.stringvar_instrumentImage.get() != "":        
+            sys.stdout("\nTrying to open Gearbox Server...\n")
             tmp = self.controller.Start_Server(gearbox=self.combo_instrumentVersion.get(), image=self.stringvar_instrumentImage.get())
             if tmp:
                 self.connect_point.configure(image=self.connectImg)  

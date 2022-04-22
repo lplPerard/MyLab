@@ -45,6 +45,9 @@ class CommandLine():
         self.initAttributes()
         self.initLabel()
         self.initCombo()
+
+        if command != None:
+            self.load_breakpoint()
         
     def initAttributes(self):
     #this method list all the attributes
@@ -247,6 +250,13 @@ class CommandLine():
         else :
             self.label_breakpoint.config(image=self.emptyImg) 
             self.command.breakpoint = 0   
+
+    def load_breakpoint(self, args=None):
+    #This method is called when loading configuration to display breakpoints
+        if (self.command.breakpoint == 1) :
+            self.label_breakpoint.config(image=self.breakpointImg) 
+        else :
+            self.label_breakpoint.config(image=self.emptyImg) 
 
     def updateLine(self, args=None):
     #this method is called to load saved data
@@ -941,8 +951,7 @@ class CommandLine():
         if self.combo_instrCommand.get() == "setDistance":
             self.entry_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
             self.stringVar_defaultText1.set("Distance")
-        
-        
+                
     def generateIVAttributes(self):
     #This method generates the attributes for Climatic Chamber commands
         self.command.combo_instrCommand = self.combo_instrCommand.get()

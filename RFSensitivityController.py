@@ -8,6 +8,7 @@ File description : Class container for IV testBench Controller.
 
 
 import sys
+import win32com.client  # Python ActiveX Client
 from RFSensitivity import RFSensitivity
 from tkinter.constants import END
 import pyvisa
@@ -31,171 +32,66 @@ class RFSensitivityController():
         if instrument != None:
             self.instrument = instrument
 
-        self.resourceManager = pyvisa.ResourceManager()
-
     def updateView(self, view):
     #Setter method for view attribute
         self.view = view
 
-    def connectToDevice(self):
-    #This method establish connection with device using instrument address
-        if (self.instrument.state == "free") or (self.instrument.state == "unreachable"):
-            try:
-                self.instrument.ressource = self.resourceManager.open_resource(self.instrument.address)
-                self.instrument.state == "free"
-
-            except:
-                if(self.instrument.state != "unreachable"):
-                    self.view.view.sendError('001')
-                    self.instrument.state = "unreachable"
-                    self.instrument.ressource.close()
-                    self.instrument.ressource = None
-                    return("ERROR")
-
-            try:
-                self.instrument.ressource.write('*RST')
-                self.instrument.ressource.write('*CLS')
-                self.instrument.ressource.write('SYST:REM')
-                self.instrument.ressource.read_termination = "\r\n"
-
-            except:
-                if(self.instrument.state != "unreachable"):
-                    self.view.view.sendError('002')
-                    self.instrument.state = "unreachable"
-                    self.instrument.ressource.close()
-                    self.instrument.ressource = None
-                    return("ERROR")
-
-        else:
-            self.view.view.sendError('004')
-
-    def closeConnection(self):    
-    #This method close the connection to device   
-        if self.instrument.ressource != None:
-            try: 
-                self.instrument.ressource.close()
-                self.instrument.ressource = None
-            except:
-                if(self.instrument.state != "unreachable"):
-                    self.view.view.sendError('002')
-                    self.instrument.state = "unreachable"
-
-    def IV_test(self, args=[]):
-    #this methods generates a IV characterization waveform   
-
+    def RFSensitivity_test(self, args=[]):
+    #this methods generates a IV characterization waveform 
         try:
-            liste = self.model.openConfiguration(args[0])
+            frequencyList = self.view.getFrequencies()
+            attenuation = args[1]
+            power = args[0]
+            per = args[2]
+            bitRate = args[7]
 
         except:
-            sys.stdout("    Can't open waveform file\n")
             self.view.testState = "STOP"
+            sys.stdout("\nERROR while loading test parameters\n")
             return("ERROR")
 
-        progressLength = len(liste[1])
-        currentProgress = 0
+        progressLength = len(frequencyList)
+        currentProgress = 0  
 
-        if self.instrument.state == "unreachable":
-            try:
-                self.instrument.ressource = self.resourceManager.open_resource(self.instrument.address)
-                self.instrument.state == "free"
-            except:
-                if(self.instrument.state != "unreachable"):
-                    self.view.view.sendError('001')
-                    self.instrument.state = "unreachable"
-                self.view.testState = "STOP"
-                return("ERROR")
+        try:
+            for frequency in frequencyList:
+                sys.stdout("\nProgress = " + str(self.progress) + "%")
 
-        if self.instrument.state == "free":
-            if args[7] == "Voltage":
-
-                sys.stdout("Voltage waveform\n")
+                LabVIEW = win32com.client.Dispatch("Labview.Application")
+                VI = LabVIEW.getvireference("C:\\Users\\Public\\Documents\\National Instruments\\TestStand 2017 (32-bit)\\Components\\StepTypes\\Oticon\\RF Measurements\\Receiver Sensitivity_Config_LUEA.vi")  # Path to LabVIEW VI
+                VI._FlagAsMethod("Call")  # Flag "Call" as Method
 
                 try:
-                    self.instrument.ressource.write('SOUR:FUNC VOLT')
-                    self.instrument.ressource.write('SENS:FUNC "CURR"')
-                    self.instrument.ressource.write('SENS:CURR:PROT ' + str(args[1]))
-                    self.instrument.ressource.write('OUTP ON')
+                    VI.setcontrolvalue('Attenuation', attenuation)  # Set Input 1
+                    VI.setcontrolvalue('Frequency', frequency)  # Set Input 2
+                    VI.setcontrolvalue('PER only In', False)  # Set Input 3
+                    VI.setcontrolvalue('PER Target in', per)  # Set Input 4
+                    VI.setcontrolvalue('Power Level', power)  # Set Input 5
+                    VI.setcontrolvalue('BitRate', bitRate)  # Set Input 5
 
-                    for item in liste[1]:
-                        sys.stdout("\nProgress = " + str(self.progress) + "%")
-                        self.instrument.ressource.write('SOUR:VOLT ' + str(item))
-                        self.instrument.ressource.write('MEAS:CURR?')
-                        result = self.instrument.ressource.read()
-                        result = result.split(",")
+                    VI.Call()  # Run the VI
 
-                        voltage = float(result[0])
-                        sys.stdout("\n  Voltage = " + str(voltage))
-                        current = float(result[1])
-                        sys.stdout("\n  Current = " + str(current) + "\n")
+                    self.instrument.measure["frequency"].append(frequency)
+                    sensitivity = VI.getcontrolvalue('Level@PER Target')
+                    self.instrument.measure["sensitivity"].append(sensitivity)
 
-
-                        self.instrument.result = current
-                        self.instrument.measure["voltage"].append(voltage)
-                        self.instrument.measure["current"].append(current)
-
-                        currentProgress = currentProgress + 1
-                        self.progress = (currentProgress/progressLength)*100
-                    
-                    self.instrument.ressource.write('SOUR:VOLT 0')
-                    self.instrument.ressource.write('OUTP OFF')  
+                    sys.stdout("\nFrequency : " + str(frequency))
+                    sys.stdout("\n  Sensitivity : " + str(sensitivity) + " dBm\n")
 
                 except:
-                    self.view.view.sendError('002')
-                    self.instrument.state = "unreachable"
-                    self.instrument.ressource.close()
-                    self.instrument.ressource = None
+                    sys.stdout("\nError during VI'execution\n")
                     self.view.testState = "STOP"
                     return("ERROR")
+
+                currentProgress = currentProgress + 1
+                self.progress = (currentProgress/progressLength)*100
             
-            elif args[7] =="Current":
-
-                sys.stdout("Current waveform\n")
-
-                try:
-                    self.instrument.ressource.write('SOUR:FUNC CURR')
-                    self.instrument.ressource.write('SOUR:CURR:MODE FIXED')
-                    self.instrument.ressource.write('SENS:FUNC "VOLT"')
-                    self.instrument.ressource.write('SENS:VOLT:PROT ' + str(args[1]))
-                    self.instrument.ressource.write('OUTP ON')  
-
-                    for item in liste[1]:
-                        sys.stdout("\nProgress = " + str(self.progress) + "%")
-                        self.instrument.ressource.write('SOUR:CURR:LEV ' + str(item))
-                        self.instrument.ressource.write('MEAS:VOLT?')
-                        result = self.instrument.ressource.read()
-                        result = result.split(",")
-
-                        voltage = float(result[0])
-                        sys.stdout("\n  Voltage = " + str(voltage))
-                        current = float(result[1])
-                        sys.stdout("\n  Current = " + str(current) + "\n")
-
-                        self.instrument.result = voltage
-                        self.instrument.measure["voltage"].append(voltage)
-                        self.instrument.measure["current"].append(current)
-                        self.progress = (currentProgress/progressLength)*100
-
-                        currentProgress = currentProgress + 1
-                    
-                    self.instrument.ressource.write('SOUR:CURR:LEV 0')
-                    self.instrument.ressource.write('OUTP OFF')  
-
-                except:
-                    self.view.view.sendError('002')
-                    self.instrument.state = "unreachable"
-                    self.instrument.ressource.close()
-                    self.instrument.ressource = None
-                    self.view.testState = "STOP"
-                    return("ERROR")
-
-            else:
-                self.view.testState = "STOP"
-                return()
-
-            self.view.graph.addLinGraph(x=self.instrument.measure["voltage"], xlabel="voltage", y=self.instrument.measure["current"], ylabel="current")
-            self.view.testState = "STOP"
             self.progress = 0
-
-        else:
-            self.view.view.sendError('004')
+            sys.stdout("\nProgress = 100%")
+            sys.stdout("\nRF Sensitivity test is finished\n")
             self.view.testState = "STOP"
+
+        except:
+            sys.stdout("\n    Impossible to start the VI\n")
+            self.view.testState = "STOP"
+            return("ERROR")

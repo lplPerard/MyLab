@@ -32,13 +32,12 @@ class GearboxController():
 
     def Start_Server(self, gearbox, image):
     #This methods opens a Gearbox server at local host port:2950 and create a session with the selected image
-        sys.stdout("\nTrying to open Gearbox Server...\n")
         cmd = "C:\\toolsuites\\gearbox\\gearboxj\\" + gearbox + "\\gearboxj server -s http://localhost:2950"
-        tempBatch = open("Configuration/gearbox.bat", 'w')
-        tempBatch.write(cmd)
-        tempBatch.close()
+        defaultBatch = open("Configuration/gearbox.bat", 'w')
+        defaultBatch.write(cmd)
+        defaultBatch.close()
         subprocess.Popen("Configuration\gearbox.bat", shell=True)
-        test = urllib.request.urlopen('http://localhost:2950///general.createAuroraSession?name=temp&modelFile=' + image, timeout=120).read().decode('UTF-8')
+        test = urllib.request.urlopen('http://localhost:2950///general.createAuroraSession?name=default&modelFile=' + image, timeout=120).read().decode('UTF-8')
         
         if test[:2] == "OK":
             sys.stdout("\nGearbox Server opened on port 2950\n")
@@ -56,17 +55,17 @@ class GearboxController():
 #####################################################################################################################################################################################################################################################################################
         
     def Open_connection(self):
-        urllib.request.urlopen('http://localhost:2950//manager/sessions/temp/general.createConnection?name=left&medium=HiPro&side=Left&protocol=PIF2FW&connected=true') 
+        urllib.request.urlopen('http://localhost:2950//manager/sessions/default/general.createConnection?name=left&medium=HiPro&side=Left&protocol=PIF2FW&connected=true') 
         
     def Close_connection(self):
-        urllib.request.urlopen('http://localhost:2950//manager/sessions/temp/general.removeConnection?connection=manager/sessions/temp/connections/left') #Lukker en Connection til device
+        urllib.request.urlopen('http://localhost:2950//manager/sessions/default/general.removeConnection?connection=manager/sessions/default/connections/left') #Lukker en Connection til device
         sys.stdout('\nHiPro connection is closed.\n')
 
 #####################################################################################################################################################################################################################################################################################
         
     def Read_device_info(self, args=[]):
         try:
-            info = urllib.request.urlopen('http://localhost:2950//manager/sessions/temp/connections/left/general.readDeviceInfo').read()  #Read Device info
+            info = urllib.request.urlopen('http://localhost:2950//manager/sessions/default/connections/left/general.readDeviceInfo').read()  #Read Device info
             info = info.decode(encoding='UTF-8')
             info = info.split('readDeviceInfo')    #Gearbox returns the data as bytes. This line change the 'bytes' to 'string'
             sys.stdout(info)
@@ -77,7 +76,7 @@ class GearboxController():
 
     def Read_identity(self, args=[]):
         try:
-            identity = urllib.request.urlopen('http://localhost:2950//manager/sessions/temp/connections/left/general.identifyDevice').read()  #Read Indentify device
+            identity = urllib.request.urlopen('http://localhost:2950//manager/sessions/default/connections/left/general.identifyDevice').read()  #Read Indentify device
             identity = identity.decode(encoding='UTF-8').split('identifyDevice')[1]    #Gearbox returns the data as bytes. This line change the 'bytes' to 'string'
             sys.stdout(identity)
 
@@ -87,7 +86,7 @@ class GearboxController():
     
     def Read_serial_number(self, args=[]):
         try:
-            serial = urllib.request.urlopen('http://localhost:2950//manager/sessions/temp/connections/left/general.readSerialNumber').read()    #Read Serial number
+            serial = urllib.request.urlopen('http://localhost:2950//manager/sessions/default/connections/left/general.readSerialNumber').read()    #Read Serial number
             serial = serial.decode(encoding='UTF-8').split('readSerialNumber')[1]
             sys.stdout(serial)
 
@@ -97,7 +96,7 @@ class GearboxController():
     
     def Identify_FE_chip(self, args=[]):
         try:
-            serial = urllib.request.urlopen('http://localhost:2950//manager/sessions/temp/connections/left/general.identifyFE').read()    #Read Serial number
+            serial = urllib.request.urlopen('http://localhost:2950//manager/sessions/default/connections/left/general.identifyFE').read()    #Read Serial number
             serial = serial.decode(encoding='UTF-8').split('identifyFE')[1]
             self.instrument.measure["Identify_FE"] = [list(serial)]
             sys.stdout(serial)
@@ -108,7 +107,7 @@ class GearboxController():
     
     def Identify_DSP_chip(self, args=[]):
         try:
-            serial = urllib.request.urlopen('http://localhost:2950//manager/sessions/temp/connections/left/general.identifyDSP').read()    #Read Serial number
+            serial = urllib.request.urlopen('http://localhost:2950//manager/sessions/default/connections/left/general.identifyDSP').read()    #Read Serial number
             serial = serial.decode(encoding='UTF-8').split('identifyDSP')[1]
             self.instrument.measure["Identify_DSP"] = [list(serial)]
             sys.stdout(serial)
@@ -119,7 +118,7 @@ class GearboxController():
     
     def Identify_RF_chip(self, args=[]):
         try:
-            serial = urllib.request.urlopen('http://localhost:2950//manager/sessions/temp/connections/left/general.identifyRF').read()    #Read Serial number
+            serial = urllib.request.urlopen('http://localhost:2950//manager/sessions/default/connections/left/general.identifyRF').read()    #Read Serial number
             serial = serial.decode(encoding='UTF-8').split('identifyRF')[1]
             self.instrument.measure["Identify_RF"] = [list(serial)]
             sys.stdout(serial)
@@ -132,7 +131,7 @@ class GearboxController():
         
     def EAS_set_generator_output(self, args=[]):
         try:
-            url = 'http://localhost:2950//manager/sessions/temp/connections/left/productionTest.signalGenerators.configureOutputSignalGenerator?newToneFrequency='+str(args[0])+'&newGain='+ str(args[7])[-1] +'&enable='+str(args[8])
+            url = 'http://localhost:2950//manager/sessions/default/connections/left/productionTest.signalGenerators.configureOutputSignalGenerator?newToneFrequency='+str(args[0])+'&newGain='+ str(args[7])[-1] +'&enable='+str(args[8])
             url = url.replace(" ", "%20")
             urllib.request.urlopen(url).read() 
             serial = serial.decode(encoding='UTF-8')
@@ -146,7 +145,7 @@ class GearboxController():
             
     def BLE_DTM_StartTX(self, args=[]):
         try:
-            url = 'http://localhost:2950//manager/sessions/temp/connections/left/nwt.dtmStartTxTest?frequency=' + str(args[7]) + '&data_length=' + str(args[0]) + '&payload_type=' + str(args[8])
+            url = 'http://localhost:2950//manager/sessions/default/connections/left/nwt.dtmStartTxTest?frequency=' + str(args[7]) + '&data_length=' + str(args[0]) + '&payload_type=' + str(args[8])
             url = url.replace(" ", "%20")
             serial = urllib.request.urlopen(url).read()
             serial = serial.decode(encoding='UTF-8').split('dtmStartTxTest')[1]
@@ -158,7 +157,7 @@ class GearboxController():
 
     def BLE_DTM_StartRX(self, args=[]):
         try:
-            url = 'http://localhost:2950//manager/sessions/temp/connections/left/nwt.dtmStartRxTest?frequency=' + str(args[7])
+            url = 'http://localhost:2950//manager/sessions/default/connections/left/nwt.dtmStartRxTest?frequency=' + str(args[7])
             url = url.replace(" ", "%20")
             urllib.request.urlopen(url).read()
             serial = serial.decode(encoding='UTF-8').split('dtmStartRxTest')[1]
@@ -170,7 +169,7 @@ class GearboxController():
 
     def BLE_DTM_EndTest(self, args=[]):
         try:
-            urllib.request.urlopen('http://localhost:2950//manager/sessions/temp/connections/left/nwt.dtmEndTest').read()
+            urllib.request.urlopen('http://localhost:2950//manager/sessions/default/connections/left/nwt.dtmEndTest').read()
             serial = serial.decode(encoding='UTF-8')
             sys.stdout(serial)
 
@@ -182,7 +181,7 @@ class GearboxController():
 
     def init_XP(self, args=[]):
         try:
-            url = 'http://localhost:2950//manager/sessions/temp/connections/left/medicalTests.medicalTests.Initialization?clock_out_activation=Activate&DC_DC=Enable&VHF=' + str(args[7]) + '&output_mux=OOK&carrier_frequency=' + str(args[0]) + '&divisor=32&duty_cycle=' + str(args[1]) + '&med_drv_a_cfg=tx_data&med_drv_b_cfg=tx_data&xp_clock=0.974'
+            url = 'http://localhost:2950//manager/sessions/default/connections/left/medicalTests.medicalTests.Initialization?clock_out_activation=Activate&DC_DC=Enable&VHF=' + str(args[7]) + '&output_mux=OOK&carrier_frequency=' + str(args[0]) + '&divisor=32&duty_cycle=' + str(args[1]) + '&med_drv_a_cfg=tx_data&med_drv_b_cfg=tx_data&xp_clock=0.974'
             url = url.replace(" ", "%20")
             serial = urllib.request.urlopen(url).read()
             serial = serial.decode(encoding='UTF-8')
@@ -194,7 +193,7 @@ class GearboxController():
         
     def getID_XP(self, args=[]):
         try:
-            url = 'http://localhost:2950//manager/sessions/temp/connections/left/medicalTests.medicalTests.GetID?startup_precharges=100&Precharge=1920&manchester_speed=32&Frame_Interval=24000&Capture_Type=GPIO'
+            url = 'http://localhost:2950//manager/sessions/default/connections/left/medicalTests.medicalTests.GetID?startup_precharges=100&Precharge=1920&manchester_speed=32&Frame_Interval=24000&Capture_Type=GPIO'
             url = url.replace(" ", "%20")
             serial = urllib.request.urlopen(url).read()
             serial = serial.decode(encoding='UTF-8')
@@ -206,7 +205,7 @@ class GearboxController():
         
     def getClock_XP(self, args=[]):
         try:
-            url = 'http://localhost:2950//manager/sessions/temp/connections/left/medicalTests.medicalTests.GetClock?startup_precharges=100&Precharge=1920&manchester_speed=32&Frame_Interval=24000&Capture_Type=GPIO'
+            url = 'http://localhost:2950//manager/sessions/default/connections/left/medicalTests.medicalTests.GetClock?startup_precharges=100&Precharge=1920&manchester_speed=32&Frame_Interval=24000&Capture_Type=GPIO'
             url = url.replace(" ", "%20")
             serial = urllib.request.urlopen(url).read()
             serial = serial.decode(encoding='UTF-8')
@@ -218,7 +217,7 @@ class GearboxController():
         
     def getVunreg_XP(self, args=[]):
         try:
-            url = 'http://localhost:2950//manager/sessions/temp/connections/left/medicalTests.medicalTests.GetVunreg?Precharge=1920&Frame_Interval=24000&Capture_Type=ADC'
+            url = 'http://localhost:2950//manager/sessions/default/connections/left/medicalTests.medicalTests.GetVunreg?Precharge=1920&Frame_Interval=24000&Capture_Type=ADC'
             url = url.replace(" ", "%20")
             serial = urllib.request.urlopen(url).read()
             serial = serial.decode(encoding='UTF-8')
@@ -230,7 +229,7 @@ class GearboxController():
         
     def stopCMD(self, args=[]):
         try:
-            url = 'http://localhost:2950//manager/sessions/temp/connections/left/medicalTests.medicalTests.STOP'
+            url = 'http://localhost:2950//manager/sessions/default/connections/left/medicalTests.medicalTests.STOP'
             url = url.replace(" ", "%20")
             urllib.request.urlopen(url).read()
             serial = serial.decode(encoding='UTF-8')

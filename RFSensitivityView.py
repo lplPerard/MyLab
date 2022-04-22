@@ -11,16 +11,13 @@ from tkinter.constants import END
 from RFSensitivityController import RFSensitivityController
 from DeviceFrame import DeviceFrame
 
-from tkinter import Button, Canvas, Frame, IntVar, Label, Scrollbar, filedialog
+from tkinter import Button, Frame, Label, Listbox
 from tkinter import LabelFrame
 from tkinter import StringVar
 from tkinter import DoubleVar
 from tkinter import Entry
-from tkinter import Radiobutton
 from tkinter.ttk import Combobox, Progressbar
 from PIL import Image, ImageTk
-
-from Graph import Graph
 
 from threading import Thread
 
@@ -49,88 +46,62 @@ class RFSensitivityView (DeviceFrame):
         self.initCombo()
         self.initVar()
         self.initEntries()
+        self.initListBox()
   
     def initAttributes(self):
-    #This methods initiates all attributes in the class. It is usefull to prevent double usage     
-        self.state="freeze"   
+    #This methods initiates all attributes in the class. It is usefull to prevent double usage
         self.testState = "STOP"
-
-        self.frame_instrument_name = Frame(self.labelFrame_instrument)
-        self.frame_instrument_address = Frame(self.labelFrame_instrument)
 
         self.labelFrame_testBench = LabelFrame(self.frame, text="TestBench")
 
-        self.frameline_waveform = Frame(self.labelFrame_testBench)
-        self.frameline_source = Frame(self.labelFrame_testBench)
-        self.frameline_limit = Frame(self.labelFrame_testBench)
-
+        self.frame_instrument_name = Frame(self.labelFrame_instrument)
+        self.frameline_frequency = Frame(self.labelFrame_testBench)
+        self.frameline_power = Frame(self.labelFrame_testBench)
+        self.frameline_attenuation = Frame(self.labelFrame_testBench)
+        self.frameline_bitRate= Frame(self.labelFrame_testBench)
+        self.frameline_PER = Frame(self.labelFrame_testBench)
         self.frameline_button = Frame(self.frame)
 
         self.stringvar_instrumentName = StringVar()    
-        self.stringvar_instrumentaddress = StringVar()
-        self.stringvar_waveform = StringVar("")
-
-        self.doubleVar_limit= DoubleVar()
+        self.doubleVar_power = DoubleVar()
+        self.doubleVar_attenuation = DoubleVar()
+        self.doubleVar_PER = DoubleVar()
 
         self.label_instrumentName = Label(self.frame_instrument_name, text="Name :")
-        self.label_instrumentaddress = Label(self.frame_instrument_address, text="Address :")
+        self.label_frequency = Label(self.frameline_frequency, text="Frequency : ")
+        self.label_power = Label(self.frameline_power, text="Initial Power (dBm) : ")
+        self.label_attenuation = Label(self.frameline_attenuation, text="Attenuation (dB) :     ")
+        self.label_bitRate = Label(self.frameline_bitRate, text="Bit Rate : ")
+        self.label_PER = Label(self.frameline_PER, text="PER Target (%) :         ")
+
+        self.entry_instrumentName = Entry(self.frame_instrument_name, textvariable=self.stringvar_instrumentName)
+        self.entry_power = Entry(self.frameline_power, textvariable=self.doubleVar_power, justify="right", width=10)
+        self.entry_attenuation = Entry(self.frameline_attenuation, textvariable=self.doubleVar_attenuation, justify="right", width=10)
+        self.entry_PER = Entry(self.frameline_PER, textvariable=self.doubleVar_PER, justify="right", width=10)
         
-        self.label_waveform = Label(self.frameline_waveform, text="Waveform :    ")
-        self.label_source = Label(self.frameline_source, text="Source Type  :")
-        self.label_limit = Label(self.frameline_limit, text="Source Limit :")
+        self.listbox_frequency = Listbox(self.frameline_frequency, selectmode='extended', width=17, height=6)
 
-        self.entry_instrumentName = Entry(self.frame_instrument_name, textvariable=self.stringvar_instrumentName, width=25)
-        self.entry_instrumentaddress = Entry(self.frame_instrument_address, textvariable=self.stringvar_instrumentaddress, width=25, state="readonly")
+        self.combo_bitRate = Combobox(self.frameline_bitRate, state="readonly", width=15, values=["BLE (1 Mpbs)",
+                                                                                                  "ABLE (1 Mpbs)",
+                                                                                                  "OBLE (4 Mpbs)",
+                                                                                                  "OBLE (2 Mpbs)"])
 
-        self.entry_waveform = Entry(self.frameline_waveform, textvariable=self.stringvar_waveform, width=20, state="readonly")
-        self.entry_limit = Entry(self.frameline_limit, textvariable=self.doubleVar_limit, width=15)
+        self.progressbar = Progressbar(self.frameline_button, orient='horizontal', length = 130, mode = 'determinate')
 
-        self.combo_source = Combobox(self.frameline_source, state="readonly", width=20, values=["Current", "Voltage"])
-        self.combo_limit = Combobox(self.frameline_limit, state="readonly", width=3, values=["V", "mV"])
-
-        self.progressbar = Progressbar(self.frameline_button, orient='horizontal', length = 100, mode = 'determinate')
-        self.progressbar.after(50, self.updateProgressBar)
-
-        self.graphImg = Image.open("Images/sine.png")
-        self.graphImg = self.graphImg.resize((12, 13), Image.ANTIALIAS)
-        self.graphImg = ImageTk.PhotoImage(self.graphImg)
-
-        self.button_waveform = Button(self.frameline_waveform, image=self.graphImg, command=self.view.menu3_Waveform_callBack)
         self.button_launch = Button(self.frameline_button, text="Launch", command=self.button_launch_callback)
+        
+        self.img = Image.open("Images/SMU200A.png")
+        self.img = self.img.resize((250, 110), Image.ANTIALIAS)
+        self.img = ImageTk.PhotoImage(self.img)
+        self.panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColorInstrument'])
 
-        self.graph = None
-
-    def updateView(self, configuration=False):
-    #This method refresh the content of the view
-        self.stringvar_instrumentaddress.set(self.controller.instrument.address)
-        self.state="freeze"
-        found=0
-
-        for item in self.model.devices_dict:
-            if item in self.controller.instrument.address:
-                newName = self.model.devices_dict[item][0] + " (0)"
-                self.entry_instrumentName_callback(newName=newName)
-
-        if (found==1) and (self.model.devices_dict[item][1] != "Sourcemeter"):
-            self.view.menu5_callback(self)
-            self.view.sendError('005')
-
-        if (found == 0) and (self.controller.instrument.address != ""):                
-            sys.stdout("\nUnknown device connected")
-
+    def updateView(self, instrument=None):
+    #This method refresh the content of the view, its is used when loading a configuration file
         self.renameInstrument()
-                       
-        if self.controller.instrument.address != "":
-            self.controller.connectToDevice()
-  
-    def renameInstrument(self):
-        for item in self.view.listViews:
-            if self.controller.instrument.name == item.controller.instrument.name:  
-                if (self != item):
-                    index = int(item.controller.instrument.name[-2]) + 1
-                    newName = self.controller.instrument.name[:-2] + str(index) + ")"
-                    self.entry_instrumentName_callback(newName=newName)
-             
+
+        if instrument != None :
+            pass
+          
     def initLabelFrame(self):
     #This method instanciates all the LabelFrame
         self.labelFrame_instrument.pack(padx=5, pady=5, fill="y")
@@ -143,17 +114,20 @@ class RFSensitivityView (DeviceFrame):
         self.frame_instrument_name.configure(bg=self.model.parameters_dict['backgroundColorInstrumentData'])
         self.frame_instrument_name.pack(fill="both", pady=3)
 
-        self.frame_instrument_address.configure(bg=self.model.parameters_dict['backgroundColorInstrumentData'])
-        self.frame_instrument_address.pack(fill="both", pady=3)
+        self.frameline_frequency.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frameline_frequency.pack(fill="both", pady=2)
 
-        self.frameline_waveform.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
-        self.frameline_waveform.pack(fill="both", pady=2)
+        self.frameline_power.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frameline_power.pack(fill="both", pady=2)
 
-        self.frameline_source.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
-        self.frameline_source.pack(fill="both", pady=2)
+        self.frameline_attenuation.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frameline_attenuation.pack(fill="both", pady=2)
 
-        self.frameline_limit.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
-        self.frameline_limit.pack(fill="both", pady=2)
+        self.frameline_bitRate.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frameline_bitRate.pack(fill="both", pady=2)
+
+        self.frameline_PER.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.frameline_PER.pack(fill="both", pady=2)
 
         self.frameline_button.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
         self.frameline_button.pack(padx=5, pady=3, fill="y", expand="yes")
@@ -161,74 +135,46 @@ class RFSensitivityView (DeviceFrame):
     def initVar(self):
     #This methods instanciates all the Var
         self.stringvar_instrumentName.set(self.controller.instrument.name)    
-        self.stringvar_instrumentaddress.set(self.controller.instrument.address)
-        
-        self.doubleVar_limit.set(0)
+
+        self.doubleVar_power.set(-90)
+        self.doubleVar_attenuation.set(6)
+        self.doubleVar_PER.set(30.8)
         
     def initLabel(self):
     #This methods instanciates all the Label
         self.label_instrumentName.configure(bg=self.model.parameters_dict['backgroundColorInstrumentData'])
         self.label_instrumentName.pack(side="left")
 
-        self.label_instrumentaddress.configure(bg=self.model.parameters_dict['backgroundColorInstrumentData'])
-        self.label_instrumentaddress.pack(side="left")
+        self.label_frequency.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.label_frequency.pack(side="left", anchor='ne')
 
-        self.label_waveform.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
-        self.label_waveform.pack(side="left", anchor='ne')
+        self.label_power.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.label_power.pack(side="left", anchor='ne')
 
-        self.label_source.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
-        self.label_source.pack(side="left", anchor='ne')
+        self.label_attenuation.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.label_attenuation.pack(side="left", anchor='ne')
 
-        self.label_limit.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
-        self.label_limit.pack(side="left", anchor='ne')
+        self.label_bitRate.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.label_bitRate.pack(side="left", anchor='ne')
+
+        self.label_PER.configure(bg=self.model.parameters_dict['backgroundColorInstrument'])
+        self.label_PER.pack(side="left", anchor='ne')
 
     def initCombo(self):
     #This methods instanciates all the combobox
         #self.combo_source_voltage.bind("<<ComboboxSelected>>", self.combo_temperatureSource_callback)
-        self.combo_source.configure(background='white')
-        self.combo_source.current(0)
-        self.combo_source.bind("<<ComboboxSelected>>", self.combo_source_callback)
-        self.combo_source.pack(side="right", padx=5)
-        
-        self.combo_limit.configure(background='white')
-        self.combo_limit.current(0)
-        self.combo_limit.pack(side="right", padx=5)
-
-    def combo_source_callback(self, arg=None, newName=None):
-    #This method is called when clicking on Combo source
-        if self.combo_source.get() == "Voltage":
-            self.combo_limit.configure(values=["A", "mA"])
-            self.combo_limit.current(0)
-
-        elif self.combo_source.get() == "Current":
-            self.combo_limit.configure(values=["V", "mV"])
-            self.combo_limit.current(0)
+        self.combo_bitRate.configure(background='white')
+        self.combo_bitRate.current(0)
+        self.combo_bitRate.pack(side="right", padx=5)
 
     def initEntries(self):
     #This method instanciates the entries    
-        self.entry_instrumentName.pack(side='right', padx=5)
         self.entry_instrumentName.bind("<KeyRelease>", self.entry_instrumentName_callback)
+        self.entry_instrumentName.pack(side='right', padx=5)
 
-        self.entry_instrumentaddress.pack(side='right', padx=5)
-        self.entry_instrumentaddress.bind('<Double-Button-1>', lambda event, name=self : self.view.menu2_Connections_callBack(event, name))
-
-        self.entry_limit.pack(side='right', padx=5)
-        self.entry_limit.bind('<Return>', self.entry_limit_callback)
-
-        self.entry_waveform.pack(side='left', padx=5)
-        self.entry_waveform.bind('<Double-Button-1>', self.entry_waveform_callback)
-
-    def initButton(self):
-    #This method instanciates the buttons
-
-        self.progressbar.pack(side='right', expand="yes", padx=5, fill='x', pady=4)
-        self.button_launch.pack(expand="yes", padx=3)
-
-        self.button_waveform.pack(side='right', expand="yes", padx=3)
-
-        self.graph = Graph(frame=self.frame, model=self.model, size=(6,7))
-        self.graph.clearGraph()
-        self.graph.addLinGraph(xlabel="Voltage", ylabel="Current")
+        self.entry_power.pack(side='left', padx=5)
+        self.entry_attenuation.pack(side='left', padx=5)
+        self.entry_PER.pack(side='left', padx=5)
 
     def entry_instrumentName_callback(self, arg=None, newName=None):
     #This method calls the view to change instrument name
@@ -242,37 +188,88 @@ class RFSensitivityView (DeviceFrame):
         indexMenu = self.view.menu5.index(oldname)
         self.view.menu5.entryconfigure(indexMenu, label=name)
 
-    def entry_instrumentaddress_callback(self, arg=None):
-    #This method is called when double click on the address
-        self.controller.closeConnection()
-        self.stringvar_instrumentaddress.set("")
-        self.view.menu2_Connections_callBack()
+    def initButton(self):
+    #This method instanciates the buttons
+        self.progressbar.pack(side='right', expand="yes", padx=5, fill='x', pady=4)
+        self.button_launch.pack(expand="yes", padx=3)
 
-    def entry_limit_callback(self, args=[]):
-    #This method set Voltage source and current limit
-        None
-
-    def entry_waveform_callback(self, args=[]):
-    #This method set Voltage source and current limit           
-        self.path = filedialog.askopenfilename(title = "Select file", filetypes = (("all files","*.*"), ("Waveform files","*.waveform")))
-
-        if self.path != '':
-            name = self.path.split('/')
-            self.stringvar_waveform.set(name[-1][:-9])
+        self.panel.pack(fill = "both", expand = "yes")
 
     def button_launch_callback(self, args=None):
     #This method plays the desired waveform
-        self.graph.clearGraph()
-
-        if (self.testState != "RUN") and (self.stringvar_waveform.get() != ""):
-            sys.stdout("\nNew IV testBench started\n")
-            self.testState = "RUN"
-            run = threading.Thread(target=self.controller.IV_test, args=[self.generateArguments(args1=self.path, args2=self.doubleVar_limit.get(), args8=self.combo_source.get())])
+        if (self.testState != "RUN"):
+            run = threading.Thread(target=self.controller.RFSensitivity_test, args=[self.generateArguments(args1=self.doubleVar_power.get(),
+                                                                                                           args2=self.doubleVar_attenuation.get(),
+                                                                                                           args3=self.doubleVar_PER.get(),
+                                                                                                           args8=self.combo_bitRate.get())])
             self.updateProgressBar()
             run.daemon = True
             run.start()
+            sys.stdout("\nNew RF Sensitivity testBench started\n")
+            self.testState = "RUN"
+
+    def initListBox(self, args=None):
+    #This method initialize Listboxes
+        frequencies = ["2.402GHz (ch. 37)",
+                       "2.404GHz (ch. 00)",
+                       "2.406GHz (ch. 01)",
+                       "2.408GHz (ch. 02)",
+                       "2.410GHz (ch. 03)",
+                       "2.412GHz (ch. 04)",
+                       "2.414GHz (ch. 05)",
+                       "2.416GHz (ch. 06)",
+                       "2.418GHz (ch. 07)",
+                       "2.420GHz (ch. 08)",
+                       "2.422GHz (ch. 09)",
+                       "2.424GHz (ch. 10)",
+                       "2.426GHz (ch. 38)",
+                       "2.428GHz (ch. 11)",
+                       "2.430GHz (ch. 12)",
+                       "2.432GHz (ch. 13)",
+                       "2.434GHz (ch. 14)",
+                       "2.436GHz (ch. 15)",
+                       "2.438GHz (ch. 16)",
+                       "2.440GHz (ch. 17)",
+                       "2.442GHz (ch. 18)",
+                       "2.444GHz (ch. 19)",
+                       "2.446GHz (ch. 20)",
+                       "2.448GHz (ch. 21)",
+                       "2.450GHz (ch. 22)",
+                       "2.452GHz (ch. 23)",
+                       "2.454GHz (ch. 24)",
+                       "2.456GHz (ch. 25)",
+                       "2.458GHz (ch. 26)",
+                       "2.460GHz (ch. 27)",
+                       "2.462GHz (ch. 28)",
+                       "2.464GHz (ch. 29)",
+                       "2.466GHz (ch. 30)",
+                       "2.468GHz (ch. 31)",
+                       "2.470GHz (ch. 32)",
+                       "2.472GHz (ch. 33)",
+                       "2.474GHz (ch. 34)",
+                       "2.476GHz (ch. 35)",
+                       "2.478GHz (ch. 36)",
+                       "2.480GHz (ch. 39)"]
+
+        for item in frequencies:
+            self.listbox_frequency.insert('end', item)
+
+        self.listbox_frequency.pack(pady=5, expand='yes')
+        self.listbox_frequency.configure(selectbackground="grey")
+        self.listbox_frequency.selection_set(0, len(frequencies))
+
+    def getFrequencies(self, args=None):
+    #This method return the selected frequencies from the Frequency ListBox
+        liste = self.listbox_frequency.curselection()
+        tmp = []
+
+        for index in liste :
+            tmp.append(self.listbox_frequency.get(index))
+
+        return(tmp)
 
     def updateProgressBar(self, args=None):
     #This methods updates the progressbar
-        self.progressbar['value'] = self.controller.progress
-        self.progressbar.after(50, self.updateProgressBar)
+            self.progressbar['value'] = self.controller.progress
+            self.progressbar.after(50, self.updateProgressBar)
+
