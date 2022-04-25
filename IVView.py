@@ -118,6 +118,10 @@ class IVView (DeviceFrame):
             self.combo_instrument.set(instrument.ident)
             self.combo_instrument_callback(instrument=instrument)
             self.stringvar_instrumentaddress.set(self.controller.instrument.address)
+            self.stringvar_waveform.set(self.controller.instrument.waveform)
+            self.combo_source.set(self.controller.instrument.source)
+            self.doubleVar_limit.set(self.controller.instrument.limit)
+            self.combo_source_callback()
                        
         if self.controller.instrument.address != "":
             self.controller.connectToDevice()
@@ -233,7 +237,9 @@ class IVView (DeviceFrame):
         self.controller = controller
         
     def combo_source_callback(self, arg=None):
-    #This method is called when clicking on Combo source
+#This method is called when clicking on Combo source
+        self.controller.instrument.source = self.combo_source.get()
+
         if self.combo_source.current() == 1:
             self.label_limit.configure(text="Source Limit (A) :")
 
@@ -286,7 +292,7 @@ class IVView (DeviceFrame):
 
     def entry_limit_callback(self, args=[]):
     #This method set Voltage source and current limit
-        None
+        self.controller.instrument.limit = self.doubleVar_limit.get()
 
     def entry_waveform_callback(self, args=[]):
     #This method set Voltage source and current limit           
@@ -295,6 +301,8 @@ class IVView (DeviceFrame):
         if self.path != '':
             name = self.path.split('/')
             self.stringvar_waveform.set(name[-1][:-9])
+
+        self.controller.instrument.waveform = self.path
 
     def button_launch_callback(self, args=None):
     #This method plays the desired waveform

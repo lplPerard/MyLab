@@ -42,9 +42,13 @@ class GearboxView (DeviceFrame):
         self.initVar()
         self.initEntries()
 
-    def updateView(self, configuration=False):
+    def updateView(self, instrument=None):
     #This method refresh the content of the view
         self.renameInstrument()
+
+        if instrument != None:
+            self.stringvar_instrumentImage.set(instrument.image)
+            self.controller.instrument.image = instrument.image
     
     def initAttributes(self):
     #This methods initiates all attributes in the class. It is usefull to prevent double usage     
@@ -187,6 +191,7 @@ class GearboxView (DeviceFrame):
     #This method calls the view to change instrument name
         path = filedialog.askopenfilename(title = "Select file", filetypes = (("Corona files","*.corona"), ("Metax files","*.metax"),("all files","*.*")))
         self.stringvar_instrumentImage.set(path)
+        self.controller.instrument.image = path
  
     def button_set_server_callback(self):
     #This method call the controller to change output state 

@@ -329,6 +329,20 @@ class View(Tk):
             else:
                 self.sendWarning("W000")
 
+        elif deviceType == "Gearbox":
+            localController = GearboxController(view=self, term=self.term_text, instrument=instrument, model=self.model)
+            if len(self.listViews) < 15:
+                pos = len(self.listViews)
+                name= deviceType + " (" + str(pos) + ")"
+                tamp = GearboxView(self, frame=self.mainFrame, terminal=self.term_text, model=self.model, controller=localController, name=name)
+                localController.updateView(tamp)
+                self.listViews.insert(0, tamp)
+                self.menu5.add_command(label=name, command=lambda: self.menu5_callback(tamp))
+                tamp.updateView(instrument=instrument)
+                sys.stdout("\nNew Gearbox added : " + deviceType + " (" + str(pos) + ")\n")
+            else:
+                self.sendWarning("W000")
+
         elif deviceType == "Oscilloscope":
             localController = OscilloscopeController(view=self, term=self.term_text, instrument=instrument, model=self.model)
             if len(self.listViews) < 15:
@@ -340,20 +354,6 @@ class View(Tk):
                 self.menu5.add_command(label=name, command=lambda: self.menu5_callback(tamp))
                 tamp.updateView(configuration)
                 sys.stdout("\nNew Sourcemeter added : " + deviceType + " (" + str(pos) + ")\n")
-            else:
-                self.sendWarning("W000")
-
-        elif deviceType == "Gearbox":
-            localController = GearboxController(view=self, term=self.term_text, instrument=instrument, model=self.model)
-            if len(self.listViews) < 15:
-                pos = len(self.listViews)
-                name= deviceType + " (" + str(pos) + ")"
-                tamp = GearboxView(self, frame=self.mainFrame, terminal=self.term_text, model=self.model, controller=localController, name=name)
-                localController.updateView(tamp)
-                self.listViews.insert(0, tamp)
-                self.menu5.add_command(label=name, command=lambda: self.menu5_callback(tamp))
-                tamp.updateView(instrument)
-                sys.stdout("\nNew Gearbox added : " + deviceType + " (" + str(pos) + ")\n")
             else:
                 self.sendWarning("W000")
 
@@ -394,7 +394,7 @@ class View(Tk):
                 localController.updateView(tamp)
                 self.listViews.insert(0, tamp)
                 self.menu5.add_command(label=name, command=lambda: self.menu5_callback(tamp))
-                tamp.updateView(configuration)
+                tamp.updateView(instrument = instrument)
                 sys.stdout("\nNew RF Sensitivity TestBench added : " + deviceType + " (" + str(pos) + ")\n")
             else:
                 self.sendWarning("W000")
