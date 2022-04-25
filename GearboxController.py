@@ -56,10 +56,11 @@ class GearboxController():
         
     def Open_connection(self):
         urllib.request.urlopen('http://localhost:2950//manager/sessions/default/general.createConnection?name=left&medium=HiPro&side=Left&protocol=PIF2FW&connected=true') 
+        sys.stdout('\nHiPro connection left is opened.\n')
         
     def Close_connection(self):
         urllib.request.urlopen('http://localhost:2950//manager/sessions/default/general.removeConnection?connection=manager/sessions/default/connections/left') #Lukker en Connection til device
-        sys.stdout('\nHiPro connection is closed.\n')
+        sys.stdout('\nHiPro connection left is closed.\n')
 
 #####################################################################################################################################################################################################################################################################################
         

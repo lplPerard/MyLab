@@ -255,7 +255,7 @@ class RFSensitivityView (DeviceFrame):
             self.listbox_frequency.insert('end', item)
 
         self.listbox_frequency.pack(pady=5, expand='yes')
-        self.listbox_frequency.configure(selectbackground="grey")
+        self.listbox_frequency.configure(selectbackground="gainsboro", selectforeground='black')
         self.listbox_frequency.selection_set(0, len(frequencies))
 
     def getFrequencies(self, args=None):

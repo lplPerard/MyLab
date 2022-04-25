@@ -52,7 +52,7 @@ class CommandLine():
     def initAttributes(self):
     #this method list all the attributes
         self.commandType = ""
-        self.variablesList = ["Temperature", "Voltage", "Current", "Frequency", "Power", "Period", "Time", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "La_Réponse_D"]
+        self.variablesList = ["Temperature", "Voltage", "Current", "Frequency", "Power", "Period", "Time", "Distance", "Temperature2", "Voltage2", "Current2", "Frequency2", "Power2", "Period2", "Time2", "Distance2", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "La_Réponse_D"]
         self.operatorsList = ["==", "!=", ">", ">=", "<=", "<"]
 
         self.line = Frame(self.frame, bg=self.model.parameters_dict['backgroundColorCommandLine'])
@@ -321,6 +321,7 @@ class CommandLine():
             self.commandType = "FOR"
             self.combo_instrCommand.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_instrCommand.config(value=self.variablesList)
+            self.combo_instrCommand.current(0)
 
         elif self.combo_choice1.get() == 'END':
             self.commandType = "END"
@@ -371,53 +372,53 @@ class CommandLine():
             self.generateIfAttributes()  
 
         elif self.commandType == "Power Supply":
-            self.generatePowerSupplyAttributes()
+            self.generatePowerSupplyAttributes(load=load)
         
         elif self.commandType  == "Multimeter":
-            self.generateMultimeterAttributes()
+            self.generateMultimeterAttributes(load=load)
 
         elif self.commandType  == "Climatic Chamber":
-            self.generateClimaticChamberAttributes()
+            self.generateClimaticChamberAttributes(load=load)
 
         elif self.commandType  == "Waveform Generator":
-            self.generateWaveformGeneratorAttributes()
+            self.generateWaveformGeneratorAttributes(load=load)
 
         elif self.commandType  == "Sourcemeter":
-            self.generateSourcemeterAttributes()
+            self.generateSourcemeterAttributes(load=load)
 
         elif self.commandType  == "Oscilloscope":
-            self.generateOscilloscopeAttributes()
+            self.generateOscilloscopeAttributes(load=load)
 
         elif self.commandType  == "Gearbox":
-            self.generateGearboxAttributes()
+            self.generateGearboxAttributes(load=load)
 
         elif self.commandType  == "Autospacer":
-            self.generateAutospacerAttributes()
+            self.generateAutospacerAttributes(load=load)
 
         elif self.commandType  == "IV":
-            self.generateIVAttributes()
+            self.generateIVAttributes(load=load)
 
     def cleanAttributes(self):
     #This method unpacks all attributes
-        self.entry_attribute1.config(textvariable=self.stringVar_defaultText1)
+        self.entry_attribute1.config(textvariable=self.stringVar_defaultText1, fg='gainsboro')
         self.entry_attribute1.pack_forget()
         self.stringVar_defaultText1.set("")
-        self.entry_attribute2.config(textvariable=self.stringVar_defaultText2)
+        self.entry_attribute2.config(textvariable=self.stringVar_defaultText2, fg='gainsboro')
         self.entry_attribute2.pack_forget()
         self.stringVar_defaultText2.set("")
-        self.entry_attribute3.config(textvariable=self.stringVar_defaultText3)
+        self.entry_attribute3.config(textvariable=self.stringVar_defaultText3, fg='gainsboro')
         self.entry_attribute3.pack_forget()
         self.stringVar_defaultText3.set("")
-        self.entry_attribute4.config(textvariable=self.stringVar_defaultText4)
+        self.entry_attribute4.config(textvariable=self.stringVar_defaultText4, fg='gainsboro')
         self.entry_attribute4.pack_forget()
         self.stringVar_defaultText4.set("")
-        self.entry_attribute5.config(textvariable=self.stringVar_defaultText5)
+        self.entry_attribute5.config(textvariable=self.stringVar_defaultText5, fg='gainsboro')
         self.entry_attribute5.pack_forget()
         self.stringVar_defaultText5.set("")
-        self.entry_attribute6.config(textvariable=self.stringVar_defaultText6)
+        self.entry_attribute6.config(textvariable=self.stringVar_defaultText6, fg='gainsboro')
         self.entry_attribute6.pack_forget()
         self.stringVar_defaultText6.set("")
-        self.entry_attribute7.config(textvariable=self.stringVar_defaultText7)
+        self.entry_attribute7.config(textvariable=self.stringVar_defaultText7, fg='gainsboro')
         self.entry_attribute7.pack_forget()
         self.stringVar_defaultText7.set("")
 
@@ -453,6 +454,8 @@ class CommandLine():
 
         self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
         self.combo_attribute1.config(value=self.variablesList)
+        self.combo_attribute1.current(0)
+        self.command.combo_attribute1 = self.combo_attribute1.get()    
 
     def generateIfAttributes(self):
     #This method generates the attributes for IF command
@@ -461,6 +464,8 @@ class CommandLine():
 
         self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
         self.combo_attribute1.config(value=self.operatorsList)
+        self.combo_attribute1.current(0)
+        self.command.combo_attribute1 = self.combo_attribute1.get()    
 
         self.entry_attribute2.pack(expand="no", side="left", anchor='nw', padx=2)
         self.stringVar_defaultText2.set("Variable 2")
@@ -481,8 +486,9 @@ class CommandLine():
             self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute1.config(value=self.getMeasureAttributes(self.combo_instrCommand.get()))
             self.combo_attribute1.current(0)
+            self.command.combo_attribute1 = self.combo_attribute1.get()  
         
-    def generateClimaticChamberAttributes(self):
+    def generateClimaticChamberAttributes(self, load=False):
     #This method generates the attributes for Climatic Chamber commands
         self.command.combo_instrCommand = self.combo_instrCommand.get()
 
@@ -490,7 +496,7 @@ class CommandLine():
             self.entry_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
             self.stringVar_defaultText1.set("Temperature")
 
-    def generatePowerSupplyAttributes(self):
+    def generatePowerSupplyAttributes(self, load=False):
     #This method generates the attributes for Power Supply commands
         self.command.combo_instrCommand = self.combo_instrCommand.get()
 
@@ -500,6 +506,10 @@ class CommandLine():
             self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute1.config(value=["Channel 1","Channel 2"])
             self.combo_attribute1.current(0)
+            if load == True :
+                self.combo_attribute1.set(self.command.combo_attribute1)
+            else:
+                self.command.combo_attribute1 = self.combo_attribute1.get()  
 
         if self.combo_instrCommand.get() == "setCurrentLimit":
             self.entry_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
@@ -507,31 +517,51 @@ class CommandLine():
             self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute1.config(value=["Channel 1","Channel 2"])
             self.combo_attribute1.current(0)
+            if load == True :
+                self.combo_attribute1.set(self.command.combo_attribute1)
+            else:
+                self.command.combo_attribute1 = self.combo_attribute1.get()  
 
         if self.combo_instrCommand.get() == "setChannelState":
             self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute1.config(value=["Channel 1","Channel 2"])
             self.combo_attribute1.current(0)
+            if load == True :
+                self.combo_attribute1.set(self.command.combo_attribute1)
+            else:
+                self.command.combo_attribute1 = self.combo_attribute1.get()  
 
         if self.combo_instrCommand.get() == "MeasureVoltage":
             self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute1.config(value=["Channel 1","Channel 2"])
             self.combo_attribute1.current(0)
+            if load == True :
+                self.combo_attribute1.set(self.command.combo_attribute1)
+            else:
+                self.command.combo_attribute1 = self.combo_attribute1.get()  
 
         if self.combo_instrCommand.get() == "MeasureCurrent":
             self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute1.config(value=["Channel 1","Channel 2"])
             self.combo_attribute1.current(0)
+            if load == True :
+                self.combo_attribute1.set(self.command.combo_attribute1)
+            else:
+                self.command.combo_attribute1 = self.combo_attribute1.get()  
 
         if self.combo_instrCommand.get() == "MeasurePower":
             self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute1.config(value=["Channel 1","Channel 2"])
             self.combo_attribute1.current(0)
+            if load == True :
+                self.combo_attribute1.set(self.command.combo_attribute1)
+            else:
+                self.command.combo_attribute1 = self.combo_attribute1.get()  
 
         if self.combo_instrCommand.get() == "setMasterState":
             None
 
-    def generateMultimeterAttributes(self):
+    def generateMultimeterAttributes(self, load=False):
     #This method generates the attributes for Power Supply commands
         self.command.combo_instrCommand = self.combo_instrCommand.get()
 
@@ -539,41 +569,87 @@ class CommandLine():
             self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute1.config(value=["Auto Range", "1V", "100mV", "1000V", "100V", "10V"])
             self.combo_attribute1.current(0)
+            if load == True :
+                self.combo_attribute1.set(self.command.combo_attribute1)
+            else:
+                self.command.combo_attribute1 = self.combo_attribute1.get()  
+
         if self.combo_instrCommand.get() == "setACV":
             self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute1.config(value=["Auto Range", "1V", "100mV", "750V", "100V", "10V"])
             self.combo_attribute1.current(0)
+            if load == True :
+                self.combo_attribute1.set(self.command.combo_attribute1)
+            else:
+                self.command.combo_attribute1 = self.combo_attribute1.get()  
+
         if self.combo_instrCommand.get() == "setDCI":
             self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute1.config(value=["Auto Range", "1mA", "100uA", "400mA", "100mA", "10mA"])
             self.combo_attribute1.current(0)
+            if load == True :
+                self.combo_attribute1.set(self.command.combo_attribute1)
+            else:
+                self.command.combo_attribute1 = self.combo_attribute1.get()  
             self.combo_attribute2.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute2.config(value=["mA", "10A"])
             self.combo_attribute2.current(0)
+            if load == True :
+                self.combo_attribute2.set(self.command.combo_attribute2)
+            else:
+                self.command.combo_attribute2 = self.combo_attribute2.get()  
+
         if self.combo_instrCommand.get() == "setACI":
             self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute1.config(value=["Auto Range", "10mA", "400mA", "100mA"])
             self.combo_attribute1.current(0)
+            if load == True :
+                self.combo_attribute1.set(self.command.combo_attribute1)
+            else:
+                self.command.combo_attribute1 = self.combo_attribute1.get()  
             self.combo_attribute2.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute2.config(value=["mA", "10A"])
             self.combo_attribute2.current(0)
+            if load == True :
+                self.combo_attribute2.set(self.command.combo_attribute2)
+            else:
+                self.command.combo_attribute2 = self.combo_attribute2.get()  
+
         if self.combo_instrCommand.get() == "set2WR":
             self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute1.config(value=["Auto Range", "1kΩ", "100Ω", "10kΩ", "100kΩ", "1MΩ", "10MΩ", "100MΩ"])
             self.combo_attribute1.current(0)
+            if load == True :
+                self.combo_attribute1.set(self.command.combo_attribute1)
+            else:
+                self.command.combo_attribute1 = self.combo_attribute1.get()  
+
         if self.combo_instrCommand.get() == "set4WR":
             self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute1.config(value=["Auto Range", "1kΩ", "100Ω", "10kΩ", "100kΩ", "1MΩ", "10MΩ", "100MΩ"])
             self.combo_attribute1.current(0)
+            if load == True :
+                self.combo_attribute1.set(self.command.combo_attribute1)
+            else:
+                self.command.combo_attribute1 = self.combo_attribute1.get()  
+
         if self.combo_instrCommand.get() == "setDiode":
             self.combo_attribute3.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute3.config(value=["5V", "10V"])
             self.combo_attribute3.current(0)
+            if load == True :
+                self.combo_attribute3.set(self.command.combo_attribute3)
+            else:
+                self.command.combo_attribute3 = self.combo_attribute3.get()  
             self.combo_attribute4.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute4.config(value=["1mA", "0.1mA"])
             self.combo_attribute4.current(0)
+            if load == True :
+                self.combo_attribute4.set(self.command.combo_attribute4)
+            else:
+                self.command.combo_attribute4 = self.combo_attribute4.get()  
 
-    def generateWaveformGeneratorAttributes(self):
+    def generateWaveformGeneratorAttributes(self, load=False):
     #This method generates the attributes for Waveform Generator commands
         self.command.combo_instrCommand = self.combo_instrCommand.get()
 
@@ -583,12 +659,20 @@ class CommandLine():
             self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute1.config(value=["HZ", "KHZ", "MHZ"])
             self.combo_attribute1.current(0)
+            if load == True :
+                self.combo_attribute1.set(self.command.combo_attribute1)
+            else:
+                self.command.combo_attribute1 = self.combo_attribute1.get() 
 
             self.stringVar_defaultText2.set("Amplitude")
             self.entry_attribute2.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute2.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute2.config(value=["VPP", "VRMS", "DBM"])
             self.combo_attribute2.current(0)
+            if load == True :
+                self.combo_attribute2.set(self.command.combo_attribute2)
+            else:
+                self.command.combo_attribute2 = self.combo_attribute2.get() 
 
             self.stringVar_defaultText3.set("Offset")
             self.entry_attribute3.pack(expand="no", side="left", anchor='nw', padx=2)
@@ -602,12 +686,21 @@ class CommandLine():
             self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute1.config(value=["HZ", "KHZ", "MHZ"])
             self.combo_attribute1.current(0)
+            if load == True :
+                self.combo_attribute1.set(self.command.combo_attribute1)
+            else:
+                self.command.combo_attribute1 = self.combo_attribute1.get() 
 
             self.stringVar_defaultText2.set("Amplitude")
             self.entry_attribute2.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute2.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute2.config(value=["VPP", "VRMS", "DBM"])
             self.combo_attribute2.current(0)
+            if load == True :
+                self.combo_attribute2.set(self.command.combo_attribute2)
+            else:
+                self.command.combo_attribute2 = self.combo_attribute2.get() 
+
 
             self.stringVar_defaultText3.set("Offset")
             self.entry_attribute3.pack(expand="no", side="left", anchor='nw', padx=2)
@@ -624,12 +717,20 @@ class CommandLine():
             self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute1.config(value=["HZ", "KHZ", "MHZ"])
             self.combo_attribute1.current(0)
+            if load == True :
+                self.combo_attribute1.set(self.command.combo_attribute1)
+            else:
+                self.command.combo_attribute1 = self.combo_attribute1.get() 
 
             self.stringVar_defaultText2.set("Amplitude")
             self.entry_attribute2.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute2.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute2.config(value=["VPP", "VRMS", "DBM"])
             self.combo_attribute2.current(0)
+            if load == True :
+                self.combo_attribute2.set(self.command.combo_attribute2)
+            else:
+                self.command.combo_attribute2 = self.combo_attribute2.get() 
 
             self.stringVar_defaultText3.set("Offset")
             self.entry_attribute3.pack(expand="no", side="left", anchor='nw', padx=2)
@@ -646,12 +747,21 @@ class CommandLine():
             self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute1.config(value=["HZ", "KHZ", "MHZ"])
             self.combo_attribute1.current(0)
+            if load == True :
+                self.combo_attribute1.set(self.command.combo_attribute1)
+            else:
+                self.command.combo_attribute1 = self.combo_attribute1.get() 
 
             self.stringVar_defaultText2.set("Amplitude")
             self.entry_attribute2.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute2.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute2.config(value=["VPP", "VRMS", "DBM"])
             self.combo_attribute2.current(0)
+            if load == True :
+                self.combo_attribute2.set(self.command.combo_attribute2)
+            else:
+                self.command.combo_attribute2 = self.combo_attribute2.get() 
+
 
             self.stringVar_defaultText3.set("Offset")
             self.entry_attribute3.pack(expand="no", side="left", anchor='nw', padx=2)
@@ -664,18 +774,31 @@ class CommandLine():
             self.combo_attribute5.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute5.config(value=["ms", "us", "s", "ns"])
             self.combo_attribute5.current(0)
+            if load == True :
+                self.combo_attribute5.set(self.command.combo_attribute5)
+            else:
+                self.command.combo_attribute5 = self.combo_attribute5.get() 
+
 
             self.stringVar_defaultText6.set("Rise Time")
             self.entry_attribute6.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute6.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute6.config(value=["ns", "us"])
             self.combo_attribute6.current(0)
+            if load == True :
+                self.combo_attribute6.set(self.command.combo_attribute6)
+            else:
+                self.command.combo_attribute6 = self.combo_attribute6.get() 
 
             self.stringVar_defaultText7.set("Fall Time")
             self.entry_attribute7.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute7.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute7.config(value=["ns", "us"])
             self.combo_attribute7.current(0)
+            if load == True :
+                self.combo_attribute7.set(self.command.combo_attribute7)
+            else:
+                self.command.combo_attribute7 = self.combo_attribute7.get() 
 
         if self.combo_instrCommand.get() == "applyNoise":
             self.stringVar_defaultText1.set("Amplitude")
@@ -683,6 +806,10 @@ class CommandLine():
             self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute1.config(value=["VPP", "VRMS", "DBM"])
             self.combo_attribute1.current(0)
+            if load == True :
+                self.combo_attribute1.set(self.command.combo_attribute1)
+            else:
+                self.command.combo_attribute1 = self.combo_attribute1.get() 
 
             self.stringVar_defaultText2.set("Offset")
             self.entry_attribute2.pack(expand="no", side="left", anchor='nw', padx=2)
@@ -692,16 +819,24 @@ class CommandLine():
             self.combo_attribute3.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute3.config(value=["HZ", "KHZ", "MHZ"])
             self.combo_attribute3.current(0)
+            if load == True :
+                self.combo_attribute3.set(self.command.combo_attribute3)
+            else:
+                self.command.combo_attribute3 = self.combo_attribute3.get()
 
         if self.combo_instrCommand.get() == "setOutputState":
             self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute1.config(value=["50Ω", "High Z"])
             self.combo_attribute1.current(0)
+            if load == True :
+                self.combo_attribute1.set(self.command.combo_attribute1)
+            else:
+                self.command.combo_attribute1 = self.combo_attribute1.get() 
 
         if self.combo_instrCommand.get() == "setMasterState":
             None
             
-    def generateSourcemeterAttributes(self):
+    def generateSourcemeterAttributes(self, load=False):
     #This method generates the attributes for Power Supply commands
         self.command.combo_instrCommand = self.combo_instrCommand.get()
 
@@ -717,14 +852,6 @@ class CommandLine():
             self.entry_attribute2.pack(expand="no", side="left", anchor='nw', padx=2)
             self.stringVar_defaultText2.set("Voltage Compliance")
 
-        if self.combo_instrCommand.get() == "generateVoltageWaveform":
-            self.entry_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
-            self.stringVar_defaultText1.set("Path")
-
-        if self.combo_instrCommand.get() == "generateCurrentWaveform":
-            self.entry_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
-            self.stringVar_defaultText1.set("Path")
-
         if self.combo_instrCommand.get() == "measureCurrent":
             None
 
@@ -734,7 +861,7 @@ class CommandLine():
         if self.combo_instrCommand.get() == "setMasterState":
             None
 
-    def generateOscilloscopeAttributes(self):
+    def generateOscilloscopeAttributes(self, load=False):
     #This method generates the attributes for Power Supply commands
         self.command.combo_instrCommand = self.combo_instrCommand.get()
 
@@ -742,22 +869,39 @@ class CommandLine():
             self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute1.config(value=["Channel 1","Channel 2","Channel 3","Channel 4","Channel 5","Channel 6","Channel 7","Channel 8"])
             self.combo_attribute1.current(0)
+            if load == True :
+                self.combo_attribute1.set(self.command.combo_attribute1)
+            else:
+                self.command.combo_attribute1 = self.combo_attribute1.get() 
 
         if self.combo_instrCommand.get() == "setBandwidth":
             self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute1.config(value=["Channel 1","Channel 2","Channel 3","Channel 4","Channel 5","Channel 6","Channel 7","Channel 8"])
             self.combo_attribute1.current(0)
+            self.command.combo_attribute1 = self.combo_attribute1.get()
             self.combo_attribute2.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute2.config(value=["FULL","20MHZ"])
             self.combo_attribute2.current(0)
+            if load == True :
+                self.combo_attribute2.set(self.command.combo_attribute2)
+            else:
+                self.command.combo_attribute2 = self.combo_attribute2.get() 
 
         if self.combo_instrCommand.get() == "setCoupling":
             self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute1.config(value=["Channel 1","Channel 2","Channel 3","Channel 4","Channel 5","Channel 6","Channel 7","Channel 8"])
             self.combo_attribute1.current(0)
+            if load == True :
+                self.combo_attribute1.set(self.command.combo_attribute1)
+            else:
+                self.command.combo_attribute1 = self.combo_attribute1.get() 
             self.combo_attribute2.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute2.config(value=["DC","AC","GND"])
             self.combo_attribute2.current(0)
+            if load == True :
+                self.combo_attribute2.set(self.command.combo_attribute2)
+            else:
+                self.command.combo_attribute2 = self.combo_attribute2.get() 
 
         if self.combo_instrCommand.get() == "setOffset":
             self.entry_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
@@ -765,14 +909,26 @@ class CommandLine():
             self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute1.config(value=["Channel 1","Channel 2","Channel 3","Channel 4","Channel 5","Channel 6","Channel 7","Channel 8"])
             self.combo_attribute1.current(0)
+            if load == True :
+                self.combo_attribute1.set(self.command.combo_attribute1)
+            else:
+                self.command.combo_attribute1 = self.combo_attribute1.get() 
 
         if self.combo_instrCommand.get() == "setProbe":
             self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute1.config(value=["Channel 1","Channel 2","Channel 3","Channel 4","Channel 5","Channel 6","Channel 7","Channel 8"])
             self.combo_attribute1.current(0)
+            if load == True :
+                self.combo_attribute1.set(self.command.combo_attribute1)
+            else:
+                self.command.combo_attribute1 = self.combo_attribute1.get() 
             self.combo_attribute2.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute2.config(value=["x1","x10","x100","x1000"])
             self.combo_attribute2.current(0)
+            if load == True :
+                self.combo_attribute2.set(self.command.combo_attribute2)
+            else:
+                self.command.combo_attribute2 = self.combo_attribute2.get() 
 
         if self.combo_instrCommand.get() == "setChannelScale":
             self.entry_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
@@ -780,6 +936,10 @@ class CommandLine():
             self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute1.config(value=["Channel 1","Channel 2","Channel 3","Channel 4","Channel 5","Channel 6","Channel 7","Channel 8"])
             self.combo_attribute1.current(0)
+            if load == True :
+                self.combo_attribute1.set(self.command.combo_attribute1)
+            else:
+                self.command.combo_attribute1 = self.combo_attribute1.get() 
 
         if self.combo_instrCommand.get() == "setTimeScale":
             self.entry_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
@@ -793,30 +953,50 @@ class CommandLine():
             self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute1.config(value=["Channel 1","Channel 2","Channel 3","Channel 4","Channel 5","Channel 6","Channel 7","Channel 8"])
             self.combo_attribute1.current(0)
+            if load == True :
+                self.combo_attribute1.set(self.command.combo_attribute1)
+            else:
+                self.command.combo_attribute1 = self.combo_attribute1.get() 
 
         if self.combo_instrCommand.get() == "getMeasurement":
 
             self.combo_attribute2.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute2.config(value=["Measurement 1","Measurement 2","Measurement 3","Measurement 4"])
             self.combo_attribute2.current(0)
+            if load == True :
+                self.combo_attribute2.set(self.command.combo_attribute2)
+            else:
+                self.command.combo_attribute2 = self.combo_attribute2.get() 
 
         if self.combo_instrCommand.get() == "addMeasurement":
             self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute1.config(value=["Channel 1","Channel 2","Channel 3","Channel 4","Channel 5","Channel 6","Channel 7","Channel 8"])
             self.combo_attribute1.current(0)
+            if load == True :
+                self.combo_attribute1.set(self.command.combo_attribute1)
+            else:
+                self.command.combo_attribute1 = self.combo_attribute1.get() 
 
             self.combo_attribute2.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute2.config(value=["Measurement 1","Measurement 2","Measurement 3","Measurement 4"])
             self.combo_attribute2.current(0)
+            if load == True :
+                self.combo_attribute2.set(self.command.combo_attribute2)
+            else:
+                self.command.combo_attribute2 = self.combo_attribute2.get() 
 
             self.combo_attribute3.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute3.config(value=["FREQuency","AMPlitude", "PK2Pk"])
             self.combo_attribute3.current(0)
+            if load == True :
+                self.combo_attribute3.set(self.command.combo_attribute3)
+            else:
+                self.command.combo_attribute3 = self.combo_attribute3.get() 
 
         if self.combo_instrCommand.get() == "setRunStop":
             None
 
-    def generateGearboxAttributes(self):
+    def generateGearboxAttributes(self, load=False):
     #This method generates the attributes for Gearbox commands
         self.command.combo_instrCommand = self.combo_instrCommand.get()
 
@@ -863,11 +1043,19 @@ class CommandLine():
                                                 "38: 2.478GHz (ch. 36)",
                                                 "39: 2.480GHz (ch. 39)"])
             self.combo_attribute1.current(0)
+            if load == True :
+                self.combo_attribute1.set(self.command.combo_attribute1)
+            else:
+                self.command.combo_attribute1 = self.combo_attribute1.get()
             self.entry_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
             self.stringVar_defaultText1.set("Datalength (7-37)")
             self.combo_attribute2.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute2.config(value=["00001111","01010101","10101010","11110000", "All zeros", "All ones", "Pseudo Rand 15 - PRBS15", "Pseudo Rand 9 - PRBS9"])
             self.combo_attribute2.current(0)
+            if load == True :
+                self.combo_attribute2.set(self.command.combo_attribute2)
+            else:
+                self.command.combo_attribute2 = self.combo_attribute2.get() 
 
         elif self.combo_instrCommand.get() == "BLE_DTM_StartRX":
             self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
@@ -912,6 +1100,10 @@ class CommandLine():
                                                 "38: 2.478GHz (ch. 36)",
                                                 "39: 2.480GHz (ch. 39)"])
             self.combo_attribute1.current(0)
+            if load == True :
+                self.combo_attribute1.set(self.command.combo_attribute1)
+            else:
+                self.command.combo_attribute1 = self.combo_attribute1.get()
 
         elif self.combo_instrCommand.get() == "EAS_Set_generator_output":
             self.entry_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
@@ -926,10 +1118,18 @@ class CommandLine():
                                                 "GAIN : 5",
                                                 "GAIN : 6"])
             self.combo_attribute1.current(0)
+            if load == True :
+                self.combo_attribute1.set(self.command.combo_attribute1)
+            else:
+                self.command.combo_attribute1 = self.combo_attribute1.get()
 
             self.combo_attribute2.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute2.config(value=["on","off"])
             self.combo_attribute2.current(0)
+            if load == True :
+                self.combo_attribute2.set(self.command.combo_attribute2)
+            else:
+                self.command.combo_attribute2 = self.combo_attribute2.get() 
 
         elif self.combo_instrCommand.get() == "init_XP":
             self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
@@ -937,6 +1137,10 @@ class CommandLine():
                                                 "2.2",
                                                 "2.5"])
             self.combo_attribute1.current(0)
+            if load == True :
+                self.combo_attribute1.set(self.command.combo_attribute1)
+            else:
+                self.command.combo_attribute1 = self.combo_attribute1.get()
 
             self.entry_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
             self.stringVar_defaultText1.set("Frequency (6000-7600)")
@@ -944,7 +1148,7 @@ class CommandLine():
             self.entry_attribute2.pack(expand="no", side="left", anchor='nw', padx=2)
             self.stringVar_defaultText2.set("Duty Cycle (1-50)")
         
-    def generateAutospacerAttributes(self):
+    def generateAutospacerAttributes(self, load=False):
     #This method generates the attributes for Climatic Chamber commands
         self.command.combo_instrCommand = self.combo_instrCommand.get()
 
@@ -952,7 +1156,7 @@ class CommandLine():
             self.entry_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
             self.stringVar_defaultText1.set("Distance")
                 
-    def generateIVAttributes(self):
+    def generateIVAttributes(self, load=False):
     #This method generates the attributes for Climatic Chamber commands
         self.command.combo_instrCommand = self.combo_instrCommand.get()
 
@@ -964,6 +1168,10 @@ class CommandLine():
             self.combo_attribute1.config(value=["Current",
                                                 "Voltage"])
             self.combo_attribute1.current(0)
+            if load == True :
+                self.combo_attribute1.set(self.command.combo_attribute1)
+            else:
+                self.command.combo_attribute1 = self.combo_attribute1.get()
 
             self.entry_attribute2.pack(expand="no", side="left", anchor='nw', padx=2)
             self.stringVar_defaultText2.set("Limit (V/A)")
