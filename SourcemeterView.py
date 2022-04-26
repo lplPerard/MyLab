@@ -266,7 +266,7 @@ class SourcemeterView (DeviceFrame):
 
         try :                
             self.img = Image.open("C:\\Oticon medical\\MyLab\\Instruments\\Sourcemeter\\" + self.combo_instrument.get() + "\\" + self.combo_instrument.get() + ".png")
-            self.img = self.img.resize((240, 120), Image.ANTIALIAS)
+            self.img = self.img.resize((220, 110), Image.ANTIALIAS)
             self.img = ImageTk.PhotoImage(self.img)
             self.panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColorInstrument'])
             self.panel.pack(fill = "both", expand = "yes")

@@ -36,7 +36,7 @@ class RFSensitivityController():
     #Setter method for view attribute
         self.view = view
 
-    def RFSensitivity_test(self, args=[]):
+    def RFSensitivity_testbench(self, args=[]):
     #this methods generates a IV characterization waveform 
         try:
             frequencyList = self.view.getFrequencies()
@@ -44,6 +44,8 @@ class RFSensitivityController():
             power = args[0]
             per = args[2]
             bitRate = args[7]
+            self.instrument.measure["frequency"] = []
+            self.instrument.measure["sensitivity"] = []
 
         except:
             self.view.testState = "STOP"
@@ -54,6 +56,7 @@ class RFSensitivityController():
         currentProgress = 0  
 
         try:
+            self.progress = 1
             for frequency in frequencyList:
                 sys.stdout("\nProgress = " + str(self.progress) + "%")
 

@@ -7,6 +7,7 @@ File description : Class container for the Gearbox instrument's View.
 """
 from os import listdir
 import sys
+import time
 
 from tkinter.constants import END
 from DeviceFrame import DeviceFrame
@@ -49,10 +50,13 @@ class GearboxView (DeviceFrame):
         if instrument != None:
             self.stringvar_instrumentImage.set(instrument.image)
             self.controller.instrument.image = instrument.image
+            self.combo_instrumentVersion.set(instrument.version)
+            self.controller.instrument.version = instrument.version
     
     def initAttributes(self):
     #This methods initiates all attributes in the class. It is usefull to prevent double usage     
-        self.state="CLOSED"
+        self.state="CLOSE"
+        self.hipro = "CLOSE"
 
         self.frame_instrument_name = Frame(self.labelFrame_instrument)
         self.frame_instrument_version = Frame(self.labelFrame_instrument)
@@ -150,11 +154,12 @@ class GearboxView (DeviceFrame):
         self.button_close_server.pack(side="left", pady=2, padx=2, expand="true")
 
         self.button_set_hipro.pack(side="left", pady=2, padx=2, expand="true")
+        self.button_set_hipro.after(50, self.hipro_callback)
         self.button_close_hipro.pack(side="left", pady=2, padx=2, expand="true")
 
     def initCombo(self):
     #This methods instanciates all the combobox
-        #self.combo_temperatureSource.bind("<<ComboboxSelected>>", self.combo_temperatureSource_callback)
+        self.combo_instrumentVersion.bind("<<ComboboxSelected>>", self.combo_instrumentVersion_callback)
         list=[]
         for dir in listdir("C:\\toolsuites\\gearbox\\gearboxj"):
             list.append(dir)
@@ -162,6 +167,11 @@ class GearboxView (DeviceFrame):
         self.combo_instrumentVersion.configure(values=list, background='white')
         self.combo_instrumentVersion.current(0)
         self.combo_instrumentVersion.pack(side="right", padx=5)
+        self.combo_instrumentVersion_callback()
+
+    def combo_instrumentVersion_callback(self, args=None):
+    #This methods is called when cliking on combobox
+        self.controller.instrument.version = self.combo_instrumentVersion.get()
         
     def initVar(self):
     #This methods instanciates all the Var
@@ -197,6 +207,7 @@ class GearboxView (DeviceFrame):
     #This method call the controller to change output state 
         if self.stringvar_instrumentImage.get() != "":        
             sys.stdout("\nTrying to open Gearbox Server...\n")
+            self.button_set_server.flash()
             tmp = self.controller.Start_Server(gearbox=self.combo_instrumentVersion.get(), image=self.stringvar_instrumentImage.get())
             if tmp:
                 self.connect_point.configure(image=self.connectImg)  
@@ -219,18 +230,22 @@ class GearboxView (DeviceFrame):
  
     def button_set_hipro_callback(self):
     #This method call the controller to change output state 
-        if self.state == "CONNECTED":
+        if self.state == "CONNECTED" and self.hipro == "CLOSE":
             self.controller.Open_connection()
-            self.hipro_point.configure(image=self.connectImg)  
-
-        else :
-            self.hipro_point.configure(image=self.breakpointImg)  
  
     def button_close_hipro_callback(self):
     #This method call the controller to change output state 
-        if self.state == "CONNECTED":
+        if self.state == "CONNECTED" and self.hipro == "OPEN":
             self.controller.Close_connection()
+
+    def hipro_callback(self, args=None):
+    #This methods updates img for Hipro state
+        if self.hipro == "OPEN":
+            self.hipro_point.configure(image=self.connectImg)  
+        else:
             self.hipro_point.configure(image=self.breakpointImg)  
+
+        self.button_set_hipro.after(50, self.hipro_callback)
 
     def close(self):
         if self.state == "CONNECTED":

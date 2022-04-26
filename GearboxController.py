@@ -54,13 +54,14 @@ class GearboxController():
 
 #####################################################################################################################################################################################################################################################################################
         
-    def Open_connection(self):
+    def Open_connection(self, args=[]):
         urllib.request.urlopen('http://localhost:2950//manager/sessions/default/general.createConnection?name=left&medium=HiPro&side=Left&protocol=PIF2FW&connected=true') 
         sys.stdout('\nHiPro connection left is opened.\n')
+        self.view.hipro = "OPEN"
         
-    def Close_connection(self):
+    def Close_connection(self, args=[]):
         urllib.request.urlopen('http://localhost:2950//manager/sessions/default/general.removeConnection?connection=manager/sessions/default/connections/left') #Lukker en Connection til device
-        sys.stdout('\nHiPro connection left is closed.\n')
+        self.view.hipro = "CLOSE"
 
 #####################################################################################################################################################################################################################################################################################
         
@@ -160,7 +161,7 @@ class GearboxController():
         try:
             url = 'http://localhost:2950//manager/sessions/default/connections/left/nwt.dtmStartRxTest?frequency=' + str(args[7])
             url = url.replace(" ", "%20")
-            urllib.request.urlopen(url).read()
+            serial = urllib.request.urlopen(url).read()
             serial = serial.decode(encoding='UTF-8').split('dtmStartRxTest')[1]
             sys.stdout(serial)
 
@@ -170,7 +171,7 @@ class GearboxController():
 
     def BLE_DTM_EndTest(self, args=[]):
         try:
-            urllib.request.urlopen('http://localhost:2950//manager/sessions/default/connections/left/nwt.dtmEndTest').read()
+            serial = urllib.request.urlopen('http://localhost:2950//manager/sessions/default/connections/left/nwt.dtmEndTest').read()
             serial = serial.decode(encoding='UTF-8')
             sys.stdout(serial)
 

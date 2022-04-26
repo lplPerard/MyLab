@@ -198,7 +198,7 @@ class RFSensitivityView (DeviceFrame):
     def button_launch_callback(self, args=None):
     #This method plays the desired waveform
         if (self.testState != "RUN"):
-            run = threading.Thread(target=self.controller.RFSensitivity_test, args=[self.generateArguments(args1=self.doubleVar_power.get(),
+            run = threading.Thread(target=self.controller.RFSensitivity_testbench, args=[self.generateArguments(args1=self.doubleVar_power.get(),
                                                                                                            args2=self.doubleVar_attenuation.get(),
                                                                                                            args3=self.doubleVar_PER.get(),
                                                                                                            args8=self.combo_bitRate.get())])

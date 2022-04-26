@@ -455,6 +455,7 @@ class ScriptController():
             currentProgress = 0
 
             for item in self.listeExecutable:   
+                self.progress = 1
                 if item[1][-1] == "INSTR":
                     item[1] = self.getArgs(item[1][0])
 
@@ -505,7 +506,7 @@ class ScriptController():
     
         self.view.scriptState = "STOP"
         self.view.button_runScript.config(image=self.view.playImg)
-        sys.stdout("\nScript ended\n")
+        sys.stdout("\n-------------------------------------------Script ended-------------------------------------------\n")
 
         if self.log :
             self.export2CSV()

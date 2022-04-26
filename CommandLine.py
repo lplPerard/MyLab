@@ -398,28 +398,38 @@ class CommandLine():
         elif self.commandType  == "IV":
             self.generateIVAttributes(load=load)
 
+        elif self.commandType  == "RFSensitivity":
+            self.generateRFSensitivityAttributes(load=load)
+
     def cleanAttributes(self):
     #This method unpacks all attributes
         self.entry_attribute1.config(textvariable=self.stringVar_defaultText1, fg='gainsboro')
         self.entry_attribute1.pack_forget()
+        self.stringVar_attribute1.set("")
         self.stringVar_defaultText1.set("")
         self.entry_attribute2.config(textvariable=self.stringVar_defaultText2, fg='gainsboro')
         self.entry_attribute2.pack_forget()
+        self.stringVar_attribute2.set("")
         self.stringVar_defaultText2.set("")
         self.entry_attribute3.config(textvariable=self.stringVar_defaultText3, fg='gainsboro')
         self.entry_attribute3.pack_forget()
+        self.stringVar_attribute3.set("")
         self.stringVar_defaultText3.set("")
         self.entry_attribute4.config(textvariable=self.stringVar_defaultText4, fg='gainsboro')
         self.entry_attribute4.pack_forget()
+        self.stringVar_attribute4.set("")
         self.stringVar_defaultText4.set("")
         self.entry_attribute5.config(textvariable=self.stringVar_defaultText5, fg='gainsboro')
         self.entry_attribute5.pack_forget()
+        self.stringVar_attribute5.set("")
         self.stringVar_defaultText5.set("")
         self.entry_attribute6.config(textvariable=self.stringVar_defaultText6, fg='gainsboro')
         self.entry_attribute6.pack_forget()
+        self.stringVar_attribute6.set("")
         self.stringVar_defaultText6.set("")
         self.entry_attribute7.config(textvariable=self.stringVar_defaultText7, fg='gainsboro')
         self.entry_attribute7.pack_forget()
+        self.stringVar_attribute7.set("")
         self.stringVar_defaultText7.set("")
 
         self.combo_attribute1.pack_forget()
@@ -1175,6 +1185,32 @@ class CommandLine():
 
             self.entry_attribute2.pack(expand="no", side="left", anchor='nw', padx=2)
             self.stringVar_defaultText2.set("Limit (V/A)")
+                
+    def generateRFSensitivityAttributes(self, load=False):
+    #This method generates the attributes for Climatic Chamber commands
+        self.command.combo_instrCommand = self.combo_instrCommand.get()
+
+        if self.combo_instrCommand.get() == "RFSensitivity_testbench":
+            self.entry_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.stringVar_defaultText1.set("Initial Power")
+
+            self.entry_attribute2.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.stringVar_defaultText2.set("Attenuation")
+
+            self.entry_attribute3.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.stringVar_defaultText3.set("PER (%)")
+
+
+            self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.combo_attribute1.config(value=["BLE (1 Mpbs)",
+                                                "ABLE (1 Mpbs)",
+                                                "OBLE (4 Mpbs)",
+                                                "OBLE (2 Mpbs)"])
+            self.combo_attribute1.current(0)
+            if load == True :
+                self.combo_attribute1.set(self.command.combo_attribute1)
+            else:
+                self.command.combo_attribute1 = self.combo_attribute1.get()
             
     def getMeasureAttributes(self, name=None):
     #This method return the instrument controller corresponding to name

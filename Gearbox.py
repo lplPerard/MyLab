@@ -19,6 +19,7 @@ class Gearbox(Instrument):
         Instrument.__init__(self)
 
         self.type = "Gearbox"
+        self.version = ""
         self.image = ""
         
         self.commandList = ["Open_connection", 
