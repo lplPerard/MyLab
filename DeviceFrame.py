@@ -62,7 +62,7 @@ class DeviceFrame():
     #This method is called to delete the device from the list of devices
         self.view.menu5_callback(self)
 
-    def  clearInstrument(self):
+    def clearInstrument(self):
         None   
       
     def generateArguments(self, args1="", args2="", args3="", args4="", args5="", args6="", args7="", args8="", args9="", args10="", args11="", args12="", args13="", args14=""):
