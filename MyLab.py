@@ -1,7 +1,7 @@
 """Copyright Oticon Medical NICE
 
 Developped by : Luc PERARD
-Version : 1.2.1
+Version : 2.0
 Details : 
     - 2021/07/08 Software creation 
 

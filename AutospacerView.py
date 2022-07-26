@@ -71,7 +71,7 @@ class AutospacerView (DeviceFrame):
         self.button_close = Button(self.frame_instrument_button, text='Close Connection', command=self.button_close_callback)
 
         self.img = Image.open("Images/autospacer.png")
-        self.img = self.img.resize((240, 230), Image.ANTIALIAS)
+        self.img = self.img.resize((300, 240), Image.ANTIALIAS)
         self.img = ImageTk.PhotoImage(self.img)
         self.panel = Label(self.frame, image = self.img, bg=self.model.parameters_dict['backgroundColorInstrument'])
 
