@@ -2,6 +2,8 @@
 
 # A simple setup script to create an executable using Cx_Freeze.
 
+#Execute : python setup.py build bdist_msi 
+
 import sys
 from cx_Freeze import setup, Executable
 

@@ -1164,7 +1164,36 @@ class CommandLine():
 
         if self.combo_instrCommand.get() == "setDistance":
             self.entry_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
-            self.stringVar_defaultText1.set("Distance")
+            self.stringVar_defaultText1.set("Distance (1/1000 mm)")
+
+        if self.combo_instrCommand.get() == "selectMagnet":
+            self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.combo_attribute1.config(value=["0",
+                                                "1",
+                                                "2",
+                                                "3",
+                                                "4",
+                                                "5",
+                                                "6",
+                                                "7",
+                                                "8",
+                                                "9"])
+            self.combo_attribute1.current(0)
+            if load == True :
+                self.combo_attribute1.set(self.command.combo_attribute1)
+            else:
+                self.command.combo_attribute1 = self.combo_attribute1.get()
+
+        if self.combo_instrCommand.get() == "placeMagnet":
+            self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
+            self.combo_attribute1.config(value=["up",
+                                                "down"])
+            self.combo_attribute1.current(0)
+            if load == True :
+                self.combo_attribute1.set(self.command.combo_attribute1)
+            else:
+                self.command.combo_attribute1 = self.combo_attribute1.get()
+            
                 
     def generateIVAttributes(self, load=False):
     #This method generates the attributes for Climatic Chamber commands
@@ -1199,7 +1228,6 @@ class CommandLine():
 
             self.entry_attribute3.pack(expand="no", side="left", anchor='nw', padx=2)
             self.stringVar_defaultText3.set("PER (%)")
-
 
             self.combo_attribute1.pack(expand="no", side="left", anchor='nw', padx=2)
             self.combo_attribute1.config(value=["BLE (1 Mpbs)",
