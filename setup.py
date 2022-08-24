@@ -5,7 +5,7 @@
 import sys
 from cx_Freeze import setup, Executable
 
-company_name = 'Oticon medical'
+Developer = 'LucPerard'
 product_version = '2.0'
 product_name = 'MyLab'
 
@@ -37,7 +37,7 @@ extensions = [
 
 bdist_msi_options = {'upgrade_code': '{48B079F4-B598-438D-A62A-8A233A3F8901}',
                      'add_to_path': False,
-                     'initial_target_dir': r'C:\%s\%s' % (company_name, product_name),
+                     'initial_target_dir': r'C:\%s' % (product_name),
                      'target_name': product_name,
                      'install_icon': 'Images/icon2.ico',
                      'extensions': extensions,

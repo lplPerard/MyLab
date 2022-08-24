@@ -23,6 +23,6 @@
     "geometryCheatSheetTL_RF": "350x360",
     "geometryConnectionsTL": "275x300",
 
-    "outputFolder": "C:/Oticon medical/MyLab/Results/",
-    "logFolder": "C:/Oticon medical/MyLab/Logs/"
+    "outputFolder": "C:/MyLab/Results/",
+    "logFolder": "C:/MyLab/Logs/"
 }

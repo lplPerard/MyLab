@@ -1,5 +1,4 @@
-"""Copyright Oticon Medical NICE
-
+"""
 Developped by : Luc PERARD
 
 File description : Class container for the application's view
@@ -788,9 +787,10 @@ class View(Tk):
 
     def menu7_Wiki_callback(self, args=None):
     #Callback function for menu2 2 option
-        url = r'https://teams.microsoft.com/l/entity/com.microsoft.teamspace.tab.wiki/tab::3b5e4cfe-a48d-4d21-8c8e-14c1335e8fea?context=%7B%22subEntityId%22%3A%22%7B%5C%22pageId%5C%22%3A2%2C%5C%22origin%5C%22%3A2%7D%22%2C%22channelId%22%3A%2219%3A6_CNV80B7Dz2iOUu1r6M-L-PFPKxoCYNuJqd_9bHpvk1%40thread.tacv2%22%7D&tenantId=9bf8c7a8-e008-49a7-9e43-ab76976c4bf8'
-        webbrowser.get('C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s').open(url)
-
+        #url = r'https://teams.microsoft.com/l/entity/com.microsoft.teamspace.tab.wiki/tab::3b5e4cfe-a48d-4d21-8c8e-14c1335e8fea?context=%7B%22subEntityId%22%3A%22%7B%5C%22pageId%5C%22%3A2%2C%5C%22origin%5C%22%3A2%7D%22%2C%22channelId%22%3A%2219%3A6_CNV80B7Dz2iOUu1r6M-L-PFPKxoCYNuJqd_9bHpvk1%40thread.tacv2%22%7D&tenantId=9bf8c7a8-e008-49a7-9e43-ab76976c4bf8'
+        #webbrowser.get('C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s').open(url)
+        None
+        
     def decorator(self, inputStr):
         self.term_text.insert(END, inputStr)
         self.term_text.see(END)

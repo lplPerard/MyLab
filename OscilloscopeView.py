@@ -1,5 +1,4 @@
-"""Copyright Oticon Medical NICE
-
+"""
 Developped by : Luc PERARD
 
 File description : Class container for the Oscilloscope instrument's View.

@@ -1,5 +1,4 @@
-"""Copyright Oticon Medical NICE
-
+"""
 Developped by : Luc PERARD
 Version : 2.0
 Details : 
